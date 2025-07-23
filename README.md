@@ -1,3 +1,5 @@
+# This website was vibe coded using Claude 4 Sonnet
+
 # Out Sports League - Complete Platform
 
 A comprehensive React application for the Out Sports League LGBTQ+ sports community, featuring both a public website and a full-featured admin dashboard for league management.
