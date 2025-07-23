@@ -2,7 +2,7 @@ import React from "react";
 
 export interface MenuItem {
   label: string;
-  href: string;
+  href?: string;
   isActive?: boolean;
   hasDropdown?: boolean;
   dropdownItems?: MenuItem[];
@@ -17,6 +17,7 @@ export interface CTAButton {
 
 export interface SportInfo {
   name: string;
+  title?: string; // Display name for the sport
   description: string;
   image?: string;
   gradient: "orange" | "teal" | "blue" | "purple";
@@ -25,6 +26,7 @@ export interface SportInfo {
   features?: string[];
   totalTeams?: number;
   rosterPath?: string;
+  comingSoon?: boolean;
 }
 
 export interface Feature {
@@ -46,6 +48,8 @@ export interface NavigationProps {
   menuItems: MenuItem[];
   isScrolled?: boolean;
   onMenuToggle?: () => void;
+  showLiveScores?: boolean;
+  currentRoute?: string;
 }
 
 export interface SportCardProps {
@@ -352,4 +356,38 @@ export interface GeneralInfoPageProps {
   testimonials: Testimonial[];
   faqs: FAQ[];
   timeline: Timeline;
+}
+
+// Announcement System Types
+export interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  priority: "low" | "normal" | "high" | "urgent";
+  type: "general" | "game" | "registration" | "maintenance" | "event";
+  target_audience: "all" | "players" | "teams" | "kickball" | "dodgeball";
+  is_active: boolean;
+  expires_at?: string;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateAnnouncementData {
+  title: string;
+  content: string;
+  priority?: "low" | "normal" | "high" | "urgent";
+  type?: "general" | "game" | "registration" | "maintenance" | "event";
+  target_audience?: "all" | "players" | "teams" | "kickball" | "dodgeball";
+  expires_at?: string;
+}
+
+export interface AnnouncementManagementProps {
+  className?: string;
+}
+
+export interface AnnouncementBannerProps {
+  className?: string;
+  maxHeight?: string;
+  showPriority?: boolean;
 }

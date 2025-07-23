@@ -102,7 +102,8 @@ const CommunityTestimonials: React.FC<CommunityTestimonialsProps> = ({
               {[
                 { key: "all", label: "All Sports", icon: "🏆" },
                 { key: "kickball", label: "Kickball", icon: "⚽" },
-                { key: "dodgeball", label: "Dodgeball", icon: "🏐" },
+                // Temporarily disabled - dodgeball coming soon
+                // { key: "dodgeball", label: "Dodgeball", icon: "🏐" },
               ].map(filter => (
                 <button
                   key={filter.key}
@@ -283,31 +284,7 @@ const CommunityTestimonials: React.FC<CommunityTestimonialsProps> = ({
           </div>
         </div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-16 text-center"
-        >
-          <div className="bg-gradient-to-r from-brand-teal/5 via-brand-blue/5 to-brand-purple/5 rounded-3xl p-8 border border-gray-100">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Ready to add your story?
-            </h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Join hundreds of members who have found their community, improved
-              their skills, and made lasting friendships through our inclusive
-              sports leagues.
-            </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-brand-teal to-brand-blue text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              Join Our Community
-            </motion.button>
-          </div>
-        </motion.div>
+        {/* Removed Bottom CTA - testimonials speak for themselves */}
       </div>
     </section>
   );

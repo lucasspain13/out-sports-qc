@@ -10,18 +10,37 @@ const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
     purple: "bg-gradient-card-purple",
   };
 
+  const handleClick = () => {
+    if (sport.comingSoon) {
+      // Don't navigate if coming soon
+      return;
+    }
+    onClick?.();
+  };
+
   return (
     <motion.div
-      whileHover={{ scale: 1.05, y: -8 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={sport.comingSoon ? {} : { scale: 1.05, y: -8 }}
+      whileTap={sport.comingSoon ? {} : { scale: 0.98 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="card-base card-hover cursor-pointer group"
-      onClick={onClick}
+      className={`card-base ${
+        sport.comingSoon ? "opacity-70" : "card-hover cursor-pointer"
+      } group relative`}
+      onClick={handleClick}
     >
+      {/* Coming Soon Badge */}
+      {sport.comingSoon && (
+        <div className="absolute top-4 left-4 z-20 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-md">
+          Coming Soon
+        </div>
+      )}
+
       <div
-        className={`relative h-80 ${
+        className={`relative h-80 sm:h-96 ${
           gradientClasses[sport.gradient]
-        } p-6 flex flex-col justify-end text-white`}
+        } p-6 sm:p-8 flex flex-col justify-end text-white ${
+          sport.comingSoon ? "cursor-not-allowed" : ""
+        }`}
       >
         {/* Background Pattern/Image */}
         {sport.image && (
@@ -37,7 +56,9 @@ const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
         {/* Content */}
         <div className="relative z-10">
           {/* Sport Name */}
-          <h3 className="card-title mb-3 text-shadow">{sport.name}</h3>
+          <h3 className="card-title mb-3 text-shadow">
+            {sport.title || sport.name}
+          </h3>
 
           {/* Description */}
           <p className="body-base mb-4 text-white/90 text-shadow">
@@ -89,27 +110,29 @@ const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
           )}
         </div>
 
-        {/* Hover Arrow */}
-        <motion.div
-          initial={{ opacity: 0, x: -10 }}
-          whileHover={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.2 }}
-          className="absolute top-6 right-6 text-white/70 group-hover:text-white"
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        {/* Hover Arrow - Hidden for coming soon */}
+        {!sport.comingSoon && (
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            whileHover={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
+            className="absolute top-6 right-6 text-white/70 group-hover:text-white"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17 8l4 4m0 0l-4 4m4-4H3"
-            />
-          </svg>
-        </motion.div>
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
+          </motion.div>
+        )}
       </div>
     </motion.div>
   );

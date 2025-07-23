@@ -298,5 +298,7 @@ export const getCompletedGames = (
     }
   }
 
-  return games.sort((a, b) => b.date.getTime() - a.date.getTime());
+  return games.sort(
+    (a, b) => Number(b.time.slice(0, 1)) - Number(a.time.slice(0, 1))
+  );
 };

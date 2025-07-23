@@ -1,7 +1,7 @@
 import React from "react";
 import { RosterDemo } from "../components/pages";
 import { TeamRoster } from "../components/sections";
-import { dodgeballTeams, kickballTeams } from "../data/teams";
+import { useTeams } from "../hooks/useTeams";
 
 /**
  * Example integration showing how to use the roster components
@@ -10,11 +10,24 @@ import { dodgeballTeams, kickballTeams } from "../data/teams";
 
 // Example 1: Using TeamRoster section component for homepage preview
 export const HomepageTeamPreview: React.FC = () => {
+  const { teams: kickballTeams, loading } = useTeams("kickball");
+
   const handleTeamSelect = (team: any) => {
     console.log("Navigate to team detail:", team.name);
     // In a real app, this would use React Router or similar
     // router.push(`/teams/${team.sportType}/${team.id}`);
   };
+
+  if (loading) {
+    return (
+      <div className="py-20">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading teams...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -30,17 +43,39 @@ export const HomepageTeamPreview: React.FC = () => {
       />
 
       {/* Show preview of dodgeball teams */}
-      <TeamRoster
-        title="Featured Dodgeball Teams"
-        subtitle="Meet our competitive dodgeball squads!"
-        teams={dodgeballTeams}
-        sportType="dodgeball"
-        onTeamSelect={handleTeamSelect}
-        maxTeams={2}
-        showStats={true}
-        className="bg-white"
-      />
+      <DodgeballTeamPreview onTeamSelect={handleTeamSelect} />
     </div>
+  );
+};
+
+// Helper component for dodgeball preview
+const DodgeballTeamPreview: React.FC<{ onTeamSelect: (team: any) => void }> = ({
+  onTeamSelect,
+}) => {
+  const { teams: dodgeballTeams, loading } = useTeams("dodgeball");
+
+  if (loading) {
+    return (
+      <div className="py-10">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600 mx-auto mb-2"></div>
+          <p className="text-gray-600 text-sm">Loading dodgeball teams...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <TeamRoster
+      title="Featured Dodgeball Teams"
+      subtitle="Meet our competitive dodgeball squads!"
+      teams={dodgeballTeams}
+      sportType="dodgeball"
+      onTeamSelect={onTeamSelect}
+      maxTeams={2}
+      showStats={true}
+      className="bg-white"
+    />
   );
 };
 
@@ -55,11 +90,28 @@ export const DodgeballRosterPage: React.FC = () => {
 
 // Example 3: Custom team roster with filtering
 export const CustomTeamRoster: React.FC = () => {
+  const { teams: kickballTeams, loading: loadingKickball } =
+    useTeams("kickball");
+  const { teams: dodgeballTeams, loading: loadingDodgeball } =
+    useTeams("dodgeball");
+
   const allTeams = [...kickballTeams, ...dodgeballTeams];
+  const loading = loadingKickball || loadingDodgeball;
 
   const handleTeamSelect = (team: any) => {
     console.log("Selected team:", team);
   };
+
+  if (loading) {
+    return (
+      <div className="py-20">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading all teams...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <TeamRoster

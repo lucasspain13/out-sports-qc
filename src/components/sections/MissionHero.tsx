@@ -85,7 +85,7 @@ const MissionHero: React.FC<MissionHeroProps> = ({
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-block mb-8"
+            className="inline-block mb-8 mt-16 sm:mt-8"
           >
             <span className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-full text-lg font-medium border border-white/30">
               Our Mission
@@ -100,7 +100,7 @@ const MissionHero: React.FC<MissionHeroProps> = ({
             className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-8 leading-tight"
           >
             Building Community Through{" "}
-            <span className="bg-gradient-to-r from-brand-orange via-brand-teal to-brand-purple bg-clip-text text-transparent">
+            <span className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-8 leading-tight">
               Inclusive Sports
             </span>
           </motion.h1>
@@ -168,26 +168,6 @@ const MissionHero: React.FC<MissionHeroProps> = ({
           </motion.div>
         </motion.div>
       </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center"
-        >
-          <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="w-1 h-3 bg-white/70 rounded-full mt-2"
-          />
-        </motion.div>
-      </motion.div>
     </section>
   );
 };

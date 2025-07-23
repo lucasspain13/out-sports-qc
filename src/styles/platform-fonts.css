@@ -1,0 +1,221 @@
+/* Platform-specific font system */
+
+/* Base system font stacks */
+:root {
+  /* iOS System Fonts */
+  --font-ios-system: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-ios-display: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-ios-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas,
+    "Courier New", monospace;
+
+  /* Android System Fonts */
+  --font-android-system: Roboto, "Droid Sans", "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+  --font-android-display: "Roboto Medium", Roboto, "Droid Sans",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-android-mono: "Roboto Mono", "Droid Sans Mono", "Courier New",
+    monospace;
+
+  /* Web Fallback Fonts */
+  --font-web-system: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-web-display: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-web-mono: "Consolas", "Monaco", "Courier New", monospace;
+
+  /* Default variables (will be overridden by platform-specific styles) */
+  --font-primary: var(--font-web-system);
+  --font-display: var(--font-web-display);
+  --font-mono: var(--font-web-mono);
+}
+
+/* Platform-specific font overrides */
+.platform-ios {
+  --font-primary: var(--font-ios-system);
+  --font-display: var(--font-ios-display);
+  --font-mono: var(--font-ios-mono);
+}
+
+.platform-android {
+  --font-primary: var(--font-android-system);
+  --font-display: var(--font-android-display);
+  --font-mono: var(--font-android-mono);
+}
+
+.platform-web {
+  --font-primary: var(--font-web-system);
+  --font-display: var(--font-web-display);
+  --font-mono: var(--font-web-mono);
+}
+
+/* Apply platform fonts to base elements */
+body {
+  font-family: var(--font-primary);
+}
+
+/* Platform-specific font weight adjustments */
+.platform-ios {
+  /* iOS prefers slightly lighter weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+.platform-android {
+  /* Android Material Design weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+.platform-web {
+  /* Web standard weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+/* Platform-specific font size adjustments */
+.platform-ios {
+  /* iOS uses slightly larger base font sizes */
+  --font-size-xs: 11px;
+  --font-size-sm: 13px;
+  --font-size-base: 17px; /* iOS standard body text size */
+  --font-size-lg: 19px;
+  --font-size-xl: 21px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 28px;
+  --font-size-4xl: 32px;
+  --font-size-5xl: 40px;
+}
+
+.platform-android {
+  /* Android Material Design typography scale */
+  --font-size-xs: 10px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+  --font-size-4xl: 28px;
+  --font-size-5xl: 34px;
+}
+
+.platform-web {
+  /* Web standard typography scale */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+  --font-size-4xl: 36px;
+  --font-size-5xl: 48px;
+}
+
+/* Platform-specific line height adjustments */
+.platform-ios {
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.375; /* iOS standard line height */
+  --line-height-relaxed: 1.5;
+}
+
+.platform-android {
+  --line-height-tight: 1.15;
+  --line-height-normal: 1.4;
+  --line-height-relaxed: 1.6;
+}
+
+.platform-web {
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+}
+
+/* Utility classes for platform-aware typography */
+.font-system {
+  font-family: var(--font-primary);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Platform-aware text size utilities */
+.text-platform-xs {
+  font-size: var(--font-size-xs);
+}
+.text-platform-sm {
+  font-size: var(--font-size-sm);
+}
+.text-platform-base {
+  font-size: var(--font-size-base);
+}
+.text-platform-lg {
+  font-size: var(--font-size-lg);
+}
+.text-platform-xl {
+  font-size: var(--font-size-xl);
+}
+.text-platform-2xl {
+  font-size: var(--font-size-2xl);
+}
+.text-platform-3xl {
+  font-size: var(--font-size-3xl);
+}
+.text-platform-4xl {
+  font-size: var(--font-size-4xl);
+}
+.text-platform-5xl {
+  font-size: var(--font-size-5xl);
+}
+
+/* Platform-aware weight utilities */
+.font-platform-normal {
+  font-weight: var(--font-weight-normal);
+}
+.font-platform-medium {
+  font-weight: var(--font-weight-medium);
+}
+.font-platform-semibold {
+  font-weight: var(--font-weight-semibold);
+}
+.font-platform-bold {
+  font-weight: var(--font-weight-bold);
+}
+
+/* Platform-aware line height utilities */
+.leading-platform-tight {
+  line-height: var(--line-height-tight);
+}
+.leading-platform-normal {
+  line-height: var(--line-height-normal);
+}
+.leading-platform-relaxed {
+  line-height: var(--line-height-relaxed);
+}
+
+/* Smooth font rendering optimizations */
+.platform-ios * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.platform-android * {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+.platform-web * {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}

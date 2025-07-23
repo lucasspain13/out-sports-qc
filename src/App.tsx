@@ -1,18 +1,172 @@
-import { useEffect, useState } from "react";
-import Navigation from "./components/layout/Navigation";
+import React, { useEffect, useState } from "react";
+import { DynamicAppContent } from "./components/app/DynamicAppContent";
+import { VerificationStatus } from "./components/auth/VerificationStatus";
+import AdaptiveNavigation from "./components/navigation/AdaptiveNavigation";
 import {
+  AdminDashboard,
+  AdminLogin,
+  AnimationDemo,
   GameDetail,
   GeneralInfoPage,
+  KickballRules,
+  RegistrationPage,
   RosterOverview,
   ScheduleOverview,
   TeamDetailPage,
 } from "./components/pages";
-import { About, Hero, Sports } from "./components/sections";
-import { getGameById } from "./data/schedules";
-import { getTeamById, getTeamsBySport } from "./data/teams";
-import { Feature, MenuItem, SportInfo, Team } from "./types";
+import { ContentProvider } from "./components/providers/ContentProvider";
+import { useAuth } from "./contexts/AuthContext";
+import { useGame } from "./hooks/useGames";
+import { useRealtimeScores } from "./hooks/useRealtimeScores";
+import { teamsApi } from "./lib/database";
+import {
+  navigateBack,
+  navigateTo,
+  navigateToGame,
+  navigateToSportRoster,
+  navigateToTeam,
+} from "./lib/navigation";
+import { MenuItem, Team } from "./types";
+
+// Team detail wrapper component that loads team by ID
+const TeamDetailWrapper: React.FC<{
+  teamId: string;
+  sportType: "kickball" | "dodgeball";
+  onBack: () => void;
+  onPlayerSelect: (player: any) => void;
+}> = ({ teamId, sportType, onBack, onPlayerSelect }) => {
+  const [team, setTeam] = useState<Team | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadTeam = async () => {
+      try {
+        setLoading(true);
+        const teamData = await teamsApi.getById(teamId);
+        if (teamData && teamData.sportType === sportType) {
+          setTeam(teamData);
+        } else {
+          setError("Team not found");
+        }
+      } catch (err) {
+        setError("Failed to load team");
+        console.error("Error loading team:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadTeam();
+  }, [teamId, sportType]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading team details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !team) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="max-w-4xl mx-auto px-4">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">
+            Team Not Found
+          </h1>
+          <p className="text-gray-600">Team ID: {teamId}</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <TeamDetailPage
+      team={team}
+      onBack={onBack}
+      onPlayerSelect={onPlayerSelect}
+    />
+  );
+};
+const GameDetailWrapper: React.FC<{
+  gameId: string;
+  onTeamSelect: (teamId: string) => void;
+}> = ({ gameId, onTeamSelect }) => {
+  const { game, loading, error } = useGame(gameId);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading game details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !game) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="max-w-4xl mx-auto px-4">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">
+            Game Not Found
+          </h1>
+          <p className="text-gray-600">Game ID: {gameId}</p>
+          <p className="text-sm text-gray-500 mt-4">
+            {error || "The requested game could not be found."}
+          </p>
+          <button
+            onClick={() => navigateBack()}
+            className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            ← Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <GameDetail
+      game={game}
+      onBack={() => navigateBack()}
+      onTeamSelect={onTeamSelect}
+    />
+  );
+};
 
 function App() {
+  return (
+    <ContentProvider>
+      <AppContent />
+    </ContentProvider>
+  );
+}
+
+function AppContent() {
+  // Auth context
+  const { verificationStatus, clearVerificationStatus } = useAuth();
+
+  // Check for live games
+  const { liveGames } = useRealtimeScores();
+  const hasLiveGames = liveGames.some(game => game.status === "in-progress");
+
+  // Auto-dismiss successful verification after 5 seconds
+  useEffect(() => {
+    if (verificationStatus.status === "success") {
+      const timer = setTimeout(() => {
+        clearVerificationStatus();
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [verificationStatus.status, clearVerificationStatus]);
+
   // State for routing
   const [currentRoute, setCurrentRoute] = useState<string>("#home");
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
@@ -21,16 +175,22 @@ function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash || "#home";
+      console.log("Route changed to:", hash);
       setCurrentRoute(hash);
+
+      // Scroll to top of page on navigation
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
 
       // Handle team detail routes
       const teamDetailMatch = hash.match(/^#(kickball|dodgeball)-teams\/(.+)$/);
       if (teamDetailMatch) {
         const [, sportType, teamId] = teamDetailMatch;
-        const team = getTeamById(teamId);
-        if (team && team.sportType === sportType) {
-          setSelectedTeam(team);
-        }
+        // Team loading will be handled by TeamDetailWrapper component
+        setSelectedTeam({ id: teamId, sportType } as Team);
       } else {
         setSelectedTeam(null);
       }
@@ -61,7 +221,6 @@ function App() {
     },
     {
       label: "Kickball",
-      href: "#kickball",
       hasDropdown: true,
       isActive: currentRoute.startsWith("#kickball"),
       dropdownItems: [
@@ -71,100 +230,77 @@ function App() {
         { label: "Registration", href: "#kickball-registration" },
       ],
     },
-    {
-      label: "Dodgeball",
-      href: "#dodgeball",
-      hasDropdown: true,
-      isActive: currentRoute.startsWith("#dodgeball"),
-      dropdownItems: [
-        { label: "League Rules", href: "#dodgeball-rules" },
-        { label: "Schedule", href: "#dodgeball-schedule" },
-        { label: "Teams", href: "#dodgeball-teams" },
-        { label: "Registration", href: "#dodgeball-registration" },
-      ],
-    },
+    // Temporarily disabled - coming soon
+    // {
+    //   label: "Dodgeball",
+    //   hasDropdown: true,
+    //   isActive: currentRoute.startsWith("#dodgeball"),
+    //   dropdownItems: [
+    //     { label: "League Rules", href: "#dodgeball-rules" },
+    //     { label: "Schedule", href: "#dodgeball-schedule" },
+    //     { label: "Teams", href: "#dodgeball-teams" },
+    //     { label: "Registration", href: "#dodgeball-registration" },
+    //   ],
+    // },
   ];
-
-  // Sports data with navigation handlers
-  const sports: SportInfo[] = [
-    {
-      name: "Kickball",
-      description:
-        "Classic playground fun with a competitive twist. Join our co-ed leagues for an exciting season of kicks, runs, and community spirit.",
-      gradient: "orange",
-      participants: 120,
-      nextGame: new Date("2024-03-15"),
-      features: ["Co-ed Teams", "All Skill Levels", "Weekly Games"],
-      totalTeams: 4,
-      rosterPath: "#kickball-teams",
-    },
-    {
-      name: "Dodgeball",
-      description:
-        "Fast-paced action and strategic gameplay. Experience the thrill of dodgeball in a supportive and inclusive environment.",
-      gradient: "teal",
-      participants: 85,
-      nextGame: new Date("2024-03-18"),
-      features: ["Team Strategy", "High Energy", "Quick Matches"],
-      totalTeams: 4,
-      rosterPath: "#dodgeball-teams",
-    },
-  ];
-
-  // About section features
-  const aboutFeatures: Feature[] = [
-    {
-      icon: "🏳️‍🌈",
-      title: "LGBTQ+ Inclusive",
-      description:
-        "A safe and welcoming space for all members of the LGBTQ+ community and allies.",
-    },
-    {
-      icon: "🤝",
-      title: "Community Focused",
-      description:
-        "Building lasting friendships and connections through shared love of sports and competition.",
-    },
-    {
-      icon: "🏆",
-      title: "All Skill Levels",
-      description:
-        "From beginners to seasoned athletes, everyone is welcome to join and improve their game.",
-    },
-    {
-      icon: "🎉",
-      title: "Social Events",
-      description:
-        "Regular social gatherings, tournaments, and celebrations to strengthen our community bonds.",
-    },
-  ];
-
-  // Handle sport card clicks
-  const handleSportClick = (sport: SportInfo) => {
-    if (sport.rosterPath) {
-      window.location.hash = sport.rosterPath;
-    }
-  };
 
   // Handle team selection
   const handleTeamSelect = (team: Team) => {
-    window.location.hash = `#${team.sportType}-teams/${team.id}`;
+    navigateToTeam(team);
   };
 
   // Handle back navigation from team detail
   const handleBackToRoster = () => {
     if (selectedTeam) {
-      window.location.hash = `#${selectedTeam.sportType}-teams`;
+      navigateToSportRoster(selectedTeam.sportType);
     }
   };
 
   // Render content based on current route
   const renderContent = () => {
+    // Redirect dodgeball pages to home (temporarily disabled)
+    if (currentRoute.startsWith("#dodgeball")) {
+      // Show coming soon message and redirect to home
+      setTimeout(() => {
+        navigateTo("#home");
+      }, 3000);
+
+      return (
+        <section className="py-20 bg-gray-50 min-h-screen">
+          <div className="container-custom">
+            <div className="max-w-2xl mx-auto text-center">
+              <div className="bg-white rounded-2xl shadow-xl p-12">
+                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-card-teal rounded-full flex items-center justify-center">
+                  <span className="text-3xl">🏐</span>
+                </div>
+                <h1 className="heading-2 text-gray-900 mb-4">
+                  Dodgeball Coming Soon!
+                </h1>
+                <p className="body-large text-gray-600 mb-6">
+                  We're excited to bring dodgeball to Out Sports League! Our
+                  dodgeball program is currently in development and will be
+                  available in the near future.
+                </p>
+                <p className="body-base text-gray-500 mb-8">
+                  Stay tuned for updates on registration, schedules, and team
+                  information. In the meantime, check out our kickball league!
+                </p>
+                <div className="text-sm text-gray-400">
+                  Redirecting to homepage in 3 seconds...
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
     // Team detail page
     if (selectedTeam) {
       return (
-        <TeamDetailPage
-          team={selectedTeam}
+        <TeamDetailWrapper
+          teamId={selectedTeam.id}
+          sportType={selectedTeam.sportType as "kickball" | "dodgeball"}
           onBack={handleBackToRoster}
           onPlayerSelect={player => {
             console.log("Player selected:", player);
@@ -177,39 +313,13 @@ function App() {
     const gameDetailMatch = currentRoute.match(/^#game\/(.+)$/);
     if (gameDetailMatch) {
       const [, gameId] = gameDetailMatch;
-      const game = getGameById(gameId);
-
-      if (!game) {
-        return (
-          <div className="min-h-screen bg-gray-50 py-12">
-            <div className="max-w-4xl mx-auto px-4">
-              <h1 className="text-3xl font-bold text-gray-900 mb-8">
-                Game Not Found
-              </h1>
-              <p className="text-gray-600">Game ID: {gameId}</p>
-              <p className="text-sm text-gray-500 mt-4">
-                The requested game could not be found.
-              </p>
-              <button
-                onClick={() => window.history.back()}
-                className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                ← Back
-              </button>
-            </div>
-          </div>
-        );
-      }
 
       return (
-        <GameDetail
-          game={game}
-          onBack={() => window.history.back()}
-          onTeamSelect={teamId => {
-            const team = getTeamById(teamId);
-            if (team) {
-              window.location.hash = `#${team.sportType}-teams/${team.id}`;
-            }
+        <GameDetailWrapper
+          gameId={gameId}
+          onTeamSelect={(teamId: string) => {
+            // Navigate to team route - team will be loaded by TeamDetailWrapper
+            navigateToTeam({ id: teamId } as Team);
           }}
         />
       );
@@ -217,26 +327,12 @@ function App() {
 
     // Roster overview pages
     if (currentRoute === "#kickball-teams") {
-      const kickballTeams = getTeamsBySport("kickball");
       return (
-        <RosterOverview
-          sportType="kickball"
-          teams={kickballTeams}
-          onTeamSelect={handleTeamSelect}
-        />
+        <RosterOverview sportType="kickball" onTeamSelect={handleTeamSelect} />
       );
     }
 
-    if (currentRoute === "#dodgeball-teams") {
-      const dodgeballTeams = getTeamsBySport("dodgeball");
-      return (
-        <RosterOverview
-          sportType="dodgeball"
-          teams={dodgeballTeams}
-          onTeamSelect={handleTeamSelect}
-        />
-      );
-    }
+    // Dodgeball routes are temporarily disabled - handled by redirect above
 
     // Schedule pages
     if (currentRoute === "#kickball-schedule") {
@@ -244,21 +340,35 @@ function App() {
         <ScheduleOverview
           sportType="kickball"
           onGameSelect={game => {
-            window.location.hash = `#game/${game.id}`;
+            navigateToGame(game.id);
           }}
         />
       );
     }
 
-    if (currentRoute === "#dodgeball-schedule") {
-      return (
-        <ScheduleOverview
-          sportType="dodgeball"
-          onGameSelect={game => {
-            window.location.hash = `#game/${game.id}`;
-          }}
-        />
-      );
+    // Dodgeball schedule is temporarily disabled - handled by redirect above
+
+    // Registration pages
+    if (currentRoute === "#kickball-registration") {
+      return <RegistrationPage sportType="kickball" />;
+    }
+
+    // Dodgeball registration is temporarily disabled - handled by redirect above
+
+    // Rules pages
+    if (currentRoute === "#kickball-rules") {
+      return <KickballRules />;
+    }
+
+    // Dodgeball rules are temporarily disabled - handled by redirect above
+
+    // Admin routes
+    if (currentRoute === "#admin-login") {
+      return <AdminLogin />;
+    }
+
+    if (currentRoute === "#sports-admin") {
+      return <AdminDashboard />;
     }
 
     // General Info page
@@ -266,120 +376,55 @@ function App() {
       return <GeneralInfoPage />;
     }
 
-    // Default home page content
+    // Animation Demo page
+    if (currentRoute === "#animation-demo") {
+      return <AnimationDemo />;
+    }
+
+    // Default home page content - use dynamic content loader
     return (
-      <>
-        {/* Hero Section */}
-        <Hero
-          title="Welcome to Out Sports League"
-          subtitle="Join our inclusive LGBTQ+ sports community where everyone belongs. Experience the joy of competition, friendship, and athletic achievement in a welcoming environment."
-          primaryCTA={{
-            text: "League Info",
-            variant: "primary",
-            href: "#info",
-          }}
-          secondaryCTA={{
-            text: "Join a Team",
-            variant: "secondary",
-            href: "#signup",
-          }}
-        />
-
-        {/* Sports Section */}
-        <Sports
-          sports={sports.map(sport => ({
-            ...sport,
-            onClick: () => handleSportClick(sport),
-          }))}
-        />
-
-        {/* About Section */}
-        <About
-          title="Building Community Through Sports"
-          content="Out Sports League has been fostering an inclusive environment for LGBTQ+ athletes and allies since 2020. We believe that sports have the power to bring people together, build confidence, and create lasting friendships. Our leagues provide a safe space where you can be yourself while enjoying competitive and recreational athletics."
-          features={aboutFeatures}
-        />
-
-        {/* Footer */}
-        <footer className="bg-gray-900 text-white py-12">
-          <div className="container-custom">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div>
-                <h3 className="heading-5 mb-4 text-gradient-brand">
-                  Out Sports League
-                </h3>
-                <p className="body-base text-gray-300">
-                  Building an inclusive sports community where everyone can
-                  play, compete, and belong.
-                </p>
-              </div>
-              <div>
-                <h4 className="heading-6 mb-4">Quick Links</h4>
-                <ul className="space-y-2">
-                  <li>
-                    <a
-                      href="#info"
-                      className="text-gray-300 hover:text-white transition-colors"
-                    >
-                      League Info
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#kickball-teams"
-                      className="text-gray-300 hover:text-white transition-colors"
-                    >
-                      Kickball Teams
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#dodgeball-teams"
-                      className="text-gray-300 hover:text-white transition-colors"
-                    >
-                      Dodgeball Teams
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#signup"
-                      className="text-gray-300 hover:text-white transition-colors"
-                    >
-                      Join a Team
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="heading-6 mb-4">Contact</h4>
-                <p className="body-base text-gray-300 mb-2">
-                  Email: info@outsportsleague.com
-                </p>
-                <p className="body-base text-gray-300">
-                  Follow us on social media for updates and community
-                  highlights.
-                </p>
-              </div>
-            </div>
-            <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-              <p className="body-base text-gray-400">
-                © 2024 Out Sports League. All rights reserved. Season 2024 now
-                open for registration.
-              </p>
-            </div>
-          </div>
-        </footer>
-      </>
+      <DynamicAppContent
+        currentRoute={currentRoute}
+        renderContent={() => <></>}
+      />
     );
   };
 
   return (
     <div className="App">
-      {/* Navigation */}
-      <Navigation logo="/logo.png" menuItems={menuItems} />
+      {/* Verification Status */}
+      <VerificationStatus
+        verificationStatus={verificationStatus}
+        onDismiss={clearVerificationStatus}
+      />
 
-      {/* Dynamic Content */}
-      {renderContent()}
+      {/* Adaptive Navigation - Hide on admin pages */}
+      {!currentRoute.startsWith("#admin") &&
+        !currentRoute.startsWith("#sports-admin") && (
+          <AdaptiveNavigation
+            logo="/logo.png"
+            menuItems={menuItems}
+            showLiveScores={hasLiveGames}
+            currentRoute={currentRoute}
+          >
+            {/* Dynamic Content with proper spacing for fixed elements */}
+            <div
+              className={`${
+                currentRoute === "#home"
+                  ? "pt-0"
+                  : "mt-nav-safe bg-white min-h-screen"
+              }`}
+            >
+              {renderContent()}
+            </div>
+          </AdaptiveNavigation>
+        )}
+
+      {/* Admin pages without navigation */}
+      {(currentRoute.startsWith("#admin") ||
+        currentRoute.startsWith("#sports-admin")) && (
+        <div className="min-h-screen bg-white">{renderContent()}</div>
+      )}
     </div>
   );
 }

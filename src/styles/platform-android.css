@@ -1,0 +1,1215 @@
+/* Android Material Design Registration Form Styles */
+
+/* Android Form Container */
+.android-form-container {
+  background-color: #fafafa;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Android App Bar */
+.android-app-bar {
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.android-app-bar-content {
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+}
+
+.android-form-emoji {
+  font-size: 1.5rem;
+  margin-right: 12px;
+}
+
+.android-app-bar-title {
+  flex: 1;
+}
+
+.android-form-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #212121;
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+}
+
+.android-form-subtitle {
+  font-size: 0.875rem;
+  color: #757575;
+  margin: 2px 0 0 0;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Android Linear Progress */
+.android-linear-progress {
+  height: 4px;
+  position: relative;
+  overflow: hidden;
+  background-color: #e0e0e0;
+}
+
+.android-linear-progress-buffer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(33, 150, 243, 0.3);
+}
+
+.android-linear-progress-primary {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #2196f3;
+  transform-origin: left;
+  transition: transform 300ms ease;
+}
+
+/* Android Form Content */
+.android-form-content {
+  padding: 24px;
+  background-color: #fafafa;
+}
+
+.android-form-section {
+  margin-bottom: 32px;
+}
+
+/* Android Section Title */
+.android-section-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #212121;
+  margin: 0 0 24px 0;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Android Text Fields */
+.android-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.android-textfield-container {
+  position: relative;
+}
+
+.android-textfield {
+  position: relative;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: all 200ms ease;
+}
+
+.android-textfield.focused {
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+.android-textfield-input,
+.android-textarea-input {
+  width: 100%;
+  padding: 16px 12px 8px 12px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+  color: #212121;
+  font-family: "Roboto", sans-serif;
+}
+
+.android-textarea-input {
+  resize: none;
+  min-height: 80px;
+}
+
+.android-textfield-label {
+  position: absolute;
+  left: 12px;
+  top: 16px;
+  font-size: 1rem;
+  color: #757575;
+  font-family: "Roboto", sans-serif;
+  transition: all 200ms ease;
+  pointer-events: none;
+  transform-origin: left top;
+}
+
+.android-textfield.focused .android-textfield-label,
+.android-textfield-label.filled {
+  transform: translateY(-12px) scale(0.75);
+  color: #2196f3;
+}
+
+.android-textfield-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #e0e0e0;
+}
+
+.android-textfield-underline::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #2196f3;
+  transition: all 200ms ease;
+  transform: translateX(-50%);
+}
+
+.android-textfield.focused .android-textfield-underline::after {
+  width: 100%;
+}
+
+/* Android Select Fields */
+.android-select-container {
+  margin-bottom: 24px;
+}
+
+.android-select-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #757575;
+  margin-bottom: 8px;
+  font-family: "Roboto", sans-serif;
+}
+
+.android-select-input {
+  width: 100%;
+  padding: 16px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 1rem;
+  color: #212121;
+  font-family: "Roboto", sans-serif;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: all 200ms ease;
+}
+
+.android-select-input:focus {
+  border-color: #2196f3;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+  outline: none;
+}
+
+/* Android Radio Group */
+.android-radio-group {
+  margin-bottom: 24px;
+}
+
+.android-radio-group-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #757575;
+  margin: 0 0 16px 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.android-radio-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  background-color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.android-radio-item:hover {
+  background-color: #f5f5f5;
+}
+
+.android-radio-input {
+  display: none;
+}
+
+.android-radio-circle {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #757575;
+  border-radius: 50%;
+  margin-right: 16px;
+  position: relative;
+  transition: border-color 200ms ease;
+  flex-shrink: 0;
+}
+
+.android-radio-input:checked + .android-radio-circle {
+  border-color: #2196f3;
+}
+
+.android-radio-inner {
+  width: 10px;
+  height: 10px;
+  background-color: #2196f3;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 200ms ease;
+}
+
+.android-radio-input:checked + .android-radio-circle .android-radio-inner {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.android-radio-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.android-radio-emoji {
+  font-size: 1.25rem;
+}
+
+.android-radio-label {
+  font-size: 1rem;
+  color: #212121;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Android Checkboxes */
+.android-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.android-checkbox-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px;
+  background-color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.android-checkbox-item:hover {
+  background-color: #f5f5f5;
+}
+
+.android-checkbox-input {
+  display: none;
+}
+
+.android-checkbox-box {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #757575;
+  border-radius: 2px;
+  margin-right: 16px;
+  position: relative;
+  transition: all 200ms ease;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.android-checkbox-input:checked + .android-checkbox-box {
+  background-color: #2196f3;
+  border-color: #2196f3;
+}
+
+.android-checkbox-check {
+  width: 14px;
+  height: 14px;
+  fill: white;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 200ms ease;
+}
+
+.android-checkbox-input:checked
+  + .android-checkbox-box
+  .android-checkbox-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.android-checkbox-content {
+  flex: 1;
+}
+
+.android-checkbox-title {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #212121;
+  margin-bottom: 4px;
+  font-family: "Roboto", sans-serif;
+}
+
+.android-checkbox-subtitle {
+  display: block;
+  font-size: 0.875rem;
+  color: #757575;
+  line-height: 1.4;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Android Buttons */
+.android-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 200ms ease;
+  font-family: "Roboto", sans-serif;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+}
+
+.android-button-text {
+  background: transparent;
+  color: #2196f3;
+}
+
+.android-button-text:hover {
+  background-color: rgba(33, 150, 243, 0.08);
+}
+
+.android-button-text:focus {
+  background-color: rgba(33, 150, 243, 0.12);
+}
+
+/* Android FAB */
+.android-fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background-color: #2196f3;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 200ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.android-fab:hover:not(:disabled) {
+  background-color: #1976d2;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.android-fab:disabled {
+  background-color: #e0e0e0;
+  color: #9e9e9e;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.android-fab-submit {
+  background-color: #4caf50;
+}
+
+.android-fab-submit:hover:not(:disabled) {
+  background-color: #388e3c;
+}
+
+.android-fab-icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* Android Form Navigation */
+.android-form-navigation {
+  padding: 16px 24px;
+  background-color: white;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.android-nav-spacer {
+  flex: 1;
+}
+
+/* Android Circular Progress */
+.android-circular-progress {
+  width: 24px;
+  height: 24px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: android-spin 1s linear infinite;
+}
+
+@keyframes android-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Android Ripple Effect */
+.android-button,
+.android-fab,
+.android-radio-item,
+.android-checkbox-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.android-button::before,
+.android-fab::before,
+.android-radio-item::before,
+.android-checkbox-item::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+  pointer-events: none;
+}
+
+.android-button:active::before,
+.android-fab:active::before,
+.android-radio-item:active::before,
+.android-checkbox-item:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Android Date Picker */
+.android-date-picker-container {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.android-textfield-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  color: #757575;
+  pointer-events: none;
+}
+
+/* Material Dialog */
+.android-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+}
+
+.android-dialog {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 100%;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+.android-dialog-header {
+  padding: 24px 24px 20px 24px;
+}
+
+.android-dialog-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #212121;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.android-dialog-content {
+  padding: 0 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.android-picker-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.android-picker-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #757575;
+  margin-bottom: 8px;
+  font-family: "Roboto", sans-serif;
+}
+
+.android-native-picker {
+  padding: 16px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 1rem;
+  color: #212121;
+  font-family: "Roboto", sans-serif;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: all 200ms ease;
+}
+
+.android-native-picker:focus {
+  border-color: #2196f3;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+  outline: none;
+}
+
+.android-picker-preview {
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.android-preview-label {
+  font-size: 0.875rem;
+  color: #757575;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}
+
+.android-preview-value {
+  font-size: 1rem;
+  color: #212121;
+  font-weight: 400;
+  font-family: "Roboto", sans-serif;
+}
+
+.android-dialog-actions {
+  padding: 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.android-button-primary-text {
+  color: #2196f3;
+}
+
+.android-button-primary-text:hover {
+  background-color: rgba(33, 150, 243, 0.08);
+}
+
+/* Android Safe Area Handling */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .android-form-navigation {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Android Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .android-linear-progress-primary,
+  .android-textfield,
+  .android-textfield-label,
+  .android-textfield-underline::after,
+  .android-button,
+  .android-fab,
+  .android-circular-progress {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* Android Dark Theme */
+@media (prefers-color-scheme: dark) {
+  .android-form-container {
+    background-color: #303030;
+  }
+
+  .android-app-bar {
+    background-color: #424242;
+  }
+
+  .android-form-title {
+    color: #ffffff;
+  }
+
+  .android-form-subtitle {
+    color: #b0b0b0;
+  }
+
+  .android-form-content {
+    background-color: #303030;
+  }
+
+  .android-section-title {
+    color: #ffffff;
+  }
+
+  .android-textfield,
+  .android-select-input,
+  .android-radio-item,
+  .android-checkbox-item {
+    background-color: #424242;
+  }
+
+  .android-textfield-input,
+  .android-textarea-input,
+  .android-select-input {
+    color: #ffffff;
+  }
+
+  .android-textfield-label {
+    color: #b0b0b0;
+  }
+
+  .android-textfield.focused .android-textfield-label {
+    color: #64b5f6;
+  }
+
+  .android-textfield-underline {
+    background-color: #616161;
+  }
+
+  .android-textfield-underline::after {
+    background-color: #64b5f6;
+  }
+
+  .android-select-label,
+  .android-radio-group-title {
+    color: #b0b0b0;
+  }
+
+  .android-radio-label,
+  .android-checkbox-title {
+    color: #ffffff;
+  }
+
+  .android-checkbox-subtitle {
+    color: #b0b0b0;
+  }
+
+  .android-form-navigation {
+    background-color: #424242;
+    border-color: #616161;
+  }
+}
+
+/* Android Mobile Components */
+
+/* Android Tab Bar Styling */
+.android-tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.android-tab-bar-background {
+  background-color: var(--surface, #ffffff);
+  border-top: 1px solid var(--outline, #79747e);
+  display: flex;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.android-tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 4px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  min-height: 64px;
+  overflow: hidden;
+}
+
+.android-tab-item.active {
+  color: var(--primary, #6200ea);
+}
+
+.android-tab-icon {
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.android-tab-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: var(--error, #b00020);
+  color: var(--on-error, #ffffff);
+  font-size: 11px;
+  font-weight: 500;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  font-family: "Roboto", sans-serif;
+}
+
+.android-tab-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.android-tab-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--primary, #6200ea);
+}
+
+.android-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.12);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Android Card Styling */
+.android-card {
+  background-color: var(--surface, #ffffff);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.android-card-default {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.android-card-elevated {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.android-card-outlined {
+  border: 1px solid var(--outline, #79747e);
+}
+
+.android-card-filled {
+  background-color: var(--surface-variant, #f3f0f4);
+}
+
+.android-card-padding-none {
+  padding: 0;
+}
+
+.android-card-padding-small {
+  padding: 12px;
+}
+
+.android-card-padding-medium {
+  padding: 16px;
+}
+
+.android-card-padding-large {
+  padding: 24px;
+}
+
+.android-card-interactive {
+  cursor: pointer;
+  transition: elevation 0.2s ease;
+}
+
+.android-card-interactive:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16), 0 4px 8px rgba(0, 0, 0, 0.23);
+}
+
+.android-card-disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.android-ripple-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Android Button Styling */
+.android-button {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.android-button-filled {
+  background-color: var(--primary, #6200ea);
+  color: var(--on-primary, #ffffff);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+}
+
+.android-button-filled:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16), 0 4px 8px rgba(0, 0, 0, 0.23);
+}
+
+.android-button-outlined {
+  background-color: transparent;
+  color: var(--primary, #6200ea);
+  border: 1px solid var(--primary, #6200ea);
+}
+
+.android-button-outlined:hover {
+  background-color: rgba(98, 0, 234, 0.04);
+}
+
+.android-button-text {
+  background-color: transparent;
+  color: var(--primary, #6200ea);
+}
+
+.android-button-text:hover {
+  background-color: rgba(98, 0, 234, 0.04);
+}
+
+.android-button-destructive {
+  background-color: var(--error, #b00020);
+  color: var(--on-error, #ffffff);
+}
+
+.android-button-destructive:hover {
+  background-color: #8e001c;
+}
+
+.android-button-ghost {
+  background-color: transparent;
+  color: var(--on-surface-variant, #49454f);
+}
+
+.android-button-ghost:hover {
+  background-color: rgba(73, 69, 79, 0.08);
+}
+
+.android-button-small {
+  padding: 8px 16px;
+  font-size: 12px;
+  min-height: 32px;
+}
+
+.android-button-medium {
+  padding: 10px 24px;
+  font-size: 14px;
+  min-height: 40px;
+}
+
+.android-button-large {
+  padding: 12px 32px;
+  font-size: 16px;
+  min-height: 48px;
+}
+
+.android-button-full-width {
+  width: 100%;
+}
+
+.android-button-disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.android-button-loading {
+  pointer-events: none;
+}
+
+/* Android Header Styling */
+.android-header {
+  background-color: var(--surface, #ffffff);
+  border-bottom: 1px solid var(--outline, #79747e);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.android-header-transparent {
+  background: transparent;
+  border-bottom: none;
+  box-shadow: none;
+}
+
+.android-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+  min-height: 56px;
+}
+
+.android-header-left,
+.android-header-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.android-header-right {
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.android-header-center {
+  flex: 2;
+  padding: 0 16px;
+}
+
+.android-header-nav-button,
+.android-header-action {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background: none;
+  border: none;
+  color: var(--on-surface, #1c1b1f);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.2s ease;
+}
+
+.android-header-nav-button:hover,
+.android-header-action:hover {
+  background-color: rgba(28, 27, 31, 0.08);
+}
+
+.android-header-nav-button.disabled,
+.android-header-action.disabled {
+  color: rgba(28, 27, 31, 0.38);
+  cursor: not-allowed;
+}
+
+.android-header-title {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--on-surface, #1c1b1f);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.android-header-subtitle {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  color: var(--on-surface-variant, #49454f);
+  margin: 2px 0 0 0;
+}
+
+/* Android Modal Styling */
+.android-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.32);
+}
+
+.android-modal {
+  background-color: var(--surface, #ffffff);
+  border-radius: 28px;
+  box-shadow: 0 11px 15px rgba(0, 0, 0, 0.2), 0 9px 46px rgba(0, 0, 0, 0.12),
+    0 24px 38px rgba(0, 0, 0, 0.14);
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+.android-modal-small {
+  width: 280px;
+}
+
+.android-modal-medium {
+  width: 400px;
+}
+
+.android-modal-large {
+  width: 560px;
+}
+
+.android-modal-fullscreen {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
+.android-modal-elevation {
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 50%
+  );
+  pointer-events: none;
+}
+
+.android-modal-header {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid var(--outline, #79747e);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.android-modal-title {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--on-surface, #1c1b1f);
+  margin: 0;
+}
+
+.android-modal-close-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: none;
+  border: none;
+  color: var(--on-surface-variant, #49454f);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.2s ease;
+}
+
+.android-modal-close-button:hover {
+  background-color: rgba(73, 69, 79, 0.08);
+}
+
+.android-modal-content {
+  padding: 24px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Android Swipeable Card Styling */
+.android-swipeable-card {
+  background-color: var(--surface, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
+  position: relative;
+  overflow: hidden;
+}
+
+.android-swipeable-card-disabled {
+  opacity: 0.38;
+}
+
+.android-swipe-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  min-height: 60px;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.android-swipe-action:hover {
+  filter: brightness(0.9);
+}
+
+.android-swipe-ripple-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}

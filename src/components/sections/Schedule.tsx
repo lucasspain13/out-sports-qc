@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import React, { useState } from "react";
-import { getScheduleBySport, getUpcomingGames } from "../../data/schedules";
+import React, { useEffect, useMemo, useState } from "react";
+import { useLeagueStats, useUpcomingGames } from "../../hooks/useGames";
 import { Game } from "../../types";
 import GameCard from "../ui/GameCard";
 
@@ -27,29 +27,38 @@ const Schedule: React.FC<ScheduleSectionProps> = ({
     "kickball" | "dodgeball" | "all"
   >(sportType || "all");
 
-  // Get games based on selection
-  const getGames = () => {
-    if (showUpcomingOnly) {
-      return getUpcomingGames(
-        selectedSport === "all" ? undefined : selectedSport
-      );
-    } else {
-      if (selectedSport === "all") {
-        const kickballSchedule = getScheduleBySport("kickball");
-        const dodgeballSchedule = getScheduleBySport("dodgeball");
-        const allGames = [
-          ...kickballSchedule.weeks.flatMap(week => week.games),
-          ...dodgeballSchedule.weeks.flatMap(week => week.games),
-        ];
-        return allGames.sort((a, b) => a.date.getTime() - b.date.getTime());
-      } else {
-        const schedule = getScheduleBySport(selectedSport);
-        return schedule.weeks.flatMap(week => week.games);
-      }
-    }
-  };
+  // Use the database-driven hook for games
+  const {
+    games: dbGames,
+    loading,
+    error,
+  } = useUpcomingGames(
+    selectedSport === "all" ? undefined : selectedSport,
+    maxGames
+  );
 
-  const games = getGames().slice(0, maxGames);
+  // Get league stats for the bottom section
+  const leagueStats = useLeagueStats();
+
+  // Ensure selectedSport is properly synced with sportType prop
+  useEffect(() => {
+    if (sportType && sportType !== selectedSport) {
+      setSelectedSport(sportType);
+    }
+  }, [sportType, selectedSport]);
+
+  // Filter and limit games based on options
+  const games = useMemo(() => {
+    let filteredGames = dbGames;
+
+    if (!showUpcomingOnly) {
+      // If we want all games, we need all games, not just upcoming
+      // For now, we'll still use upcoming as the base set
+      filteredGames = dbGames;
+    }
+
+    return filteredGames.slice(0, maxGames);
+  }, [dbGames, showUpcomingOnly, maxGames]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -79,7 +88,8 @@ const Schedule: React.FC<ScheduleSectionProps> = ({
     return [
       { key: "all" as const, label: "All Sports", emoji: "🏆" },
       { key: "kickball" as const, label: "Kickball", emoji: "⚽" },
-      { key: "dodgeball" as const, label: "Dodgeball", emoji: "🏐" },
+      // Temporarily disabled - dodgeball coming soon
+      // { key: "dodgeball" as const, label: "Dodgeball", emoji: "🏐" },
     ];
   };
 
@@ -135,7 +145,51 @@ const Schedule: React.FC<ScheduleSectionProps> = ({
         </motion.div>
 
         {/* Games Grid */}
-        {games.length === 0 ? (
+        {loading ? (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center py-16"
+          >
+            <div className="bg-gray-50 rounded-2xl p-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <h3 className="heading-4 text-gray-900 mb-2">Loading Games...</h3>
+              <p className="body-base text-gray-600">
+                Please wait while we fetch the latest game information.
+              </p>
+            </div>
+          </motion.div>
+        ) : error ? (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center py-16"
+          >
+            <div className="bg-red-50 rounded-2xl p-12">
+              <svg
+                className="w-16 h-16 mx-auto mb-4 text-red-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"
+                />
+              </svg>
+              <h3 className="heading-4 text-gray-900 mb-2">
+                Error Loading Games
+              </h3>
+              <p className="body-base text-gray-600">{error}</p>
+            </div>
+          </motion.div>
+        ) : games.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -169,23 +223,21 @@ const Schedule: React.FC<ScheduleSectionProps> = ({
           </motion.div>
         ) : (
           <motion.div
+            key={`games-${selectedSport}`} // Force re-render when filter changes
             variants={containerVariants}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+            animate="visible"
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {games.map((game, index) => (
-              <motion.div
-                key={game.id}
-                variants={itemVariants}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
+            {games.map(game => (
+              <motion.div key={game.id} variants={itemVariants}>
                 <GameCard
                   game={game}
                   onClick={() => onGameSelect?.(game)}
                   showLocation={true}
-                  showScore={game.status === "completed"}
+                  showScore={
+                    game.status === "completed" || game.status === "in-progress"
+                  }
                   compact={false}
                 />
               </motion.div>
@@ -237,6 +289,7 @@ const Schedule: React.FC<ScheduleSectionProps> = ({
                   <span className="mr-2">⚽</span>
                   Kickball Schedule
                 </motion.a>
+                {/* Temporarily disabled - dodgeball coming soon
                 <motion.a
                   href="#dodgeball-schedule"
                   whileHover={{ scale: 1.05 }}
@@ -246,6 +299,7 @@ const Schedule: React.FC<ScheduleSectionProps> = ({
                   <span className="mr-2">🏐</span>
                   Dodgeball Schedule
                 </motion.a>
+                */}
               </div>
             )}
           </motion.div>
@@ -265,15 +319,13 @@ const Schedule: React.FC<ScheduleSectionProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
                   <div className="text-3xl font-bold mb-2">
-                    {getUpcomingGames("kickball").length +
-                      getUpcomingGames("dodgeball").length}
+                    {leagueStats.totalUpcomingGames}
                   </div>
                   <div className="text-sm opacity-90">Upcoming Games</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold mb-2">
-                    {getScheduleBySport("kickball").weeks.length +
-                      getScheduleBySport("dodgeball").weeks.length}
+                    {leagueStats.totalWeeks}
                   </div>
                   <div className="text-sm opacity-90">Total Weeks</div>
                 </div>

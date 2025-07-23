@@ -64,27 +64,94 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
     >
       {/* Week Header */}
       <div
-        className="p-6 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors"
+        className="p-4 sm:p-6 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            {/* Week Number */}
+        {/* Mobile Layout */}
+        <div className="block sm:hidden">
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-brand-teal to-brand-blue rounded-lg flex items-center justify-center text-white font-bold">
+              <div className="w-10 h-10 bg-gradient-to-br from-brand-teal to-brand-blue rounded-lg flex items-center justify-center text-white font-bold text-sm">
                 {week.weekNumber}
               </div>
               <div>
-                <h3 className="card-title text-gray-900">
+                <h3 className="text-sm font-semibold text-gray-900">
                   Week {week.weekNumber}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-xs text-gray-600">
                   {formatDateRange(week.startDate, week.endDate)}
                 </p>
               </div>
             </div>
 
-            {/* Status Badge */}
+            {/* Expand/Collapse Icon - Mobile */}
+            <motion.div
+              animate={{ rotate: isExpanded ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+              className="text-gray-400"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </motion.div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span
+                className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${status.color}`}
+              >
+                {status.label}
+              </span>
+              <span className="text-xs font-medium text-gray-900">
+                {week.games.length} {week.games.length === 1 ? "Game" : "Games"}
+              </span>
+            </div>
+            <div className="text-xs text-gray-500">
+              {statusCounts.completed > 0 && (
+                <span className="mr-2">{statusCounts.completed} completed</span>
+              )}
+              {statusCounts["in-progress"] > 0 && (
+                <span className="mr-2 text-red-600">
+                  {statusCounts["in-progress"]} live
+                </span>
+              )}
+              {statusCounts.scheduled > 0 && (
+                <span>{statusCounts.scheduled} scheduled</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Layout */}
+        <div className="hidden sm:flex items-center justify-between">
+          <div className="flex items-center space-x-4 min-w-0 flex-1">
+            {/* Week Number */}
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-brand-teal to-brand-blue rounded-lg flex items-center justify-center text-white font-bold text-base">
+                {week.weekNumber}
+              </div>
+              <div className="min-w-0">
+                <h3 className="card-title text-gray-900 text-base">
+                  Week {week.weekNumber}
+                </h3>
+                <p className="text-sm text-gray-600 truncate">
+                  {formatDateRange(week.startDate, week.endDate)}
+                </p>
+              </div>
+            </div>
+
+            {/* Status Badge - Desktop */}
             <span
               className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${status.color}`}
             >
@@ -92,7 +159,7 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 flex-shrink-0">
             {/* Game Count and Status Summary */}
             <div className="text-right">
               <div className="text-sm font-medium text-gray-900">
@@ -115,7 +182,7 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
               </div>
             </div>
 
-            {/* Expand/Collapse Icon */}
+            {/* Expand/Collapse Icon - Desktop */}
             <motion.div
               animate={{ rotate: isExpanded ? 180 : 0 }}
               transition={{ duration: 0.2 }}
@@ -149,7 +216,7 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="overflow-hidden"
           >
-            <div className="p-6 space-y-4">
+            <div className="p-4 sm:p-6 space-y-4">
               {week.games.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
                   <svg
@@ -168,7 +235,7 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
                   <p>No games scheduled for this week</p>
                 </div>
               ) : (
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-4 md:grid md:gap-4 md:grid-cols-2 md:space-y-0">
                   {week.games.map((game, index) => (
                     <motion.div
                       key={game.id}
@@ -180,7 +247,10 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
                         game={game}
                         onClick={() => onGameSelect?.(game)}
                         showLocation={showLocations}
-                        showScore={game.status === "completed"}
+                        showScore={
+                          game.status === "completed" ||
+                          game.status === "in-progress"
+                        }
                         compact={true}
                       />
                     </motion.div>
@@ -194,19 +264,24 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
 
       {/* Quick Stats Footer (when collapsed) */}
       {!isExpanded && week.games.length > 0 && (
-        <div className="px-6 py-3 bg-gray-50 border-t border-gray-100">
+        <div className="px-4 sm:px-6 py-3 bg-gray-50 border-t border-gray-100">
           <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               {/* Sport Types */}
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1 sm:space-x-2">
                 {Array.from(new Set(week.games.map(g => g.sportType))).map(
                   sport => (
                     <span
                       key={sport}
                       className="inline-flex items-center px-2 py-1 rounded text-xs bg-white text-gray-700 border"
                     >
-                      {sport === "kickball" ? "⚽" : "🏐"}{" "}
-                      {sport.charAt(0).toUpperCase() + sport.slice(1)}
+                      <span className="hidden sm:inline">
+                        {sport === "kickball" ? "⚽" : "🏐"}{" "}
+                        {sport.charAt(0).toUpperCase() + sport.slice(1)}
+                      </span>
+                      <span className="sm:hidden">
+                        {sport === "kickball" ? "⚽" : "🏐"}
+                      </span>
                     </span>
                   )
                 )}
@@ -215,8 +290,8 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
 
             {/* Next Game Indicator */}
             {statusCounts.scheduled > 0 && (
-              <div className="text-xs text-gray-500">
-                Next game:{" "}
+              <div className="text-xs text-gray-500 text-right">
+                <span className="hidden sm:inline">Next game: </span>
                 {week.games
                   .filter(g => g.status === "scheduled")
                   .sort((a, b) => a.date.getTime() - b.date.getTime())[0]

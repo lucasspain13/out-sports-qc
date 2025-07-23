@@ -1,25 +1,45 @@
 import { motion } from "framer-motion";
 import React from "react";
-import {
-  dodgeballTeams,
-  getTeamCaptain,
-  kickballTeams,
-} from "../../data/teams";
+import { useTeams } from "../../hooks/useTeams";
 import { PlayerCard, TeamCard } from "../ui";
 
 const TeamShowcase: React.FC = () => {
+  const { teams: kickballTeams, loading: loadingKickball } =
+    useTeams("kickball");
+  const { teams: dodgeballTeams, loading: loadingDodgeball } =
+    useTeams("dodgeball");
+
+  const loading = loadingKickball || loadingDodgeball;
+
   // Get a sample of teams and players for showcase
   const sampleTeams = [
     kickballTeams[0], // Thunder Kickers
     dodgeballTeams[0], // Dodge Dynasty
     kickballTeams[1], // Rainbow Runners
     dodgeballTeams[1], // Teal Tornadoes
-  ];
+  ].filter(Boolean); // Remove undefined teams
 
   // Get sample players (captains from each team)
   const samplePlayers = sampleTeams
-    .map(team => getTeamCaptain(team))
+    .map(team =>
+      team?.captain
+        ? team.players.find(player => player.id === team.captain)
+        : null
+    )
     .filter(Boolean);
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-gray-50">
+        <div className="container-custom">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading teams...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 bg-gray-50">
@@ -143,25 +163,35 @@ const TeamShowcase: React.FC = () => {
           </div>
         </div>
 
-        {/* Call to Action */}
+        {/* View More Teams Link - Simple, non-redundant CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mt-16"
+          className="text-center mt-12"
         >
-          <div className="bg-white rounded-2xl p-8 shadow-lg max-w-2xl mx-auto">
-            <h4 className="heading-4 mb-4">Ready to Join a Team?</h4>
-            <p className="body-base text-gray-600 mb-6">
-              Connect with amazing players and become part of our inclusive
-              sports community.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="btn-primary">View All Teams</button>
-              <button className="btn-outline">Register Now</button>
-            </div>
-          </div>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="btn-outline inline-flex items-center"
+            onClick={() => console.log("Navigate to full roster")}
+          >
+            View All Teams
+            <svg
+              className="ml-2 w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
+          </motion.button>
         </motion.div>
       </div>
     </section>

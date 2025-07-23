@@ -56,7 +56,7 @@ const Sports: React.FC<SportsProps> = ({ sports }) => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto"
         >
           {sports.map(sport => (
             <motion.div
@@ -78,38 +78,17 @@ const Sports: React.FC<SportsProps> = ({ sports }) => {
           ))}
         </motion.div>
 
-        {/* Call to Action */}
+        {/* Simplified CTA - removed redundant join messaging */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
           viewport={{ once: true }}
-          className="text-center mt-16"
+          className="text-center mt-12"
         >
           <p className="body-base text-gray-600 mb-6">
-            Ready to join the fun? Sign up for the upcoming season!
+            Explore our sports programs and find your perfect team!
           </p>
-          <motion.a
-            href="#signup"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="btn-primary inline-flex items-center"
-          >
-            Join a Team
-            <svg
-              className="ml-2 w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-          </motion.a>
         </motion.div>
       </div>
     </section>

@@ -6,8 +6,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", ...fontFamily.sans],
-        display: ["Poppins", ...fontFamily.sans],
+        // Use CSS variables that will be set based on platform
+        sans: ["var(--font-primary)", ...fontFamily.sans],
+        display: ["var(--font-display)", ...fontFamily.sans],
+        mono: ["var(--font-mono)", ...fontFamily.mono],
       },
       colors: {
         brand: {
@@ -55,6 +57,15 @@ export default {
         "stagger-2": "fadeIn 0.5s ease-out 100ms forwards",
         "stagger-3": "fadeIn 0.5s ease-out 200ms forwards",
         "stagger-4": "fadeIn 0.5s ease-out 300ms forwards",
+        float: "float 3s ease-in-out infinite",
+        "float-reverse": "floatReverse 4s ease-in-out infinite",
+        "pulse-glow": "pulseGlow 2s ease-in-out infinite",
+        "gradient-shift": "gradientShift 8s ease infinite",
+        "bounce-subtle": "bounceSubtle 2s ease-in-out infinite",
+        wiggle: "wiggle 1s ease-in-out",
+        shine: "shine 2s ease-in-out infinite",
+        "spin-slow": "spin 3s linear infinite",
+        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       keyframes: {
         fadeIn: {
@@ -68,6 +79,44 @@ export default {
         scaleIn: {
           "0%": { transform: "scale(0.9)", opacity: "0" },
           "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        floatReverse: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(10px)" },
+        },
+        pulseGlow: {
+          "0%, 100%": {
+            opacity: "1",
+            transform: "scale(1)",
+            filter: "brightness(1)",
+          },
+          "50%": {
+            opacity: "0.8",
+            transform: "scale(1.05)",
+            filter: "brightness(1.1)",
+          },
+        },
+        gradientShift: {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+        bounceSubtle: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-5px)" },
+        },
+        wiggle: {
+          "0%, 100%": { transform: "rotate(0deg)" },
+          "25%": { transform: "rotate(-3deg)" },
+          "75%": { transform: "rotate(3deg)" },
+        },
+        shine: {
+          "0%": { transform: "translateX(-100%) skewX(-45deg)" },
+          "100%": { transform: "translateX(200%) skewX(-45deg)" },
         },
       },
       spacing: {

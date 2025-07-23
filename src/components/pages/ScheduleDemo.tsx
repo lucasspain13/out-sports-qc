@@ -78,7 +78,9 @@ const ScheduleDemo: React.FC = () => {
                 game={game}
                 onClick={() => handleGameSelect(game)}
                 showLocation={true}
-                showScore={game.status === "completed"}
+                showScore={
+                  game.status === "completed" || game.status === "in-progress"
+                }
               />
             ))}
           </div>

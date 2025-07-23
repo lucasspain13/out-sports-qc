@@ -33,132 +33,154 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
     purple: "border-brand-purple text-brand-purple bg-brand-purple/10",
   };
 
-  const textAccentClasses = {
-    orange: "text-brand-orange",
-    teal: "text-brand-teal",
-    blue: "text-brand-blue",
-    purple: "text-brand-purple",
-  };
-
   return (
     <motion.div
-      whileHover={{ scale: 1.02, y: -4 }}
+      whileHover={{
+        scale: 1.02,
+        y: -8,
+        transition: { duration: 0.3, ease: [0.33, 1, 0.68, 1] },
+      }}
       whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.2, ease: "easeOut" }}
       className={`card-base cursor-pointer group relative overflow-hidden ${
         showQuote ? "h-auto" : "h-32"
       }`}
       onClick={onClick}
     >
-      {/* Background Gradient */}
-      <div className={`absolute inset-0 ${gradientClasses[teamGradient]}`} />
+      {/* Animated background gradient */}
+      <motion.div
+        className={`absolute inset-0 ${gradientClasses[teamGradient]} opacity-0`}
+        whileHover={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      />
 
-      {/* Content */}
-      <div className="relative z-10 p-6">
-        {/* Header Row */}
-        <div className="flex items-start justify-between mb-4">
-          {/* Avatar and Basic Info */}
-          <div className="flex items-center space-x-4">
-            {/* Avatar Placeholder */}
-            <div
-              className={`w-12 h-12 rounded-full ${accentClasses[teamGradient]} flex items-center justify-center font-bold text-lg`}
-            >
+      {/* Floating background elements */}
+      <motion.div
+        className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-white/20 to-transparent rounded-full"
+        animate={{
+          scale: [1, 1.1, 1],
+          rotate: [0, 180, 360],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+      />
+
+      <div
+        className="relative z-10 p-6 h-full bg-white"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)",
+        }}
+      >
+        {/* Captain badge */}
+        {iscaptain && (
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{
+              duration: 0.5,
+              delay: 0.2,
+              type: "spring",
+              stiffness: 200,
+            }}
+            whileHover={{
+              rotate: [0, -10, 10, 0],
+              transition: { duration: 0.5 },
+            }}
+            className={`absolute top-4 right-4 px-2 py-1 rounded-full text-xs font-bold border-2 ${accentClasses[teamGradient]}`}
+          >
+            ⭐ CAPTAIN
+          </motion.div>
+        )}
+
+        <div className="flex items-center mb-4">
+          {/* Avatar */}
+          <motion.div
+            className={`w-16 h-16 rounded-full bg-gradient-to-br ${
+              teamGradient === "orange"
+                ? "from-brand-orange to-brand-orange-dark"
+                : teamGradient === "teal"
+                ? "from-brand-teal to-brand-teal-dark"
+                : teamGradient === "blue"
+                ? "from-brand-blue to-brand-blue-dark"
+                : "from-brand-purple to-brand-purple-dark"
+            } flex items-center justify-center text-white font-bold text-xl shadow-lg relative overflow-hidden`}
+            whileHover={{
+              scale: 1.1,
+              rotate: [0, -5, 5, 0],
+              transition: { duration: 0.3 },
+            }}
+          >
+            {/* Shine effect */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12"
+              initial={{ x: "-100%" }}
+              whileHover={{ x: "100%" }}
+              transition={{ duration: 0.6 }}
+            />
+
+            <span className="relative z-10">
               {player.name
                 .split(" ")
-                .map(n => n[0])
-                .join("")}
-            </div>
+                .map((n: string) => n[0])
+                .join("")
+                .toUpperCase()}
+            </span>
+          </motion.div>
 
-            {/* Name and Jersey */}
-            <div>
-              <div className="flex items-center space-x-2">
-                <h4 className="font-semibold text-gray-900">{player.name}</h4>
-                {iscaptain && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                    <svg
-                      className="w-3 h-3 mr-1"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    Captain
-                  </span>
-                )}
-              </div>
-              <p className="text-sm text-gray-600">
-                #{player.jerseyNumber} •{" "}
-                {player.sportType.charAt(0).toUpperCase() +
-                  player.sportType.slice(1)}
-              </p>
-            </div>
-          </div>
+          <div className="ml-4 flex-1">
+            <motion.h3
+              className="font-semibold text-gray-900 text-lg"
+              whileHover={{ x: 4 }}
+              transition={{ duration: 0.2 }}
+            >
+              {player.name}
+            </motion.h3>
 
-          {/* Jersey Number Badge */}
-          <div
-            className={`w-10 h-10 rounded-lg ${accentClasses[teamGradient]} flex items-center justify-center font-bold text-lg border-2`}
-          >
-            {player.jerseyNumber}
+            <motion.p
+              className="text-sm font-medium text-gray-600"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              Player #{player.id}
+            </motion.p>
           </div>
         </div>
 
-        {/* Quote Section (if showQuote is true) */}
-        {showQuote && (
-          <div className="mt-4 p-4 bg-white/50 backdrop-blur-sm rounded-lg border border-gray-200">
-            <div className="flex items-start space-x-2">
-              <svg
-                className={`w-4 h-4 mt-1 flex-shrink-0 ${textAccentClasses[teamGradient]}`}
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <blockquote className="text-sm italic text-gray-700 leading-relaxed">
-                "{player.quote}"
-              </blockquote>
-            </div>
-          </div>
+        {/* Quote */}
+        {showQuote && player.quote && (
+          <motion.blockquote
+            className="text-sm text-gray-600 italic border-l-4 border-brand-teal/20 pl-4 mt-4"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            "{player.quote}"
+          </motion.blockquote>
         )}
 
-        {/* Compact Mode Additional Info */}
-        {!showQuote && (
-          <div className="mt-2">
-            <p className="text-xs text-gray-600 line-clamp-2">
-              "{player.quote}"
-            </p>
-          </div>
-        )}
+        {/* Hover indicator */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-1"
+          initial={{ scaleX: 0 }}
+          whileHover={{ scaleX: 1 }}
+          transition={{ duration: 0.3 }}
+          style={{
+            background:
+              teamGradient === "orange"
+                ? "linear-gradient(90deg, #ff6b35, #f39c12)"
+                : teamGradient === "teal"
+                ? "linear-gradient(90deg, #4ecdc4, #16a085)"
+                : teamGradient === "blue"
+                ? "linear-gradient(90deg, #3498db, #2980b9)"
+                : "linear-gradient(90deg, #9b59b6, #8e44ad)",
+            transformOrigin: "left",
+          }}
+        />
       </div>
-
-      {/* Hover Indicator */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        whileHover={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.2 }}
-        className="absolute top-4 right-4 text-gray-400 group-hover:text-gray-600"
-      >
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 5l7 7-7 7"
-          />
-        </svg>
-      </motion.div>
     </motion.div>
   );
 };

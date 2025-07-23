@@ -1,19 +1,20 @@
 import { motion } from "framer-motion";
 import React from "react";
+import { useTeams } from "../../hooks/useTeams";
 import { Team } from "../../types";
 import TeamCard from "../ui/TeamCard";
 
 interface RosterOverviewProps {
   sportType: "kickball" | "dodgeball";
-  teams: Team[];
   onTeamSelect?: (team: Team) => void;
 }
 
 const RosterOverview: React.FC<RosterOverviewProps> = ({
   sportType,
-  teams,
   onTeamSelect,
 }) => {
+  const { teams, loading, error } = useTeams(sportType);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -39,6 +40,36 @@ const RosterOverview: React.FC<RosterOverviewProps> = ({
   const sportDisplayName =
     sportType.charAt(0).toUpperCase() + sportType.slice(1);
   const sportEmoji = sportType === "kickball" ? "⚽" : "🏐";
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-gray-50">
+        <div className="container-custom">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">
+              Loading {sportDisplayName.toLowerCase()} teams...
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-20 bg-gray-50">
+        <div className="container-custom">
+          <div className="text-center">
+            <h1 className="heading-1 text-gray-900 mb-4">
+              Error Loading Teams
+            </h1>
+            <p className="text-gray-600">{error}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 bg-gray-50">
@@ -116,45 +147,7 @@ const RosterOverview: React.FC<RosterOverviewProps> = ({
           ))}
         </motion.div>
 
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="text-center mt-16"
-        >
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-            <h3 className="heading-4 text-gray-900 mb-4">
-              Ready to Join the Action?
-            </h3>
-            <p className="body-base text-gray-600 mb-6">
-              Sign up for the upcoming {sportDisplayName.toLowerCase()} season
-              and become part of our amazing community!
-            </p>
-            <motion.a
-              href="#signup"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-primary inline-flex items-center"
-            >
-              Join {sportDisplayName} League
-              <svg
-                className="ml-2 w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </motion.a>
-          </div>
-        </motion.div>
+        {/* Removed redundant Call to Action - user can use main navigation to signup */}
       </div>
     </section>
   );

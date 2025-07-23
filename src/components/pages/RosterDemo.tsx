@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { getTeamsBySport } from "../../data/teams";
 import { Player, Team } from "../../types";
 import RosterOverview from "./RosterOverview";
 import TeamDetailPage from "./TeamDetailPage";
@@ -13,8 +12,6 @@ interface RosterDemoProps {
 const RosterDemo: React.FC<RosterDemoProps> = ({ sportType }) => {
   const [viewMode, setViewMode] = useState<ViewMode>("overview");
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
-
-  const teams = getTeamsBySport(sportType);
 
   const handleTeamSelect = (team: Team) => {
     setSelectedTeam(team);
@@ -42,11 +39,7 @@ const RosterDemo: React.FC<RosterDemoProps> = ({ sportType }) => {
   }
 
   return (
-    <RosterOverview
-      sportType={sportType}
-      teams={teams}
-      onTeamSelect={handleTeamSelect}
-    />
+    <RosterOverview sportType={sportType} onTeamSelect={handleTeamSelect} />
   );
 };
 

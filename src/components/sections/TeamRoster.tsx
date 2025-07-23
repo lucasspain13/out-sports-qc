@@ -212,7 +212,7 @@ const TeamRoster: React.FC<TeamRosterProps> = ({
           </motion.div>
         )}
 
-        {/* Call to Action */}
+        {/* Call to Action - Only show if it's NOT a preview/limited view */}
         {!maxTeams && displayTeams.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}

@@ -289,40 +289,7 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
           </motion.div>
         </div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-16 text-center"
-        >
-          <div className="bg-gradient-to-r from-brand-orange/5 via-brand-teal/5 to-brand-purple/5 rounded-3xl p-8 border border-gray-100">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Ready to get started?
-            </h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Don't wait for the next season to begin your journey with us. Join
-              our community today and discover the joy of inclusive recreational
-              sports.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-brand-orange to-brand-teal text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                Register Now
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="border-2 border-brand-teal text-brand-teal px-8 py-4 rounded-full font-semibold hover:bg-brand-teal hover:text-white transition-all duration-300"
-              >
-                Schedule a Visit
-              </motion.button>
-            </div>
-          </div>
-        </motion.div>
+        {/* Removed Bottom CTA - contact info is sufficient call to action */}
       </div>
     </section>
   );

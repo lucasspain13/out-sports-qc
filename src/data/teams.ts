@@ -180,9 +180,9 @@ const kickballPlayers: Player[] = [
   },
   {
     id: "kb-p20",
-    name: "Azure Power",
+    name: "Azure Energy",
     jerseyNumber: 16,
-    quote: "Azure energy, unstoppable force!",
+    quote: "Pure energy, unstoppable momentum!",
     avatar: "",
     teamId: "kb-team3",
     sportType: "kickball",
@@ -198,9 +198,9 @@ const kickballPlayers: Player[] = [
   },
   {
     id: "kb-p22",
-    name: "Navy Thunder",
+    name: "Navy Surge",
     jerseyNumber: 17,
-    quote: "Thunder from the deep!",
+    quote: "Surging from the depths!",
     avatar: "",
     teamId: "kb-team3",
     sportType: "kickball",
@@ -236,9 +236,9 @@ const kickballPlayers: Player[] = [
   // Purple Power (Purple) - Team 4
   {
     id: "kb-p26",
-    name: "Violet Force",
+    name: "Violet Spirit",
     jerseyNumber: 26,
-    quote: "Purple power, unstoppable!",
+    quote: "Spirited and unstoppable!",
     avatar: "",
     teamId: "kb-team4",
     sportType: "kickball",
@@ -290,9 +290,9 @@ const kickballPlayers: Player[] = [
   },
   {
     id: "kb-p32",
-    name: "Lilac Lightning",
+    name: "Luna Velocity",
     jerseyNumber: 32,
-    quote: "Lightning strikes twice!",
+    quote: "Velocity that illuminates!",
     avatar: "",
     teamId: "kb-team4",
     sportType: "kickball",
@@ -423,9 +423,9 @@ const dodgeballPlayers: Player[] = [
   },
   {
     id: "db-p12",
-    name: "Gale Force",
+    name: "Storm Current",
     jerseyNumber: 12,
-    quote: "Force of nature on the court!",
+    quote: "Electric current on the court!",
     avatar: "",
     teamId: "db-team2",
     sportType: "dodgeball",
@@ -616,9 +616,9 @@ const dodgeballPlayers: Player[] = [
   },
   {
     id: "db-p33",
-    name: "Lilac Lightning",
+    name: "Cosmic Stream",
     jerseyNumber: 33,
-    quote: "Lightning fast, lightning strong!",
+    quote: "Streaming through the stars!",
     avatar: "",
     teamId: "db-team4",
     sportType: "dodgeball",
@@ -695,7 +695,7 @@ export const kickballTeams: Team[] = [
     description:
       "Royal treatment for every game. This team brings elegance and power to the kickball diamond.",
     players: kickballPlayers.filter(p => p.teamId === "kb-team4"),
-    captain: "kb-p26", // Violet Force
+    captain: "kb-p26", // Violet Spirit
     founded: 2021,
     wins: 26,
     losses: 14,

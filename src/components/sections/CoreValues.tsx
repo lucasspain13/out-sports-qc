@@ -157,31 +157,7 @@ const CoreValues: React.FC<CoreValuesProps> = ({
           ))}
         </div>
 
-        {/* Bottom CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-16 text-center"
-        >
-          <div className="bg-gradient-to-r from-brand-blue/5 via-brand-purple/5 to-brand-teal/5 rounded-3xl p-8 border border-gray-100">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Ready to be part of our community?
-            </h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Join a league where these values aren't just words on a page –
-              they're lived experiences that make every game, every practice,
-              and every interaction meaningful.
-            </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-brand-teal to-brand-blue text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              Discover Our Community
-            </motion.button>
-          </div>
-        </motion.div>
+        {/* Removed Bottom CTA - core values section should focus on values */}
       </div>
     </section>
   );
