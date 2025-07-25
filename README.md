@@ -2,7 +2,7 @@
 
 # Out Sports League - Complete Platform
 
-A comprehensive React application for the Out Sports League LGBTQ+ sports community, featuring both a public website and a full-featured admin dashboard for league management.
+A comprehensive React application for the Out Sports League LGBTQ+ sports community, featuring both a public website and a full-featured admin dashboard for league management.!!
 
 ## 🌟 Features
 
