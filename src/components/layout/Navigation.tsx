@@ -137,7 +137,7 @@ const Navigation: React.FC<NavigationProps> = ({
                     href={item.href || "#"}
                     className={`nav-link nav-link-hover ${
                       needsDarkText ? "text-gray-900" : "text-white"
-                    } ${item.isActive ? "text-brand-teal" : ""}`}
+                    } ${item.isActive ? "text-brand-blue" : ""}`}
                   >
                     {item.label}
                   </a>
@@ -220,7 +220,7 @@ const Navigation: React.FC<NavigationProps> = ({
                       href={item.href || "#"}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={`block px-3 py-2 text-gray-900 hover:bg-gray-100 rounded-md ${
-                        item.isActive ? "text-brand-teal" : ""
+                        item.isActive ? "text-brand-blue" : ""
                       }`}
                     >
                       {item.label}

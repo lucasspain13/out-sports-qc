@@ -61,10 +61,28 @@ const LocationMap: React.FC<LocationMapProps> = ({
         ])
       : ([40.7589, -73.9851] as [number, number]); // Fallback to NYC
 
-  const getMarkerColor = (locationId: string) => {
-    if (selectedLocation && selectedLocation.id === locationId) {
+  const getMarkerColor = (location: LocationMapProps["locations"][0]) => {
+    if (selectedLocation && selectedLocation.id === location.id) {
       return "#ff6b35"; // Orange for selected
     }
+    
+    // Use custom marker color if specified
+    if (location.markerColor) {
+      switch (location.markerColor) {
+        case "red":
+          return "#ef4444"; // Red
+        case "blue":
+          return "#3b82f6"; // Blue
+        case "yellow":
+          return "#eab308"; // Yellow
+        case "orange":
+          return "#f97316"; // Orange
+        case "green":
+        default:
+          return "#4ecdc4"; // Teal (default)
+      }
+    }
+    
     return "#4ecdc4"; // Teal for default
   };
 
@@ -99,7 +117,7 @@ const LocationMap: React.FC<LocationMapProps> = ({
           <Marker
             key={location.id}
             position={[location.coordinates.lat, location.coordinates.lng]}
-            icon={createCustomIcon(getMarkerColor(location.id))}
+            icon={createCustomIcon(getMarkerColor(location))}
             eventHandlers={{
               click: () => {
                 if (onLocationSelect) {
@@ -125,11 +143,6 @@ const LocationMap: React.FC<LocationMapProps> = ({
                       {location.fieldType.charAt(0).toUpperCase() +
                         location.fieldType.slice(1)}
                     </span>
-                    {location.capacity && (
-                      <span className="text-xs text-gray-500">
-                        Capacity: {location.capacity}
-                      </span>
-                    )}
                   </div>
                 </div>
 
@@ -191,7 +204,7 @@ const LocationMap: React.FC<LocationMapProps> = ({
                   </div>
                   <div
                     className={`flex items-center space-x-1 ${
-                      location.concessions ? "text-green-600" : "text-gray-400"
+                      location.waterFountains ? "text-green-600" : "text-gray-400"
                     }`}
                   >
                     <svg
@@ -205,7 +218,7 @@ const LocationMap: React.FC<LocationMapProps> = ({
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span>Concessions</span>
+                    <span>Water Fountains</span>
                   </div>
                 </div>
 

@@ -5,9 +5,17 @@ import { SportCardProps } from "../../types";
 const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
   const gradientClasses = {
     orange: "bg-gradient-card-orange",
-    teal: "bg-gradient-card-teal",
+    green: "bg-gradient-card-green",
     blue: "bg-gradient-card-blue",
+    pink: "bg-gradient-card-pink",
+    white: "bg-gradient-card-white",
+    black: "bg-gradient-card-black",
+    gray: "bg-gradient-card-gray",
+    brown: "bg-gradient-card-brown",
     purple: "bg-gradient-card-purple",
+    yellow: "bg-gradient-card-yellow",
+    red: "bg-gradient-card-red",
+    cyan: "bg-gradient-card-cyan",
   };
 
   const handleClick = () => {

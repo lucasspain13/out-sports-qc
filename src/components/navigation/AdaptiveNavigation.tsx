@@ -10,20 +10,22 @@ import MobileNavigation, { TabId } from "./MobileNavigation";
 
 // Map traditional navigation routes to mobile tabs
 const routeToTabMap: Record<string, TabId> = {
-  "#home": TabId.LIVE_SCORES,
+  "#summer-kickball-schedule": TabId.SCHEDULE,
+  "#fall-kickball-schedule": TabId.SCHEDULE,
+  "#summer-kickball-teams": TabId.TEAMS,
+  "#fall-kickball-teams": TabId.TEAMS,
+  "#fall-kickball-registration": TabId.REGISTRATION,
+  // Legacy routes
   "#kickball-schedule": TabId.SCHEDULE,
-  "#dodgeball-schedule": TabId.SCHEDULE,
   "#kickball-teams": TabId.TEAMS,
-  "#dodgeball-teams": TabId.TEAMS,
   "#kickball-registration": TabId.REGISTRATION,
-  "#dodgeball-registration": TabId.REGISTRATION,
 };
 
 const tabToRouteMap: Record<TabId, string> = {
   [TabId.LIVE_SCORES]: "#home",
-  [TabId.SCHEDULE]: "#kickball-schedule", // Default to kickball schedule
-  [TabId.TEAMS]: "#kickball-teams", // Default to kickball teams
-  [TabId.REGISTRATION]: "#kickball-registration", // Default to kickball registration
+  [TabId.SCHEDULE]: "#summer-kickball-schedule", // Default to summer kickball schedule
+  [TabId.TEAMS]: "#summer-kickball-teams", // Default to summer kickball teams
+  [TabId.REGISTRATION]: "#fall-kickball-registration", // Default to fall kickball registration
 };
 
 export interface AdaptiveNavigationProps extends NavigationProps {

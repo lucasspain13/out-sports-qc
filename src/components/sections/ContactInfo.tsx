@@ -26,7 +26,7 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
       label: "Email",
       value: contact.email,
       href: `mailto:${contact.email}`,
-      gradient: "from-brand-teal to-brand-teal-light",
+      gradient: "bg-gradient-primary",
     },
     {
       icon: "📞",
@@ -150,7 +150,7 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="bg-gradient-to-br from-brand-blue/5 to-brand-teal/5 rounded-2xl p-6 border border-gray-100"
+              className="bg-gradient-to-br from-brand-blue/5 to-brand-blue/5 rounded-2xl p-6 border border-gray-100"
             >
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
                 <span className="text-2xl mr-3">🕒</span>
@@ -221,7 +221,7 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
                         "_blank"
                       )
                     }
-                    className="bg-gradient-to-r from-brand-teal to-brand-blue text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="bg-gradient-primary text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     Open in Maps
                   </motion.button>
@@ -230,7 +230,7 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
                 {/* Decorative map elements */}
                 <div className="absolute top-4 left-4 w-3 h-3 bg-brand-orange rounded-full animate-pulse" />
                 <div
-                  className="absolute bottom-8 right-8 w-2 h-2 bg-brand-teal rounded-full animate-pulse"
+                  className="absolute bottom-8 right-8 w-2 h-2 bg-brand-blue rounded-full animate-pulse"
                   style={{ animationDelay: "1s" }}
                 />
                 <div
@@ -251,7 +251,7 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
                     </label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300"
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
                       placeholder="Your name"
                     />
                   </div>
@@ -261,7 +261,7 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
                     </label>
                     <input
                       type="email"
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300"
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -271,7 +271,7 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
                     </label>
                     <textarea
                       rows={4}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300 resize-none"
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300 resize-none"
                       placeholder="Tell us how we can help..."
                     />
                   </div>
@@ -279,7 +279,7 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
-                    className="w-full bg-gradient-to-r from-brand-teal to-brand-blue text-white py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="w-full bg-gradient-primary text-white py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     Send Message
                   </motion.button>

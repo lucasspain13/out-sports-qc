@@ -9,28 +9,97 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
   showQuote = true,
 }) => {
   // Get team gradient from player's team data
-  const getTeamGradient = (teamId: string) => {
+  const getTeamGradient = (teamId: string): "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan" => {
     if (teamId.includes("team1")) return "orange";
-    if (teamId.includes("team2")) return "teal";
+    if (teamId.includes("team2")) return "green";
     if (teamId.includes("team3")) return "blue";
-    if (teamId.includes("team4")) return "purple";
-    return "teal"; // fallback
+    if (teamId.includes("team4")) return "pink";
+    // For additional teams beyond the current 4
+    if (teamId.includes("team5")) return "white";
+    if (teamId.includes("team6")) return "black";
+    if (teamId.includes("team7")) return "gray";
+    if (teamId.includes("team8")) return "brown";
+    if (teamId.includes("team9")) return "purple";
+    if (teamId.includes("team10")) return "yellow";
+    if (teamId.includes("team11")) return "red";
+    if (teamId.includes("team12")) return "cyan";
+    return "green"; // fallback
+  };
+
+  const getGradientStyle = (gradient: string) => {
+    const gradientMap = {
+      orange: "from-brand-orange to-brand-orange-dark",
+      green: "from-brand-green to-brand-green-dark",
+      blue: "from-brand-blue to-brand-blue-dark",
+      pink: "from-brand-pink to-brand-pink-dark",
+      white: "from-brand-white to-brand-white-dark",
+      black: "from-brand-black to-brand-black-dark",
+      gray: "from-brand-gray to-brand-gray-dark",
+      brown: "from-brand-brown to-brand-brown-dark",
+      purple: "from-brand-purple to-brand-purple-dark",
+      yellow: "from-brand-yellow to-brand-yellow-dark",
+      red: "from-brand-red to-brand-red-dark",
+      cyan: "from-brand-cyan to-brand-cyan-dark",
+    };
+    return gradientMap[gradient as keyof typeof gradientMap] || gradientMap.green;
+  };
+
+  const getLinearGradientStyle = (teamColor: string): React.CSSProperties => {
+    const gradients = {
+      red: { from: "#e53e3e", to: "#c53030" },
+      blue: { from: "#3498DB", to: "#2980B9" }, // Updated to match new blue
+      green: { from: "#2ECC71", to: "#27AE60" }, // Updated to match new green
+      orange: { from: "#fd7f28", to: "#dd6b20" },
+      purple: { from: "#9c4221", to: "#8b3a1f" },
+      yellow: { from: "#ffd23f", to: "#f6ad55" },
+      pink: { from: "#E91E63", to: "#C2185B" }, // Updated to match new pink
+      gray: { from: "#a0aec0", to: "#718096" },
+      cyan: { from: "#00d4aa", to: "#00a085" },
+      lime: { from: "#84cc16", to: "#65a30d" },
+      indigo: { from: "#6366f1", to: "#4f46e5" },
+      teal: { from: "#14b8a6", to: "#0f766e" },
+      white: { from: "#f9fafb", to: "#e5e7eb" },
+      black: { from: "#374151", to: "#1f2937" },
+      brown: { from: "#a16207", to: "#78350f" },
+    };
+
+    const gradient = gradients[teamColor.toLowerCase() as keyof typeof gradients] || gradients.gray;
+    
+    return {
+      background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
+    };
   };
 
   const teamGradient = getTeamGradient(player.teamId);
 
   const gradientClasses = {
     orange: "bg-gradient-to-br from-brand-orange/20 to-brand-orange-dark/30",
-    teal: "bg-gradient-to-br from-brand-teal/20 to-brand-teal-dark/30",
+    green: "bg-gradient-to-br from-brand-green/20 to-brand-green-dark/30",
     blue: "bg-gradient-to-br from-brand-blue/20 to-brand-blue-dark/30",
+    pink: "bg-gradient-to-br from-brand-pink/20 to-brand-pink-dark/30",
+    white: "bg-gradient-to-br from-brand-white/20 to-brand-white-dark/30",
+    black: "bg-gradient-to-br from-brand-black/20 to-brand-black-dark/30",
+    gray: "bg-gradient-to-br from-brand-gray/20 to-brand-gray-dark/30",
+    brown: "bg-gradient-to-br from-brand-brown/20 to-brand-brown-dark/30",
     purple: "bg-gradient-to-br from-brand-purple/20 to-brand-purple-dark/30",
+    yellow: "bg-gradient-to-br from-brand-yellow/20 to-brand-yellow-dark/30",
+    red: "bg-gradient-to-br from-brand-red/20 to-brand-red-dark/30",
+    cyan: "bg-gradient-to-br from-brand-cyan/20 to-brand-cyan-dark/30",
   };
 
   const accentClasses = {
     orange: "border-brand-orange text-brand-orange bg-brand-orange/10",
-    teal: "border-brand-teal text-brand-teal bg-brand-teal/10",
+    green: "border-brand-green text-brand-green bg-brand-green/10",
     blue: "border-brand-blue text-brand-blue bg-brand-blue/10",
-    purple: "border-brand-purple text-brand-purple bg-brand-purple/10",
+    pink: "border-brand-pink text-brand-pink bg-brand-pink/10",
+    white: "border-gray-600 text-gray-600 bg-gray-100/10",
+    black: "border-gray-800 text-gray-800 bg-gray-800/10",
+    gray: "border-gray-500 text-gray-500 bg-gray-500/10",
+    brown: "border-amber-700 text-amber-700 bg-amber-700/10",
+    purple: "border-purple-600 text-purple-600 bg-purple-600/10",
+    yellow: "border-yellow-600 text-yellow-600 bg-yellow-600/10",
+    red: "border-red-600 text-red-600 bg-red-600/10",
+    cyan: "border-cyan-500 text-cyan-500 bg-cyan-500/10",
   };
 
   return (
@@ -98,15 +167,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
         <div className="flex items-center mb-4">
           {/* Avatar */}
           <motion.div
-            className={`w-16 h-16 rounded-full bg-gradient-to-br ${
-              teamGradient === "orange"
-                ? "from-brand-orange to-brand-orange-dark"
-                : teamGradient === "teal"
-                ? "from-brand-teal to-brand-teal-dark"
-                : teamGradient === "blue"
-                ? "from-brand-blue to-brand-blue-dark"
-                : "from-brand-purple to-brand-purple-dark"
-            } flex items-center justify-center text-white font-bold text-xl shadow-lg relative overflow-hidden`}
+            className={`w-16 h-16 rounded-full bg-gradient-to-br ${getGradientStyle(teamGradient)} flex items-center justify-center text-white font-bold text-xl shadow-lg relative overflow-hidden`}
             whileHover={{
               scale: 1.1,
               rotate: [0, -5, 5, 0],
@@ -145,7 +206,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
             >
-              Player #{player.id}
+              Player #{player.jerseyNumber}
             </motion.p>
           </div>
         </div>
@@ -153,7 +214,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
         {/* Quote */}
         {showQuote && player.quote && (
           <motion.blockquote
-            className="text-sm text-gray-600 italic border-l-4 border-brand-teal/20 pl-4 mt-4"
+            className="text-sm text-gray-600 italic border-l-4 border-brand-blue/20 pl-4 mt-4"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
@@ -169,14 +230,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
           whileHover={{ scaleX: 1 }}
           transition={{ duration: 0.3 }}
           style={{
-            background:
-              teamGradient === "orange"
-                ? "linear-gradient(90deg, #ff6b35, #f39c12)"
-                : teamGradient === "teal"
-                ? "linear-gradient(90deg, #4ecdc4, #16a085)"
-                : teamGradient === "blue"
-                ? "linear-gradient(90deg, #3498db, #2980b9)"
-                : "linear-gradient(90deg, #9b59b6, #8e44ad)",
+            background: getLinearGradientStyle(teamGradient).background,
             transformOrigin: "left",
           }}
         />

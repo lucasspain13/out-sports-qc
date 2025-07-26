@@ -1,7 +1,7 @@
 export { useAnnouncements } from "./useAnnouncements";
 export { useAuth } from "./useAuth";
 export { useDeepLinking } from "./useDeepLinking";
-export { useGame } from "./useGames";
+export { useGame, useGames } from "./useGames";
 export {
   getPlatformClass,
   usePlatform,
@@ -15,6 +15,7 @@ export {
   useStaggeredAnimation,
 } from "./useScrollAnimation";
 export { useTeam, useTeams } from "./useTeams";
+export { useTeamRecord, useMultipleTeamRecords } from "./useTeamRecord";
 
 // Re-export platform utilities for convenience
 export {

@@ -21,10 +21,10 @@ const CoreValues: React.FC<CoreValuesProps> = ({
   const getValueGradient = (index: number) => {
     const gradients = [
       "from-brand-orange to-brand-orange-light",
-      "from-brand-teal to-brand-teal-light",
+      "bg-gradient-primary",
       "from-brand-blue to-brand-blue-light",
       "from-brand-purple to-brand-purple-light",
-      "from-brand-orange to-brand-teal",
+      "from-brand-orange to-brand-blue",
     ];
     return gradients[index % gradients.length];
   };
@@ -32,10 +32,10 @@ const CoreValues: React.FC<CoreValuesProps> = ({
   const getValueAccent = (index: number) => {
     const accents = [
       "border-brand-orange/20 bg-brand-orange/5",
-      "border-brand-teal/20 bg-brand-teal/5",
+      "border-brand-blue/20 bg-brand-blue/5",
       "border-brand-blue/20 bg-brand-blue/5",
       "border-brand-purple/20 bg-brand-purple/5",
-      "border-brand-orange/20 bg-gradient-to-br from-brand-orange/5 to-brand-teal/5",
+      "border-brand-orange/20 bg-gradient-to-br from-brand-orange/5 to-brand-blue/5",
     ];
     return accents[index % accents.length];
   };

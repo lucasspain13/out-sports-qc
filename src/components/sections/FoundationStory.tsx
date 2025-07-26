@@ -32,7 +32,7 @@ const FoundationStory: React.FC<FoundationStoryProps> = ({
   const getMilestoneColor = (type: TimelineMilestone["type"]) => {
     const colors = {
       founding: "from-brand-orange to-brand-orange-light",
-      expansion: "from-brand-teal to-brand-teal-light",
+      expansion: "bg-gradient-primary",
       achievement: "from-brand-purple to-brand-purple-light",
       community: "from-brand-blue to-brand-blue-light",
       facility: "from-gray-600 to-gray-500",
@@ -84,7 +84,7 @@ const FoundationStory: React.FC<FoundationStoryProps> = ({
         {/* Timeline */}
         <div className="relative">
           {/* Timeline Line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-orange via-brand-teal to-brand-purple transform md:-translate-x-1/2" />
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-orange via-brand-blue to-brand-purple transform md:-translate-x-1/2" />
 
           {/* Timeline Items */}
           <div className="space-y-12">

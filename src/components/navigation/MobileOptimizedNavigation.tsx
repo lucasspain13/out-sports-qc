@@ -96,7 +96,7 @@ const MobileOptimizedNavigation: React.FC<
                       shouldBeTransparent
                         ? "text-white/90 hover:text-white"
                         : "text-gray-700 hover:text-gray-900"
-                    } ${item.isActive ? "text-brand-teal" : ""}`}
+                    } ${item.isActive ? "text-brand-blue" : ""}`}
                   >
                     {item.label}
                   </a>

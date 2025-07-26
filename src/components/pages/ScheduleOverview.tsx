@@ -25,7 +25,7 @@ const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
 
   const sportDisplayName =
     sportType.charAt(0).toUpperCase() + sportType.slice(1);
-  const sportEmoji = sportType === "kickball" ? "⚽" : "🏐";
+  const sportEmoji = sportType === "kickball" ? "☄️" : "🏐";
 
   // Memoize filtered weeks to prevent unnecessary re-renders
   const filteredWeeks = useMemo(() => {

@@ -54,17 +54,29 @@ export const navigateBack = () => {
 /**
  * Navigate to team detail page
  * @param team - Team object with sportType and id
+ * @param season - Optional season (defaults to Summer for kickball)
  */
-export const navigateToTeam = (team: { sportType: string; id: string }) => {
-  navigateTo(`${team.sportType}-teams/${team.id}`);
+export const navigateToTeam = (team: { sportType: string; id: string }, season?: "Summer" | "Fall") => {
+  if (team.sportType === "kickball") {
+    const seasonPrefix = season === "Fall" ? "fall" : "summer";
+    navigateTo(`${seasonPrefix}-kickball-teams/${team.id}`);
+  } else {
+    navigateTo(`${team.sportType}-teams/${team.id}`);
+  }
 };
 
 /**
  * Navigate to sport roster overview
  * @param sportType - The sport type (kickball, dodgeball)
+ * @param season - Optional season (defaults to Summer for kickball)
  */
-export const navigateToSportRoster = (sportType: string) => {
-  navigateTo(`${sportType}-teams`);
+export const navigateToSportRoster = (sportType: string, season?: "Summer" | "Fall") => {
+  if (sportType === "kickball") {
+    const seasonPrefix = season === "Fall" ? "fall" : "summer";
+    navigateTo(`${seasonPrefix}-kickball-teams`);
+  } else {
+    navigateTo(`${sportType}-teams`);
+  }
 };
 
 /**
@@ -85,9 +97,15 @@ export const navigateToHome = () => {
 /**
  * Navigate to registration page
  * @param sportType - The sport type for registration
+ * Note: For kickball, only Fall 2025 registration is available
  */
 export const navigateToRegistration = (sportType: string) => {
-  navigateTo(`${sportType}-registration`);
+  if (sportType === "kickball") {
+    // Only Fall 2025 registration is available for kickball
+    navigateTo("fall-kickball-registration");
+  } else {
+    navigateTo(`${sportType}-registration`);
+  }
 };
 
 /**

@@ -18,36 +18,93 @@ export default {
             light: "#FF8A5B",
             dark: "#E55A2B",
           },
-          teal: {
-            DEFAULT: "#4ECDC4",
-            light: "#7EDDD6",
-            dark: "#3CBAB1",
+          green: {
+            DEFAULT: "#2ECC71", // Bright green instead of teal
+            light: "#58D68D", 
+            dark: "#27AE60",
           },
           blue: {
-            DEFAULT: "#1A365D",
-            light: "#2D5A87",
-            dark: "#0F2A44",
+            DEFAULT: "#3498DB", // Lighter blue instead of dark navy
+            light: "#5DADE2",
+            dark: "#2980B9",
+          },
+          pink: {
+            DEFAULT: "#E91E63", // True pink instead of purple
+            light: "#F06292",
+            dark: "#C2185B",
+          },
+          // Additional colors for 12-color expansion
+          white: {
+            DEFAULT: "#FFFFFF",
+            light: "#F9FAFB",
+            dark: "#F3F4F6",
+          },
+          black: {
+            DEFAULT: "#000000",
+            light: "#374151",
+            dark: "#111827",
+          },
+          gray: {
+            DEFAULT: "#6B7280",
+            light: "#9CA3AF",
+            dark: "#4B5563",
+          },
+          brown: {
+            DEFAULT: "#A16207",
+            light: "#D97706",
+            dark: "#78350F",
           },
           purple: {
-            DEFAULT: "#9B59B6",
-            light: "#BB7FD1",
-            dark: "#8E44AD",
+            DEFAULT: "#7C3AED",
+            light: "#A78BFA",
+            dark: "#5B21B6",
+          },
+          yellow: {
+            DEFAULT: "#EAB308",
+            light: "#FDE047",
+            dark: "#CA8A04",
+          },
+          red: {
+            DEFAULT: "#DC2626",
+            light: "#F87171",
+            dark: "#B91C1C",
+          },
+          cyan: {
+            DEFAULT: "#22D3EE", // Transgender pride flag light blue
+            light: "#67E8F9",
+            dark: "#0891B2",
           },
         },
       },
       backgroundImage: {
         "gradient-primary":
-          "linear-gradient(135deg, #FF6B35 0%, #4ECDC4 25%, #1A365D 50%, #9B59B6 100%)",
+          "linear-gradient(135deg, #DC2626 0%, #FF6B35 16%, #EAB308 33%, #2ECC71 50%, #3498DB 66%, #7C3AED 100%)",
         "gradient-hero":
-          "linear-gradient(135deg, #1A365D 0%, #9B59B6 50%, #4ECDC4 100%)",
+          "linear-gradient(135deg, #FF6B35 0%, #4ECDC4 25%, #1A365D 50%, #9B59B6 100%)",
         "gradient-card-orange":
           "linear-gradient(135deg, #FF6B35 0%, #FF8A5B 100%)",
-        "gradient-card-teal":
+        "gradient-card-green":
           "linear-gradient(135deg, #4ECDC4 0%, #7EDDD6 100%)",
         "gradient-card-blue":
           "linear-gradient(135deg, #1A365D 0%, #2D5A87 100%)",
-        "gradient-card-purple":
+        "gradient-card-pink":
           "linear-gradient(135deg, #9B59B6 0%, #BB7FD1 100%)",
+        "gradient-card-white":
+          "linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%)",
+        "gradient-card-black":
+          "linear-gradient(135deg, #000000 0%, #374151 100%)",
+        "gradient-card-gray":
+          "linear-gradient(135deg, #6B7280 0%, #9CA3AF 100%)",
+        "gradient-card-brown":
+          "linear-gradient(135deg, #A16207 0%, #D97706 100%)",
+        "gradient-card-purple":
+          "linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%)",
+        "gradient-card-yellow":
+          "linear-gradient(135deg, #EAB308 0%, #FDE047 100%)",
+        "gradient-card-red":
+          "linear-gradient(135deg, #DC2626 0%, #F87171 100%)",
+        "gradient-card-cyan":
+          "linear-gradient(135deg, #22D3EE 0%, #67E8F9 100%)",
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-out",

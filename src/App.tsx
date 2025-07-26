@@ -185,10 +185,12 @@ function AppContent() {
         behavior: "smooth",
       });
 
-      // Handle team detail routes
-      const teamDetailMatch = hash.match(/^#(kickball|dodgeball)-teams\/(.+)$/);
+      // Handle team detail routes - support both new seasonal and legacy routes
+      const teamDetailMatch = hash.match(/^#(summer-kickball|fall-kickball|kickball|dodgeball)-teams\/(.+)$/);
       if (teamDetailMatch) {
-        const [, sportType, teamId] = teamDetailMatch;
+        const [, routeType, teamId] = teamDetailMatch;
+        // Determine sport type from route
+        const sportType = routeType.includes('kickball') ? 'kickball' : 'dodgeball';
         // Team loading will be handled by TeamDetailWrapper component
         setSelectedTeam({ id: teamId, sportType } as Team);
       } else {
@@ -222,12 +224,12 @@ function AppContent() {
     {
       label: "Kickball",
       hasDropdown: true,
-      isActive: currentRoute.startsWith("#kickball"),
+      isActive: currentRoute.includes("kickball"),
       dropdownItems: [
         { label: "League Rules", href: "#kickball-rules" },
-        { label: "Schedule", href: "#kickball-schedule" },
-        { label: "Teams", href: "#kickball-teams" },
-        { label: "Registration", href: "#kickball-registration" },
+        { label: "Summer 2025 Schedule", href: "#summer-kickball-schedule" },
+        { label: "Summer 2025 Teams", href: "#summer-kickball-teams" },
+        { label: "Fall 2025 Registration", href: "#fall-kickball-registration" },
       ],
     },
     // Temporarily disabled - coming soon
@@ -270,7 +272,7 @@ function AppContent() {
           <div className="container-custom">
             <div className="max-w-2xl mx-auto text-center">
               <div className="bg-white rounded-2xl shadow-xl p-12">
-                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-card-teal rounded-full flex items-center justify-center">
+                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-card-purple rounded-full flex items-center justify-center">
                   <span className="text-3xl">🏐</span>
                 </div>
                 <h1 className="heading-2 text-gray-900 mb-4">
@@ -325,8 +327,30 @@ function AppContent() {
       );
     }
 
-    // Roster overview pages
+    // Roster overview pages - Summer and Fall Kickball
+    if (currentRoute === "#summer-kickball-teams") {
+      return (
+        <RosterOverview 
+          sportType="kickball" 
+          onTeamSelect={handleTeamSelect} 
+        />
+      );
+    }
+
+    if (currentRoute === "#fall-kickball-teams") {
+      return (
+        <RosterOverview 
+          sportType="kickball" 
+          onTeamSelect={handleTeamSelect} 
+        />
+      );
+    }
+
+    // Legacy kickball-teams route - redirect to Summer
     if (currentRoute === "#kickball-teams") {
+      setTimeout(() => {
+        navigateTo("#summer-kickball-teams");
+      }, 0);
       return (
         <RosterOverview sportType="kickball" onTeamSelect={handleTeamSelect} />
       );
@@ -334,8 +358,34 @@ function AppContent() {
 
     // Dodgeball routes are temporarily disabled - handled by redirect above
 
-    // Schedule pages
+    // Schedule pages - Summer and Fall Kickball
+    if (currentRoute === "#summer-kickball-schedule") {
+      return (
+        <ScheduleOverview
+          sportType="kickball"
+          onGameSelect={game => {
+            navigateToGame(game.id);
+          }}
+        />
+      );
+    }
+
+    if (currentRoute === "#fall-kickball-schedule") {
+      return (
+        <ScheduleOverview
+          sportType="kickball"
+          onGameSelect={game => {
+            navigateToGame(game.id);
+          }}
+        />
+      );
+    }
+
+    // Legacy kickball-schedule route - redirect to Summer
     if (currentRoute === "#kickball-schedule") {
+      setTimeout(() => {
+        navigateTo("#summer-kickball-schedule");
+      }, 0);
       return (
         <ScheduleOverview
           sportType="kickball"
@@ -348,15 +398,31 @@ function AppContent() {
 
     // Dodgeball schedule is temporarily disabled - handled by redirect above
 
-    // Registration pages
+    // Registration pages - Only Fall Kickball (Summer registration removed)
+    if (currentRoute === "#fall-kickball-registration") {
+      return <RegistrationPage sportType="kickball" season="Fall 2025" />;
+    }
+
+    // Legacy kickball-registration route - redirect to Fall (since Summer registration removed)
     if (currentRoute === "#kickball-registration") {
-      return <RegistrationPage sportType="kickball" />;
+      setTimeout(() => {
+        navigateTo("#fall-kickball-registration");
+      }, 0);
+      return <RegistrationPage sportType="kickball" season="Fall 2025" />;
     }
 
     // Dodgeball registration is temporarily disabled - handled by redirect above
 
-    // Rules pages
+    // Rules pages - Single kickball rules page for all seasons
     if (currentRoute === "#kickball-rules") {
+      return <KickballRules />;
+    }
+
+    // Legacy summer and fall kickball rules routes - redirect to main rules
+    if (currentRoute === "#summer-kickball-rules" || currentRoute === "#fall-kickball-rules") {
+      setTimeout(() => {
+        navigateTo("#kickball-rules");
+      }, 0);
       return <KickballRules />;
     }
 

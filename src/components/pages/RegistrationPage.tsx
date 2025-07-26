@@ -4,18 +4,27 @@ import { PlatformRegistrationForm } from "../platform";
 
 interface RegistrationPageProps {
   sportType: "kickball" | "dodgeball";
+  season?: "Summer 2025" | "Fall 2025" | string;
 }
 
-const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType }) => {
+const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }) => {
   const sportDisplayName =
     sportType.charAt(0).toUpperCase() + sportType.slice(1);
-  const sportEmoji = sportType === "kickball" ? "⚽" : "🏐";
+  const sportEmoji = sportType === "kickball" ? "☄️" : "🏐";
+
+  // Determine season based on current route if season not provided
+  const currentSeason = season || (() => {
+    const currentRoute = window.location.hash;
+    if (currentRoute.includes("fall-kickball")) return "Fall 2025";
+    if (currentRoute.includes("summer-kickball")) return "Summer 2025";
+    return "Fall 2025"; // Default fallback
+  })();
 
   const sportColors = {
     kickball: {
-      gradient: "from-brand-orange to-brand-orange-light",
+      gradient: "from-amber-700 to-orange-600",
       accent: "brand-orange",
-      bg: "bg-gradient-card-orange",
+      bg: "bg-gradient-to-br from-amber-700 to-orange-600",
     },
     dodgeball: {
       gradient: "from-brand-purple to-brand-purple-light",
@@ -36,11 +45,11 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType }) => {
         "🎉 End-of-season celebration",
       ],
       gameDetails: {
-        season: "Summer 2025",
-        duration: "7 weeks",
-        gameTime: "Sundays at 2pm",
-        location: "Junge Park",
-        teamSize: "10-16 players",
+        season: currentSeason,
+        duration: currentSeason === "Summer 2025" ? "8 weeks" : "7 weeks",
+        gameTime: "TBD",
+        location: "TBD",
+        teamSize: "16 players",
       },
     },
     dodgeball: {
@@ -54,11 +63,11 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType }) => {
         "🎉 Post-game social activities",
       ],
       gameDetails: {
-        season: "Winter 2025",
-        duration: "6 weeks",
-        gameTime: "Wednesdays at 7pm",
-        location: "Community Center Gym",
-        teamSize: "8-10 players",
+        season: "Winter 2026",
+        duration: "TBD",
+        gameTime: "TBD",
+        location: "TBD",
+        teamSize: "20 players",
       },
     },
   };
@@ -87,7 +96,7 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType }) => {
             >
               <div className="text-6xl mb-6">{sportEmoji}</div>
               <h1 className="heading-1 mb-6">
-                {sportDisplayName} League Registration
+                {currentSeason === "Fall 2025" ? "Fall" : currentSeason} {sportDisplayName} Registration
               </h1>
               <p className="body-large mb-8 max-w-2xl mx-auto opacity-90">
                 {currentSport.description}
@@ -203,16 +212,15 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType }) => {
                     welcome email with team assignments and first game details.
                   </p>
                   <p className="opacity-90">
-                    <strong>Team Formation:</strong> Teams are balanced by
-                    experience level to ensure fair and fun games.
+                    <strong>Team Formation:</strong> Teams are formed randomly to encourage new friendships and maximize socializing opportunities across our community.
                   </p>
                   <p className="opacity-90">
                     <strong>Equipment:</strong> All game equipment provided!
                     Just bring yourself and a water bottle.
                   </p>
                   <p className="opacity-90">
-                    <strong>Weather Policy:</strong> Games continue rain or
-                    shine, with indoor alternatives when needed.
+                    <strong>Weather Policy:</strong> Games are on, rain or
+                    shine! However, we will stop for lightning and severe weather.
                   </p>
                 </div>
               </motion.div>
@@ -233,18 +241,9 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType }) => {
                     Have questions about the league? We're here to help!
                   </p>
                   <div className="space-y-2">
-                    <a
-                      href="mailto:info@outsportsleague.com"
-                      className="block text-brand-teal hover:text-brand-teal-dark font-medium transition-colors"
-                    >
-                      📧 info@outsportsleague.com
-                    </a>
-                    <a
-                      href="#contact"
-                      className="block text-brand-teal hover:text-brand-teal-dark font-medium transition-colors"
-                    >
-                      🌐 Contact Form
-                    </a>
+                    <div className="text-brand-blue font-medium">
+                      Travis Stanger : 563-381-0504
+                    </div>
                   </div>
                 </div>
               </motion.div>

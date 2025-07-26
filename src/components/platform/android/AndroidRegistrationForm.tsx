@@ -11,13 +11,14 @@ interface AndroidRegistrationFormProps {
 interface FormData {
   firstName: string;
   lastName: string;
+  preferredPronouns: string;
+  age: string;
   email: string;
   phone: string;
-  shirtSize: "XS" | "S" | "M" | "L" | "XL" | "XXL";
+  shirtSize: "XS" | "S" | "M" | "L" | "XL" | "XXL" | "3XL" | "4XL";
   emergencyContactName: string;
   emergencyContactPhone: string;
   experienceLevel: "beginner" | "intermediate" | "advanced";
-  howDidYouHear: string;
   dietaryRestrictions: string;
   medicalConditions: string;
   agreeToTerms: boolean;
@@ -34,13 +35,14 @@ const AndroidRegistrationForm: React.FC<AndroidRegistrationFormProps> = ({
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
+    preferredPronouns: "",
+    age: "",
     email: "",
     phone: "",
     shirtSize: "M",
     emergencyContactName: "",
     emergencyContactPhone: "",
     experienceLevel: "beginner",
-    howDidYouHear: "",
     dietaryRestrictions: "",
     medicalConditions: "",
     agreeToTerms: false,
@@ -51,7 +53,7 @@ const AndroidRegistrationForm: React.FC<AndroidRegistrationFormProps> = ({
 
   const sportDisplayName =
     sportType.charAt(0).toUpperCase() + sportType.slice(1);
-  const sportEmoji = sportType === "kickball" ? "⚽" : "🏐";
+  const sportEmoji = sportType === "kickball" ? "☄️" : "🏐";
 
   const totalSteps = 4;
   const progressPercentage = (currentStep / totalSteps) * 100;
@@ -153,13 +155,14 @@ const AndroidRegistrationForm: React.FC<AndroidRegistrationFormProps> = ({
           sport_type: sportType,
           first_name: formData.firstName,
           last_name: formData.lastName,
+          preferred_pronouns: formData.preferredPronouns,
+          age: parseInt(formData.age),
           email: formData.email.toLowerCase(),
           phone: formData.phone,
           shirt_size: formData.shirtSize,
           emergency_contact_name: formData.emergencyContactName,
           emergency_contact_phone: formData.emergencyContactPhone,
           experience_level: formData.experienceLevel,
-          how_did_you_hear: formData.howDidYouHear,
           dietary_restrictions: formData.dietaryRestrictions || null,
           medical_conditions: formData.medicalConditions || null,
           agree_to_terms: formData.agreeToTerms,

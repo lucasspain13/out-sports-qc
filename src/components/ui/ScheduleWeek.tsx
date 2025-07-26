@@ -71,7 +71,7 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
         <div className="block sm:hidden">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-brand-teal to-brand-blue rounded-lg flex items-center justify-center text-white font-bold text-sm">
+              <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center text-white font-bold text-sm">
                 {week.weekNumber}
               </div>
               <div>
@@ -138,7 +138,7 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
           <div className="flex items-center space-x-4 min-w-0 flex-1">
             {/* Week Number */}
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-brand-teal to-brand-blue rounded-lg flex items-center justify-center text-white font-bold text-base">
+              <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center text-white font-bold text-base">
                 {week.weekNumber}
               </div>
               <div className="min-w-0">
@@ -276,11 +276,11 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
                       className="inline-flex items-center px-2 py-1 rounded text-xs bg-white text-gray-700 border"
                     >
                       <span className="hidden sm:inline">
-                        {sport === "kickball" ? "⚽" : "🏐"}{" "}
+                        {sport === "kickball" ? "☄️" : "🏐"}{" "}
                         {sport.charAt(0).toUpperCase() + sport.slice(1)}
                       </span>
                       <span className="sm:hidden">
-                        {sport === "kickball" ? "⚽" : "🏐"}
+                        {sport === "kickball" ? "☄️" : "🏐"}
                       </span>
                     </span>
                   )

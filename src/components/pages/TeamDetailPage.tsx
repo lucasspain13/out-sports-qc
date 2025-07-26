@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
+import { useTeamRecord } from "../../hooks/useTeamRecord";
 import { Player, Team } from "../../types";
 import PlayerCard from "../ui/PlayerCard";
 
@@ -18,18 +19,37 @@ const TeamDetailPage: React.FC<TeamDetailPageProps> = ({
     ? team.players.find(player => player.id === team.captain)
     : undefined;
 
+  // Use optimized hook to calculate team record
+  const teamRecord = useTeamRecord(team.id);
+
   const gradientClasses = {
     orange: "bg-gradient-card-orange",
-    teal: "bg-gradient-card-teal",
+    green: "bg-gradient-card-green",
     blue: "bg-gradient-card-blue",
+    pink: "bg-gradient-card-pink",
+    white: "bg-gradient-card-white",
+    black: "bg-gradient-card-black",
+    gray: "bg-gradient-card-gray",
+    brown: "bg-gradient-card-brown",
     purple: "bg-gradient-card-purple",
+    yellow: "bg-gradient-card-yellow",
+    red: "bg-gradient-card-red",
+    cyan: "bg-gradient-card-cyan",
   };
 
   const accentClasses = {
     orange: "border-brand-orange text-brand-orange bg-brand-orange/10",
-    teal: "border-brand-teal text-brand-teal bg-brand-teal/10",
+    green: "border-brand-green text-brand-green bg-brand-green/10",
     blue: "border-brand-blue text-brand-blue bg-brand-blue/10",
+    pink: "border-brand-pink text-brand-pink bg-brand-pink/10",
+    white: "border-brand-white text-brand-white bg-brand-white/10",
+    black: "border-brand-black text-brand-black bg-brand-black/10",
+    gray: "border-brand-gray text-brand-gray bg-brand-gray/10",
+    brown: "border-brand-brown text-brand-brown bg-brand-brown/10",
     purple: "border-brand-purple text-brand-purple bg-brand-purple/10",
+    yellow: "border-brand-yellow text-brand-yellow bg-brand-yellow/10",
+    red: "border-brand-red text-brand-red bg-brand-red/10",
+    cyan: "border-brand-cyan text-brand-cyan bg-brand-cyan/10",
   };
 
   const containerVariants = {
@@ -54,7 +74,7 @@ const TeamDetailPage: React.FC<TeamDetailPageProps> = ({
     },
   };
 
-  const sportEmoji = team.sportType === "kickball" ? "⚽" : "🏐";
+  const sportEmoji = team.sportType === "kickball" ? "☄️" : "🏐";
   const sportDisplayName =
     team.sportType.charAt(0).toUpperCase() + team.sportType.slice(1);
 
@@ -114,17 +134,9 @@ const TeamDetailPage: React.FC<TeamDetailPageProps> = ({
                 </h1>
 
                 {/* Team Description */}
-                <p className="body-large text-white/90 mb-6 text-shadow">
+                <p className="body-large text-white/90 mb-8 text-shadow">
                   {team.description}
                 </p>
-
-                {/* Team Motto */}
-                <div className="p-6 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 mb-8">
-                  <h3 className="text-lg font-semibold text-white mb-2">
-                    Team Motto
-                  </h3>
-                  <p className="text-white/95 italic text-lg">"{team.motto}"</p>
-                </div>
 
                 {/* Quick Stats */}
                 <div className="grid grid-cols-2 gap-4">
@@ -159,7 +171,7 @@ const TeamDetailPage: React.FC<TeamDetailPageProps> = ({
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-gray-600">Season Record</span>
                     <span className="font-semibold text-gray-900">
-                      {team.wins}W - {team.losses}L
+                      {teamRecord.wins}W - {teamRecord.losses}L
                     </span>
                   </div>
 
@@ -170,15 +182,12 @@ const TeamDetailPage: React.FC<TeamDetailPageProps> = ({
                         gradientClasses[team.gradient]
                       }`}
                       style={{
-                        width: `${
-                          (team.wins / (team.wins + team.losses)) * 100
-                        }%`,
+                        width: `${teamRecord.winPercentage}%`,
                       }}
                     />
                   </div>
                   <div className="text-sm text-gray-500 mt-2">
-                    {Math.round((team.wins / (team.wins + team.losses)) * 100)}%
-                    Win Rate
+                    {teamRecord.winPercentage}% Win Rate
                   </div>
                 </div>
 

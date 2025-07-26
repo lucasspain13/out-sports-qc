@@ -146,12 +146,52 @@ export const SportsInfoManagement: React.FC<SportsInfoManagementProps> = () => {
       label: "Orange",
       color: "from-orange-500 to-orange-600",
     },
-    { value: "teal", label: "Teal", color: "from-teal-500 to-teal-600" },
+    { value: "green", label: "Green", color: "from-green-500 to-green-600" },
     { value: "blue", label: "Blue", color: "from-blue-500 to-blue-600" },
+    {
+      value: "pink",
+      label: "Pink",
+      color: "from-pink-500 to-pink-600",
+    },
+    {
+      value: "white",
+      label: "White",
+      color: "from-gray-200 to-gray-300",
+    },
+    {
+      value: "black",
+      label: "Black",
+      color: "from-gray-800 to-gray-900",
+    },
+    {
+      value: "gray",
+      label: "Gray",
+      color: "from-gray-500 to-gray-600",
+    },
+    {
+      value: "brown",
+      label: "Brown",
+      color: "from-amber-700 to-amber-800",
+    },
     {
       value: "purple",
       label: "Purple",
       color: "from-purple-500 to-purple-600",
+    },
+    {
+      value: "yellow",
+      label: "Yellow",
+      color: "from-yellow-500 to-yellow-600",
+    },
+    {
+      value: "red",
+      label: "Red",
+      color: "from-red-500 to-red-600",
+    },
+    {
+      value: "cyan",
+      label: "Cyan",
+      color: "from-cyan-400 to-cyan-500",
     },
   ];
 
@@ -321,7 +361,7 @@ export const SportsInfoManagement: React.FC<SportsInfoManagementProps> = () => {
                       setFormData({ ...formData, rosterPath: e.target.value })
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="#kickball-teams"
+                    placeholder="#summer-kickball-teams"
                   />
                 </div>
 

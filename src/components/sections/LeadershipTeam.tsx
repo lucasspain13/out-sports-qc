@@ -24,11 +24,11 @@ const LeadershipTeam: React.FC<LeadershipTeamProps> = ({
   const getRoleColor = (role: string) => {
     const roleColors = {
       "League Commissioner": "from-brand-orange to-brand-orange-light",
-      "Operations Director": "from-brand-teal to-brand-teal-light",
+      "Operations Director": "bg-gradient-primary",
       "Player Development Coordinator": "from-brand-blue to-brand-blue-light",
       "Community Outreach Manager": "from-brand-purple to-brand-purple-light",
-      "Safety & Inclusion Officer": "from-brand-orange to-brand-teal",
-      "Social Media & Communications": "from-brand-teal to-brand-blue",
+      "Safety & Inclusion Officer": "from-brand-orange to-brand-blue",
+      "Social Media & Communications": "bg-gradient-primary",
       "Volunteer Coordinator": "from-brand-blue to-brand-purple",
       "Finance & Sponsorship Director": "from-brand-purple to-brand-orange",
     };
@@ -40,13 +40,13 @@ const LeadershipTeam: React.FC<LeadershipTeamProps> = ({
   const getRoleAccent = (role: string) => {
     const roleAccents = {
       "League Commissioner": "border-brand-orange/20 bg-brand-orange/5",
-      "Operations Director": "border-brand-teal/20 bg-brand-teal/5",
+      "Operations Director": "border-brand-blue/20 bg-brand-blue/5",
       "Player Development Coordinator": "border-brand-blue/20 bg-brand-blue/5",
       "Community Outreach Manager": "border-brand-purple/20 bg-brand-purple/5",
       "Safety & Inclusion Officer":
-        "border-brand-orange/20 bg-gradient-to-br from-brand-orange/5 to-brand-teal/5",
+        "border-brand-orange/20 bg-gradient-to-br from-brand-orange/5 to-brand-blue/5",
       "Social Media & Communications":
-        "border-brand-teal/20 bg-gradient-to-br from-brand-teal/5 to-brand-blue/5",
+        "border-brand-red/20 bg-gradient-to-br from-brand-red/5 to-brand-purple/5",
       "Volunteer Coordinator":
         "border-brand-blue/20 bg-gradient-to-br from-brand-blue/5 to-brand-purple/5",
       "Finance & Sponsorship Director":

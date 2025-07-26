@@ -20,7 +20,7 @@ export interface SportInfo {
   title?: string; // Display name for the sport
   description: string;
   image?: string;
-  gradient: "orange" | "teal" | "blue" | "purple";
+  gradient: "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan";
   participants?: number;
   nextGame?: Date;
   features?: string[];
@@ -96,7 +96,7 @@ export interface Team {
   id: string;
   name: string;
   sportType: "kickball" | "dodgeball";
-  gradient: "orange" | "teal" | "blue" | "purple";
+  gradient: "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan";
   description: string;
   players: Player[];
   captain?: string; // Player ID
@@ -137,16 +137,19 @@ export interface GameLocation {
   id: string;
   name: string;
   address: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
   coordinates: {
     lat: number;
     lng: number;
   };
   facilities: string[];
   fieldType: "grass" | "turf" | "indoor" | "court";
-  capacity?: number;
   parking: boolean;
   restrooms: boolean;
-  concessions: boolean;
+  waterFountains: boolean;
+  markerColor?: "green" | "red" | "blue" | "yellow" | "orange";
 }
 
 export type GameStatus =

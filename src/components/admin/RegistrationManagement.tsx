@@ -203,7 +203,7 @@ export const RegistrationManagement: React.FC = () => {
                   {stat.sport_type} League
                 </h3>
                 <span className="text-2xl">
-                  {stat.sport_type === "kickball" ? "⚽" : "🏐"}
+                  {stat.sport_type === "kickball" ? "☄️" : "🏐"}
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-4 text-sm">
@@ -324,7 +324,7 @@ export const RegistrationManagement: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <span className="text-lg mr-2">
-                        {registration.sport_type === "kickball" ? "⚽" : "🏐"}
+                        {registration.sport_type === "kickball" ? "☄️" : "🏐"}
                       </span>
                       <span className="text-sm capitalize">
                         {registration.sport_type}

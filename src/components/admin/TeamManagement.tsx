@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useMultipleTeamRecords } from "../../hooks/useTeamRecord";
 import { teamsApi } from "../../lib/database";
 import {
   getErrorActionSuggestion,
   parseSupabaseError,
 } from "../../lib/errorHandling";
-import { supabase } from "../../lib/supabase";
 import { Team } from "../../types";
 import { AdminErrorBanner } from "./AdminErrorBanner";
 
 interface TeamFormData {
   name: string;
   sport: "kickball" | "dodgeball";
-  gradient: "orange" | "teal" | "blue" | "purple";
+  gradient: "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan";
   description: string;
   motto: string;
   founded: number;
@@ -39,8 +39,22 @@ export const TeamManagement: React.FC = () => {
     founded: new Date().getFullYear(),
   });
 
+  // Use optimized hook to calculate team records for all teams
+  const teamRecords = useMultipleTeamRecords(teams.map(team => team.id));
+
   useEffect(() => {
-    fetchTeams();
+    const initializeTeams = async () => {
+      try {
+        // First run migration to fix any legacy color values
+        await teamsApi.migrateLegacyColors();
+      } catch (error) {
+        console.warn("Migration failed, continuing with normal load:", error);
+      }
+      // Then fetch teams
+      await fetchTeams();
+    };
+    
+    initializeTeams();
   }, []);
 
   const fetchTeams = async () => {
@@ -65,37 +79,29 @@ export const TeamManagement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Ensure the gradient value is valid by converting any legacy values
+      const sanitizedGradient = formData.gradient;
+      console.log("Creating/updating team with gradient:", sanitizedGradient);
+      
       if (editingTeam) {
-        // Update existing team
-        const { error } = await supabase
-          .from("teams")
-          .update({
-            name: formData.name,
-            sport: formData.sport,
-            gradient: formData.gradient,
-            description: formData.description,
-            motto: formData.motto,
-            founded: formData.founded,
-          })
-          .eq("id", editingTeam.id);
-
-        if (error) throw error;
+        await teamsApi.updateTeam(editingTeam.id, {
+          name: formData.name,
+          sport: formData.sport,
+          gradient: sanitizedGradient,
+          description: formData.description,
+          motto: formData.motto,
+          founded: formData.founded,
+        });
       } else {
-        // Create new team
-        const { error } = await supabase.from("teams").insert([
-          {
-            name: formData.name,
-            sport: formData.sport,
-            gradient: formData.gradient,
-            description: formData.description,
-            motto: formData.motto,
-            founded: formData.founded,
-            wins: 0,
-            losses: 0,
-          },
-        ]);
-
-        if (error) throw error;
+        // Create new team using the teamsApi
+        await teamsApi.createTeam({
+          name: formData.name,
+          sport: formData.sport,
+          gradient: sanitizedGradient,
+          description: formData.description,
+          motto: formData.motto,
+          founded: formData.founded,
+        });
       }
 
       await fetchTeams();
@@ -108,6 +114,7 @@ export const TeamManagement: React.FC = () => {
       );
       setErrorActionSuggestion(actionSuggestion);
       console.error("Team save error:", err);
+      console.error("Form data:", formData);
     }
   };
 
@@ -134,22 +141,7 @@ export const TeamManagement: React.FC = () => {
     }
 
     try {
-      // First delete all players in the team
-      const { error: playersError } = await supabase
-        .from("players")
-        .delete()
-        .eq("team_id", teamId);
-
-      if (playersError) throw playersError;
-
-      // Then delete the team
-      const { error: teamError } = await supabase
-        .from("teams")
-        .delete()
-        .eq("id", teamId);
-
-      if (teamError) throw teamError;
-
+      await teamsApi.deleteTeam(teamId);
       await fetchTeams();
       // Clear any previous errors on successful deletion
       setError(null);
@@ -189,9 +181,17 @@ export const TeamManagement: React.FC = () => {
 
   const gradientClasses = {
     orange: "from-orange-400 to-red-500",
-    teal: "from-teal-400 to-cyan-500",
+    green: "from-green-400 to-emerald-500",
     blue: "from-blue-400 to-indigo-500",
-    purple: "from-purple-400 to-pink-500",
+    pink: "from-pink-400 to-rose-500",
+    white: "from-gray-100 to-gray-200",
+    black: "from-gray-700 to-gray-900",
+    gray: "from-gray-400 to-gray-600",
+    brown: "from-amber-600 to-amber-800",
+    purple: "from-purple-400 to-purple-600",
+    yellow: "from-yellow-400 to-yellow-600",
+    red: "from-red-400 to-red-600",
+    cyan: "from-cyan-300 to-cyan-500",
   };
 
   if (loading) {
@@ -280,7 +280,10 @@ export const TeamManagement: React.FC = () => {
               <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                 <span>{team.players.length} players</span>
                 <span>
-                  {team.wins}W - {team.losses}L
+                  {(() => {
+                    const record = teamRecords[team.id];
+                    return record ? `${record.wins}W - ${record.losses}L` : "0W - 0L";
+                  })()}
                 </span>
               </div>
               <div className="flex gap-2">
@@ -355,17 +358,33 @@ export const TeamManagement: React.FC = () => {
                       ...formData,
                       gradient: e.target.value as
                         | "orange"
-                        | "teal"
+                        | "green"
                         | "blue"
-                        | "purple",
+                        | "pink"
+                        | "white"
+                        | "black"
+                        | "gray"
+                        | "brown"
+                        | "purple"
+                        | "yellow"
+                        | "red"
+                        | "cyan",
                     })
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="blue">Blue</option>
                   <option value="orange">Orange</option>
-                  <option value="teal">Teal</option>
+                  <option value="green">Green</option>
+                  <option value="pink">Pink</option>
+                  <option value="white">White</option>
+                  <option value="black">Black</option>
+                  <option value="gray">Gray</option>
+                  <option value="brown">Brown</option>
                   <option value="purple">Purple</option>
+                  <option value="yellow">Yellow</option>
+                  <option value="red">Red</option>
+                  <option value="cyan">Cyan</option>
                 </select>
               </div>
 

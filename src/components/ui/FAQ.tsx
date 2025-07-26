@@ -54,10 +54,10 @@ const FAQ: React.FC<FAQProps> = ({
   const getCategoryColor = (category: string) => {
     const colors = {
       general: "from-brand-blue to-brand-blue-light",
-      registration: "from-brand-teal to-brand-teal-light",
+      registration: "bg-gradient-primary",
       rules: "from-brand-orange to-brand-orange-light",
       costs: "from-brand-purple to-brand-purple-light",
-      events: "from-brand-orange to-brand-teal",
+      events: "from-brand-orange to-brand-blue",
       safety: "from-brand-blue to-brand-purple",
     };
     return (
@@ -98,7 +98,7 @@ const FAQ: React.FC<FAQProps> = ({
                 placeholder="Search questions..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 pl-12 rounded-full border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300"
+                className="w-full px-4 py-3 pl-12 rounded-full border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
               />
               <svg
                 className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
@@ -130,7 +130,7 @@ const FAQ: React.FC<FAQProps> = ({
                   onClick={() => setSelectedCategory(category.key)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-full font-medium transition-all duration-300 ${
                     selectedCategory === category.key
-                      ? "bg-gradient-to-r from-brand-teal to-brand-blue text-white shadow-lg scale-105"
+                      ? "bg-gradient-primary text-white shadow-lg scale-105"
                       : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
                   }`}
                 >
@@ -250,7 +250,7 @@ const FAQ: React.FC<FAQProps> = ({
           transition={{ duration: 0.8, delay: 0.5 }}
           className="mt-16 text-center"
         >
-          <div className="bg-gradient-to-r from-brand-blue/5 via-brand-purple/5 to-brand-teal/5 rounded-3xl p-8 border border-gray-100">
+          <div className="bg-gradient-to-r from-brand-blue/5 via-brand-purple/5 to-brand-blue/5 rounded-3xl p-8 border border-gray-100">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
               Still have questions?
             </h3>
@@ -262,14 +262,14 @@ const FAQ: React.FC<FAQProps> = ({
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-brand-teal to-brand-blue text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-gradient-primary text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 Contact Us
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="border-2 border-brand-teal text-brand-teal px-8 py-4 rounded-full font-semibold hover:bg-brand-teal hover:text-white transition-all duration-300"
+                className="border-2 border-brand-blue text-brand-blue px-8 py-4 rounded-full font-semibold hover:bg-brand-blue hover:text-white transition-all duration-300"
               >
                 Join Our Discord
               </motion.button>

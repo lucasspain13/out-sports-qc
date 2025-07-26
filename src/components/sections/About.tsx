@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
+import { useTeams } from "../../hooks/useTeams";
 import { AboutSectionProps } from "../../types";
 
 const About: React.FC<AboutSectionProps> = ({
@@ -8,6 +9,21 @@ const About: React.FC<AboutSectionProps> = ({
   features,
   image,
 }) => {
+  // Get all teams to calculate total active members
+  const { teams: kickballTeams } = useTeams("kickball");
+  const { teams: dodgeballTeams } = useTeams("dodgeball");
+  
+  // Calculate total active members (players across all teams)
+  const totalActiveMembers = [...kickballTeams, ...dodgeballTeams].reduce(
+    (total, team) => total + team.players.length,
+    0
+  );
+  
+  // Calculate years running (founded on May 14, 2024)
+  const foundedDate = new Date('2024-05-14');
+  const currentDate = new Date();
+  const yearsDifference = (currentDate.getTime() - foundedDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+  const yearsRunning = Math.floor(yearsDifference);
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -117,7 +133,7 @@ const About: React.FC<AboutSectionProps> = ({
             >
               <div className="text-center">
                 <div className="text-3xl font-bold text-gradient-brand mb-1">
-                  500+
+                  {totalActiveMembers}
                 </div>
                 <div className="text-sm text-gray-600">Active Members</div>
               </div>
@@ -132,9 +148,11 @@ const About: React.FC<AboutSectionProps> = ({
             >
               <div className="text-center">
                 <div className="text-3xl font-bold text-gradient-brand mb-1">
-                  4
+                  {yearsRunning}
                 </div>
-                <div className="text-sm text-gray-600">Years Running</div>
+                <div className="text-sm text-gray-600">
+                  {yearsRunning === 1 ? "Year Running" : "Years Running"}
+                </div>
               </div>
             </motion.div>
           </motion.div>

@@ -145,10 +145,10 @@ select {
     /* Primary Gradient Colors (from logo analysis) */
     --color-orange: #ff6b35;
     --color-orange-light: #ff8a5b;
-    --color-teal: #4ecdc4;
-    --color-teal-light: #7eddd6;
-    --color-blue: #1a365d;
-    --color-blue-light: #2d5a87;
+    --color-blue: #3498DB;
+    --color-blue-light: #5dade2;
+    --color-blue-dark: #1a365d;
+    --color-blue-dark-light: #2d5a87;
     --color-purple: #9b59b6;
     --color-purple-light: #bb7fd1;
 
@@ -266,7 +266,7 @@ select {
   }
 
   .btn-primary {
-    @apply btn-base bg-brand-teal text-white hover:bg-brand-teal-dark hover:shadow-xl hover:-translate-y-1 focus:ring-brand-teal;
+    @apply btn-base bg-brand-green text-white hover:bg-brand-green-dark hover:shadow-xl hover:-translate-y-1 focus:ring-brand-green;
   }
 
   .btn-secondary {
@@ -274,7 +274,7 @@ select {
   }
 
   .btn-outline {
-    @apply btn-base border-2 border-brand-teal text-brand-teal bg-transparent hover:bg-brand-teal hover:text-white hover:shadow-lg hover:-translate-y-0.5 focus:ring-brand-teal;
+    @apply btn-base border-2 border-brand-green text-brand-green bg-transparent hover:bg-brand-green hover:text-white hover:shadow-lg hover:-translate-y-0.5 focus:ring-brand-green;
   }
 
   /* Card Components */
@@ -618,7 +618,7 @@ select {
 
   /* Focus visible utilities */
   .focus-visible-ring {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal focus-visible:ring-offset-2;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green focus-visible:ring-offset-2;
   }
 
   /* Line clamping utilities */

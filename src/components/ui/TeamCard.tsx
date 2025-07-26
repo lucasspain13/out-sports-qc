@@ -1,17 +1,31 @@
 import { motion } from "framer-motion";
 import React from "react";
-import { TeamCardProps } from "../../types";
+import { useTeamRecord } from "../../hooks/useTeamRecord";
+import { Team } from "../../types";
 
-const TeamCard: React.FC<TeamCardProps> = ({
-  team,
-  onClick,
-  showStats = true,
-}) => {
+interface TeamCardProps {
+  team: Team;
+  onClick?: () => void;
+  showStats?: boolean;
+}
+
+const TeamCard: React.FC<TeamCardProps> = ({ team, onClick, showStats = true }) => {
+  // Use optimized hook to calculate team record
+  const teamRecord = useTeamRecord(team.id);
+
   const gradientClasses = {
     orange: "bg-gradient-card-orange",
-    teal: "bg-gradient-card-teal",
+    green: "bg-gradient-card-green",
     blue: "bg-gradient-card-blue",
+    pink: "bg-gradient-card-pink",
+    white: "bg-gradient-card-white",
+    black: "bg-gradient-card-black",
+    gray: "bg-gradient-card-gray",
+    brown: "bg-gradient-card-brown",
     purple: "bg-gradient-card-purple",
+    yellow: "bg-gradient-card-yellow",
+    red: "bg-gradient-card-red",
+    cyan: "bg-gradient-card-cyan",
   };
 
   return (
@@ -24,7 +38,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
     >
       <div
         className={`relative h-96 ${
-          gradientClasses[team.gradient]
+          gradientClasses[team.gradient as keyof typeof gradientClasses] || gradientClasses.blue
         } p-6 flex flex-col justify-between text-white`}
       >
         {/* Gradient Overlay */}
@@ -34,7 +48,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
         <div className="relative z-10">
           {/* Sport Type Badge */}
           <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-xs font-medium mb-4">
-            {team.sportType === "kickball" ? "⚽" : "🏐"}{" "}
+            {team.sportType === "kickball" ? "☄️" : "🏐"}{" "}
             {team.sportType.charAt(0).toUpperCase() + team.sportType.slice(1)}
           </div>
 
@@ -49,13 +63,6 @@ const TeamCard: React.FC<TeamCardProps> = ({
 
         {/* Footer Content */}
         <div className="relative z-10">
-          {/* Team Motto */}
-          <div className="mb-4 p-3 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-            <p className="text-sm italic text-white/95 text-center">
-              "{team.motto}"
-            </p>
-          </div>
-
           {/* Stats Row */}
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center space-x-4">
@@ -93,7 +100,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
               <div className="text-right">
                 <div className="text-xs text-white/70">Record</div>
                 <div className="font-medium">
-                  {team.wins}W - {team.losses}L
+                  {teamRecord.wins}W - {teamRecord.losses}L
                 </div>
               </div>
             )}

@@ -47,17 +47,17 @@ const ScheduleDemo: React.FC = () => {
               onClick={() => setSelectedSport("kickball")}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 selectedSport === "kickball"
-                  ? "bg-brand-teal text-white"
+                  ? "bg-brand-blue text-white"
                   : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
               }`}
             >
-              ⚽ Kickball
+              ☄️ Kickball
             </button>
             <button
               onClick={() => setSelectedSport("dodgeball")}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 selectedSport === "dodgeball"
-                  ? "bg-brand-teal text-white"
+                  ? "bg-brand-blue text-white"
                   : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
               }`}
             >
@@ -118,7 +118,7 @@ const ScheduleDemo: React.FC = () => {
                     onClick={() => handleLocationSelect(location)}
                     className={`p-4 rounded-lg border cursor-pointer transition-colors ${
                       selectedLocation?.id === location.id
-                        ? "border-brand-teal bg-brand-teal/5"
+                        ? "border-brand-blue bg-brand-blue/5"
                         : "border-gray-200 hover:border-gray-300 bg-white"
                     }`}
                   >

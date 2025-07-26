@@ -344,20 +344,43 @@ export const leagueInfoApi = {
   },
 
   async update(updates: Partial<Omit<LeagueInfo, "id">>): Promise<LeagueInfo> {
-    const { data, error } = await supabase
-      .from("league_info")
-      .update({
-        mission: updates.mission,
-        history: updates.history,
-        founded_year: updates.foundedYear,
-        member_count: updates.memberCount,
-        seasons_completed: updates.seasonsCompleted,
-      })
-      .select()
-      .single();
+    // First try to get existing record
+    const existing = await this.get();
+    
+    if (existing) {
+      // Update existing record
+      const { data, error } = await supabase
+        .from("league_info")
+        .update({
+          mission: updates.mission,
+          history: updates.history,
+          founded_year: updates.foundedYear,
+          member_count: updates.memberCount,
+          seasons_completed: updates.seasonsCompleted,
+        })
+        .eq("id", existing.id)
+        .select()
+        .single();
 
-    if (error) throw error;
-    return transformLeagueInfo(data);
+      if (error) throw error;
+      return transformLeagueInfo(data);
+    } else {
+      // Create new record
+      const { data, error } = await supabase
+        .from("league_info")
+        .insert({
+          mission: updates.mission || "",
+          history: updates.history || "",
+          founded_year: updates.foundedYear || 2019,
+          member_count: updates.memberCount || 0,
+          seasons_completed: updates.seasonsCompleted || 0,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return transformLeagueInfo(data);
+    }
   },
 };
 
@@ -377,27 +400,57 @@ export const contactInfoApi = {
   async update(
     updates: Partial<Omit<ContactInfo, "id">>
   ): Promise<ContactInfo> {
-    const { data, error } = await supabase
-      .from("contact_info")
-      .update({
-        email: updates.email,
-        phone: updates.phone,
-        address_street: updates.address?.street,
-        address_city: updates.address?.city,
-        address_state: updates.address?.state,
-        address_zip: updates.address?.zipCode,
-        office_hours_weekdays: updates.officeHours?.weekdays,
-        office_hours_weekends: updates.officeHours?.weekends,
-        facebook_url: updates.socialMedia?.facebook,
-        instagram_url: updates.socialMedia?.instagram,
-        twitter_url: updates.socialMedia?.twitter,
-        discord_url: updates.socialMedia?.discord,
-      })
-      .select()
-      .single();
+    // First try to get existing record
+    const existing = await this.get();
+    
+    if (existing) {
+      // Update existing record
+      const { data, error } = await supabase
+        .from("contact_info")
+        .update({
+          email: updates.email,
+          phone: updates.phone,
+          address_street: updates.address?.street,
+          address_city: updates.address?.city,
+          address_state: updates.address?.state,
+          address_zip: updates.address?.zipCode,
+          office_hours_weekdays: updates.officeHours?.weekdays,
+          office_hours_weekends: updates.officeHours?.weekends,
+          facebook_url: updates.socialMedia?.facebook,
+          instagram_url: updates.socialMedia?.instagram,
+          twitter_url: updates.socialMedia?.twitter,
+          discord_url: updates.socialMedia?.discord,
+        })
+        .eq("id", existing.id)
+        .select()
+        .single();
 
-    if (error) throw error;
-    return transformContactInfo(data);
+      if (error) throw error;
+      return transformContactInfo(data);
+    } else {
+      // Create new record
+      const { data, error } = await supabase
+        .from("contact_info")
+        .insert({
+          email: updates.email || "",
+          phone: updates.phone || "",
+          address_street: updates.address?.street || "",
+          address_city: updates.address?.city || "",
+          address_state: updates.address?.state || "",
+          address_zip: updates.address?.zipCode || "",
+          office_hours_weekdays: updates.officeHours?.weekdays || "",
+          office_hours_weekends: updates.officeHours?.weekends || "",
+          facebook_url: updates.socialMedia?.facebook,
+          instagram_url: updates.socialMedia?.instagram,
+          twitter_url: updates.socialMedia?.twitter,
+          discord_url: updates.socialMedia?.discord,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return transformContactInfo(data);
+    }
   },
 };
 

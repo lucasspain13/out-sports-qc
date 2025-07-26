@@ -141,7 +141,7 @@ const AnimatedNav: React.FC<AnimatedNavProps> = ({
         <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="text-2xl font-bold text-brand-teal"
+          className="text-2xl font-bold text-brand-blue"
         >
           <motion.span
             animate={{
@@ -152,7 +152,7 @@ const AnimatedNav: React.FC<AnimatedNavProps> = ({
               repeat: Infinity,
               ease: "linear",
             }}
-            className="bg-gradient-to-r from-brand-teal via-brand-orange to-brand-purple bg-clip-text text-transparent"
+            className="bg-gradient-primary bg-clip-text text-transparent"
             style={{ backgroundSize: "200% 200%" }}
           >
             Out Sports
@@ -167,10 +167,10 @@ const AnimatedNav: React.FC<AnimatedNavProps> = ({
               href={link.href}
               className={`relative py-2 px-1 text-sm font-medium transition-colors duration-200 ${
                 link.active
-                  ? "text-brand-teal"
+                  ? "text-brand-blue"
                   : scrolled
-                  ? "text-gray-700 hover:text-brand-teal"
-                  : "text-white hover:text-brand-teal"
+                  ? "text-gray-700 hover:text-brand-blue"
+                  : "text-white hover:text-brand-blue"
               }`}
               whileHover={{ y: -2 }}
               initial={{ opacity: 0, y: -20 }}
@@ -188,7 +188,7 @@ const AnimatedNav: React.FC<AnimatedNavProps> = ({
 
               {/* Animated underline */}
               <motion.div
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-brand-teal to-brand-orange origin-left"
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-primary origin-left"
                 initial={{ scaleX: 0 }}
                 whileHover={{ scaleX: 1 }}
                 transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
@@ -197,7 +197,7 @@ const AnimatedNav: React.FC<AnimatedNavProps> = ({
               {/* Active indicator */}
               {link.active && (
                 <motion.div
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-brand-teal to-brand-orange"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-primary"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
@@ -212,7 +212,7 @@ const AnimatedNav: React.FC<AnimatedNavProps> = ({
           variants={hamburgerVariants}
           animate={isOpen ? "open" : "closed"}
           onClick={onToggle}
-          className="md:hidden p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-teal"
+          className="md:hidden p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -271,8 +271,8 @@ const AnimatedNav: React.FC<AnimatedNavProps> = ({
                   href={link.href}
                   className={`block py-3 px-4 rounded-xl font-medium transition-all duration-200 ${
                     link.active
-                      ? "bg-brand-teal text-white"
-                      : "text-gray-700 hover:bg-brand-teal/10 hover:text-brand-teal"
+                      ? "bg-brand-blue text-white"
+                      : "text-gray-700 hover:bg-brand-blue/10 hover:text-brand-blue"
                   }`}
                   onClick={onToggle}
                   whileHover={{
@@ -303,7 +303,7 @@ const AnimatedNav: React.FC<AnimatedNavProps> = ({
                   {/* Mobile active indicator */}
                   {link.active && (
                     <motion.div
-                      className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-teal to-brand-orange rounded-r-full"
+                      className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-primary rounded-r-full"
                       initial={{ scaleY: 0 }}
                       animate={{ scaleY: 1 }}
                       transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}

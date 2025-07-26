@@ -31,7 +31,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
     { id: "faqs", label: "FAQs", icon: "❓" },
     { id: "timeline", label: "Timeline", icon: "📅" },
     { id: "hero-content", label: "Hero Content", icon: "🖼️" },
-    { id: "sports-info", label: "Sports Info", icon: "⚽" },
+    { id: "sports-info", label: "Sports Info", icon: "☄️" },
     { id: "about-features", label: "About Features", icon: "✨" },
     { id: "site-settings", label: "Site Settings", icon: "⚙️" },
     { id: "announcements", label: "Announcements", icon: "📢" },

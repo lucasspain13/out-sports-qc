@@ -15,12 +15,35 @@ type DbPlayer = Database["public"]["Tables"]["players"]["Row"];
 type DbGame = Database["public"]["Tables"]["games"]["Row"];
 type DbLocation = Database["public"]["Tables"]["locations"]["Row"];
 
+// Helper function to convert old color values to new ones
+const convertLegacyGradient = (gradient: string): "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan" => {
+  // Map old color values to new ones
+  const colorMap: Record<string, "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan"> = {
+    "teal": "green",
+    "purple": "pink",
+    // Keep all valid new colors as-is
+    "orange": "orange",
+    "green": "green", 
+    "blue": "blue",
+    "pink": "pink",
+    "white": "white",
+    "black": "black",
+    "gray": "gray",
+    "brown": "brown",
+    "yellow": "yellow",
+    "red": "red",
+    "cyan": "cyan"
+  };
+  
+  return colorMap[gradient] || "blue"; // Default to blue if unknown
+};
+
 // Transform database team to application team type
 const transformTeam = (dbTeam: DbTeam, players: Player[] = []): Team => ({
   id: dbTeam.id,
   name: dbTeam.name,
   sportType: dbTeam.sport as "kickball" | "dodgeball",
-  gradient: dbTeam.gradient as "orange" | "teal" | "blue" | "purple",
+  gradient: convertLegacyGradient(dbTeam.gradient),
   description: dbTeam.description || "",
   players,
   captain: dbTeam.captain_id || undefined,
@@ -178,6 +201,108 @@ export const teamsApi = {
       console.error(`❌ Unexpected error fetching team ${teamId}:`, error);
       return null;
     }
+  },
+
+  // Migration function to update legacy color values in the database
+  async migrateLegacyColors() {
+    try {
+      // Update teams with "teal" to "green"
+      const { error: tealError } = await supabase
+        .from("teams")
+        .update({ gradient: "green" })
+        .eq("gradient", "teal");
+
+      if (tealError) throw tealError;
+
+      // Update teams with "purple" to "pink"  
+      const { error: purpleError } = await supabase
+        .from("teams")
+        .update({ gradient: "pink" })
+        .eq("gradient", "purple");
+
+      if (purpleError) throw purpleError;
+
+      return { success: true };
+    } catch (error) {
+      console.error("Failed to migrate legacy colors:", error);
+      throw error;
+    }
+  },
+
+  // Team CRUD operations
+  async createTeam(teamData: {
+    name: string;
+    sport: "kickball" | "dodgeball";
+    gradient: "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan";
+    description: string;
+    motto: string;
+    founded: number;
+  }) {
+    const { data, error } = await supabase
+      .from("teams")
+      .insert([
+        {
+          ...teamData,
+          wins: 0,
+          losses: 0,
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  async updateTeam(
+    teamId: string,
+    teamData: Partial<{
+      name: string;
+      sport: "kickball" | "dodgeball";
+      gradient: "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan";
+      description: string;
+      motto: string;
+      founded: number;
+      wins: number;
+      losses: number;
+      captain_id: string;
+    }>
+  ) {
+    // Prepare the update data, ensuring gradient is handled properly
+    const updateData = { ...teamData };
+    
+    // Ensure gradient value is valid (convert legacy values if needed)
+    if (updateData.gradient) {
+      updateData.gradient = convertLegacyGradient(updateData.gradient);
+    }
+
+    const { data, error } = await supabase
+      .from("teams")
+      .update(updateData)
+      .eq("id", teamId)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteTeam(teamId: string) {
+    // First delete all players in the team
+    const { error: playersError } = await supabase
+      .from("players")
+      .delete()
+      .eq("team_id", teamId);
+
+    if (playersError) throw playersError;
+
+    // Then delete the team
+    const { error: teamError } = await supabase
+      .from("teams")
+      .delete()
+      .eq("id", teamId);
+
+    if (teamError) throw teamError;
   },
 };
 
@@ -587,74 +712,6 @@ export const getScheduleBySport = (sportType: "kickball" | "dodgeball") =>
 
 // Admin CRUD Operations
 export const adminApi = {
-  // Team operations
-  async createTeam(teamData: {
-    name: string;
-    sport: "kickball" | "dodgeball";
-    gradient: "orange" | "teal" | "blue" | "purple";
-    description: string;
-    motto: string;
-    founded: number;
-  }) {
-    const { data, error } = await supabase
-      .from("teams")
-      .insert([
-        {
-          ...teamData,
-          wins: 0,
-          losses: 0,
-        },
-      ])
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
-  },
-
-  async updateTeam(
-    teamId: string,
-    teamData: Partial<{
-      name: string;
-      sport: "kickball" | "dodgeball";
-      gradient: "orange" | "teal" | "blue" | "purple";
-      description: string;
-      motto: string;
-      founded: number;
-      wins: number;
-      losses: number;
-      captain_id: string;
-    }>
-  ) {
-    const { data, error } = await supabase
-      .from("teams")
-      .update(teamData)
-      .eq("id", teamId)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
-  },
-
-  async deleteTeam(teamId: string) {
-    // First delete all players in the team
-    const { error: playersError } = await supabase
-      .from("players")
-      .delete()
-      .eq("team_id", teamId);
-
-    if (playersError) throw playersError;
-
-    // Then delete the team
-    const { error: teamError } = await supabase
-      .from("teams")
-      .delete()
-      .eq("id", teamId);
-
-    if (teamError) throw teamError;
-  },
-
   // Player operations
   async createPlayer(playerData: {
     name: string;

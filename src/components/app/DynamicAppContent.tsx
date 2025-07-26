@@ -47,7 +47,7 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
             "Weekend games",
           ],
           totalTeams: 4,
-          rosterPath: "#kickball-teams",
+          rosterPath: "#summer-kickball-teams",
           comingSoon: false,
         },
         {
@@ -55,7 +55,7 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
           title: "Dodgeball",
           description:
             "Fast-paced indoor fun that emphasizes strategy, teamwork, and quick reflexes. Our modified rules ensure everyone gets to play and have a great time regardless of athletic background.",
-          gradient: "teal" as const,
+          gradient: "green" as const,
           participants: 140,
           features: [
             "Beginner to advanced",
@@ -73,7 +73,7 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
       name: sport.name,
       title: sport.title,
       description: sport.description,
-      gradient: sport.gradient as "orange" | "teal" | "blue" | "purple",
+      gradient: sport.gradient as "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan",
       participants: sport.participants || 0,
       nextGame: sport.nextGame ? new Date(sport.nextGame) : undefined,
       features: sport.features || [],
@@ -192,7 +192,7 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
                       </li>
                       <li>
                         <a
-                          href="#kickball-teams"
+                          href="#summer-kickball-teams"
                           className="text-gray-300 hover:text-white transition-colors"
                         >
                           Kickball Teams

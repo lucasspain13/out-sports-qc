@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
+import { useMultipleTeamRecords } from "../../hooks/useTeamRecord";
 import { Team } from "../../types";
 import TeamCard from "../ui/TeamCard";
 
@@ -24,6 +25,9 @@ const TeamRoster: React.FC<TeamRosterProps> = ({
   maxTeams,
   className = "",
 }) => {
+  // Use optimized hook to calculate team records for all teams
+  const teamRecords = useMultipleTeamRecords(teams.map(team => team.id));
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -57,7 +61,7 @@ const TeamRoster: React.FC<TeamRosterProps> = ({
     : filteredTeams;
 
   const sportEmoji =
-    sportType === "kickball" ? "⚽" : sportType === "dodgeball" ? "🏐" : "🏆";
+    sportType === "kickball" ? "☄️" : sportType === "dodgeball" ? "🏐" : "🏆";
   const sportDisplayName = sportType
     ? sportType.charAt(0).toUpperCase() + sportType.slice(1)
     : "League";
@@ -126,7 +130,10 @@ const TeamRoster: React.FC<TeamRosterProps> = ({
               {showStats && (
                 <div className="text-center">
                   <div className="text-3xl font-bold text-gradient-brand mb-1">
-                    {displayTeams.reduce((total, team) => total + team.wins, 0)}
+                    {displayTeams.reduce((total, team) => {
+                      const record = teamRecords[team.id];
+                      return total + (record?.wins || 0);
+                    }, 0)}
                   </div>
                   <div className="text-sm text-gray-600">Total Wins</div>
                 </div>

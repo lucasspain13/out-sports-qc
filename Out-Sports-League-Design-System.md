@@ -390,7 +390,7 @@ interface SportCardProps {
     name: string;
     description: string;
     image: string;
-    gradient: "orange" | "teal" | "blue" | "purple";
+    gradient: "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan";
     participants?: number;
     nextGame?: Date;
   };

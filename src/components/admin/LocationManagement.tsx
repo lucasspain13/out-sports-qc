@@ -18,10 +18,9 @@ interface LocationFormData {
   longitude: number;
   facilities: string[];
   fieldType: "grass" | "turf" | "indoor" | "court";
-  capacity?: number;
   parking: boolean;
   restrooms: boolean;
-  concessions: boolean;
+  waterFountains: boolean;
 }
 
 export const LocationManagement: React.FC = () => {
@@ -36,6 +35,7 @@ export const LocationManagement: React.FC = () => {
     null
   );
   const [searchTerm, setSearchTerm] = useState("");
+  const [newFacility, setNewFacility] = useState("");
   const [formData, setFormData] = useState<LocationFormData>({
     name: "",
     address: "",
@@ -46,35 +46,10 @@ export const LocationManagement: React.FC = () => {
     longitude: 0,
     facilities: [],
     fieldType: "grass",
-    capacity: undefined,
     parking: false,
     restrooms: false,
-    concessions: false,
+    waterFountains: false,
   });
-
-  const facilityOptions = [
-    "Parking",
-    "Concessions",
-    "Bleachers",
-    "Scoreboard",
-    "Water Fountains",
-    "Picnic Area",
-    "Indoor Courts",
-    "Locker Rooms",
-    "Vending Machines",
-    "Basketball Courts",
-    "Snack Bar",
-    "Equipment Storage",
-    "Multiple Fields",
-    "Playground",
-    "Artificial Turf",
-    "Pro Shop",
-    "Lighting",
-    "Sound System",
-    "Air Conditioning",
-    "Harbor View",
-    "Picnic Tables",
-  ];
 
   useEffect(() => {
     fetchLocations();
@@ -112,10 +87,9 @@ export const LocationManagement: React.FC = () => {
         longitude: formData.longitude,
         facilities: formData.facilities,
         field_type: formData.fieldType,
-        capacity: formData.capacity || null,
         parking: formData.parking,
         restrooms: formData.restrooms,
-        concessions: formData.concessions,
+        water_fountains: formData.waterFountains,
       };
 
       if (editingLocation) {
@@ -155,17 +129,16 @@ export const LocationManagement: React.FC = () => {
     setFormData({
       name: location.name,
       address: location.address,
-      city: "", // These would need to be parsed from address or stored separately
-      state: "",
-      zipCode: "",
+      city: location.city || "",
+      state: location.state || "",
+      zipCode: location.zipCode || "",
       latitude: location.coordinates.lat,
       longitude: location.coordinates.lng,
       facilities: location.facilities,
       fieldType: location.fieldType,
-      capacity: location.capacity,
       parking: location.parking,
       restrooms: location.restrooms,
-      concessions: location.concessions,
+      waterFountains: location.waterFountains || false, // Default to false for older records
     });
     setShowForm(true);
   };
@@ -211,24 +184,43 @@ export const LocationManagement: React.FC = () => {
       longitude: 0,
       facilities: [],
       fieldType: "grass",
-      capacity: undefined,
       parking: false,
       restrooms: false,
-      concessions: false,
+      waterFountains: false,
     });
     setEditingLocation(null);
     setShowForm(false);
     setError(null);
     setErrorActionSuggestion(null);
+    setNewFacility("");
   };
 
-  const handleFacilityToggle = (facility: string) => {
+  const handleFacilityAdd = (facility: string) => {
+    const trimmedFacility = facility.trim();
+    if (trimmedFacility && !formData.facilities.includes(trimmedFacility)) {
+      setFormData(prev => ({
+        ...prev,
+        facilities: [...prev.facilities, trimmedFacility],
+      }));
+    }
+    setNewFacility("");
+  };
+
+  const handleFacilityRemove = (facilityToRemove: string) => {
     setFormData(prev => ({
       ...prev,
-      facilities: prev.facilities.includes(facility)
-        ? prev.facilities.filter(f => f !== facility)
-        : [...prev.facilities, facility],
+      facilities: prev.facilities.filter(f => f !== facilityToRemove),
     }));
+  };
+
+  const handleFacilityKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Tab' && newFacility.trim()) {
+      e.preventDefault();
+      handleFacilityAdd(newFacility);
+    } else if (e.key === 'Enter' && newFacility.trim()) {
+      e.preventDefault();
+      handleFacilityAdd(newFacility);
+    }
   };
 
   const filteredLocations = locations.filter(
@@ -314,15 +306,9 @@ export const LocationManagement: React.FC = () => {
 
               <p className="text-gray-600 text-sm mb-3">{location.address}</p>
 
-              {location.capacity && (
-                <p className="text-sm text-gray-500 mb-3">
-                  Capacity: {location.capacity}
-                </p>
-              )}
-
               <div className="mb-4">
                 <h4 className="text-sm font-medium text-gray-700 mb-2">
-                  Facilities:
+                  Additional Amenities:
                 </h4>
                 <div className="flex flex-wrap gap-1">
                   {location.facilities.slice(0, 3).map((facility, index) => (
@@ -342,9 +328,10 @@ export const LocationManagement: React.FC = () => {
               </div>
 
               <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
-                <div className="flex space-x-3">
+                <div className="flex flex-wrap gap-2">
                   {location.parking && <span>🅿️ Parking</span>}
-                  {location.concessions && <span>🍿 Concessions</span>}
+                  {location.restrooms && <span>🚻 Restrooms</span>}
+                  {location.waterFountains && <span>⛲ Water Fountains</span>}
                 </div>
               </div>
 
@@ -513,29 +500,11 @@ export const LocationManagement: React.FC = () => {
                   />
                 </div>
 
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Capacity (optional)
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={formData.capacity || ""}
-                    onChange={e =>
-                      setFormData({
-                        ...formData,
-                        capacity: parseInt(e.target.value) || undefined,
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-
                 <div className="mb-4 md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Basic Amenities
                   </label>
-                  <div className="flex gap-4">
+                  <div className="flex flex-wrap gap-4">
                     <label className="flex items-center">
                       <input
                         type="checkbox"
@@ -553,39 +522,74 @@ export const LocationManagement: React.FC = () => {
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={formData.concessions}
+                        checked={formData.restrooms}
                         onChange={e =>
                           setFormData({
                             ...formData,
-                            concessions: e.target.checked,
+                            restrooms: e.target.checked,
                           })
                         }
                         className="mr-2"
                       />
-                      Concessions
+                      Restrooms
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={formData.waterFountains}
+                        onChange={e =>
+                          setFormData({
+                            ...formData,
+                            waterFountains: e.target.checked,
+                          })
+                        }
+                        className="mr-2"
+                      />
+                      Water Fountains
                     </label>
                   </div>
                 </div>
 
                 <div className="mb-4 md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Additional Facilities
+                    Additional Amenities
                   </label>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-32 overflow-y-auto border border-gray-200 rounded p-3">
-                    {facilityOptions.map(facility => (
-                      <label
-                        key={facility}
-                        className="flex items-center text-sm"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={formData.facilities.includes(facility)}
-                          onChange={() => handleFacilityToggle(facility)}
-                          className="mr-2"
-                        />
-                        {facility}
-                      </label>
-                    ))}
+                  <div className="space-y-3">
+                    {/* Input for adding new amenities */}
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Type an amenity and press Tab or Enter to add"
+                        value={newFacility}
+                        onChange={e => setNewFacility(e.target.value)}
+                        onKeyDown={handleFacilityKeyDown}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Press Tab or Enter to add the amenity
+                      </p>
+                    </div>
+                    
+                    {/* Display added amenities as tags */}
+                    {formData.facilities.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {formData.facilities.map((facility, index) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
+                          >
+                            {facility}
+                            <button
+                              type="button"
+                              onClick={() => handleFacilityRemove(facility)}
+                              className="ml-2 text-blue-600 hover:text-blue-800 focus:outline-none"
+                            >
+                              ×
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

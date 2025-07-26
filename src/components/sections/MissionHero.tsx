@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
+import { useGames } from "../../hooks/useGames";
 import { LeagueInfo } from "../../types";
 import Button from "../ui/Button";
 
@@ -14,6 +15,16 @@ const MissionHero: React.FC<MissionHeroProps> = ({
   onJoinClick,
   className = "",
 }) => {
+  // Get completed games count from database
+  const { games, loading: gamesLoading } = useGames();
+  const completedGamesCount = games.filter(game => game.status === "completed").length;
+  
+  // Calculate years since May 14, 2024
+  const foundedDate = new Date('2024-05-14');
+  const currentDate = new Date();
+  const yearsDifference = (currentDate.getTime() - foundedDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+  const yearsStrong = Math.floor(yearsDifference);
+  
   const stats = [
     {
       label: "Active Members",
@@ -21,18 +32,18 @@ const MissionHero: React.FC<MissionHeroProps> = ({
       icon: "👥",
     },
     {
-      label: "Years Strong",
-      value: new Date().getFullYear() - leagueInfo.foundedYear,
+      label: yearsStrong === 1 ? "Year Strong" : "Years Strong",
+      value: yearsStrong,
       icon: "🏆",
     },
     {
-      label: "Seasons Completed",
+      label: leagueInfo.seasonsCompleted === 1 ? "Season Completed" : "Seasons Completed",
       value: leagueInfo.seasonsCompleted,
-      icon: "⚽",
+      icon: "☄️",
     },
     {
       label: "Games Played",
-      value: "1,200+",
+      value: gamesLoading ? "Loading..." : completedGamesCount.toLocaleString(),
       icon: "🎯",
     },
   ];
@@ -68,7 +79,7 @@ const MissionHero: React.FC<MissionHeroProps> = ({
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-brand-teal/10 to-transparent rounded-full"
+          className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-brand-blue/10 to-transparent rounded-full"
         />
       </div>
 
@@ -152,7 +163,7 @@ const MissionHero: React.FC<MissionHeroProps> = ({
               variant="primary"
               size="large"
               onClick={onJoinClick}
-              className="w-full sm:w-auto bg-brand-teal hover:bg-brand-teal-dark text-white border-0 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              className="w-full sm:w-auto bg-brand-blue hover:bg-brand-blue-dark text-white border-0 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
               Join Our Community
             </Button>

@@ -11,13 +11,15 @@ interface RegistrationFormProps {
 interface FormData {
   firstName: string;
   lastName: string;
+  preferredPronouns: string;
+  age: string;
   email: string;
   phone: string;
-  shirtSize: "XS" | "S" | "M" | "L" | "XL" | "XXL";
+  shirtSize: "XS" | "S" | "M" | "L" | "XL" | "XXL" | "3XL" | "4XL";
   emergencyContactName: string;
   emergencyContactPhone: string;
   experienceLevel: "beginner" | "intermediate" | "advanced";
-  howDidYouHear: string;
+  teamRequest: string;
   dietaryRestrictions: string;
   medicalConditions: string;
   agreeToTerms: boolean;
@@ -33,13 +35,15 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
+    preferredPronouns: "",
+    age: "",
     email: "",
     phone: "",
     shirtSize: "M",
     emergencyContactName: "",
     emergencyContactPhone: "",
     experienceLevel: "beginner",
-    howDidYouHear: "",
+    teamRequest: "",
     dietaryRestrictions: "",
     medicalConditions: "",
     agreeToTerms: false,
@@ -48,7 +52,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
   const sportDisplayName =
     sportType.charAt(0).toUpperCase() + sportType.slice(1);
-  const sportEmoji = sportType === "kickball" ? "⚽" : "🏐";
+  const sportEmoji = sportType === "kickball" ? "☄️" : "🏐";
 
   const experienceLevels = [
     { value: "beginner", label: "Beginner - I'm new to this!", emoji: "🌱" },
@@ -60,20 +64,55 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     { value: "advanced", label: "Advanced - I'm pretty good!", emoji: "🏆" },
   ];
 
-  const hearAboutOptions = [
-    "Social Media",
-    "Friend Referral",
-    "Google Search",
-    "Community Board",
-    "Previous Season Player",
-    "Other",
-  ];
+  const formatPhoneNumber = (value: string) => {
+    // Remove all non-numeric characters
+    const phoneNumber = value.replace(/\D/g, '');
+    
+    // Limit to 10 digits maximum
+    const limitedPhone = phoneNumber.slice(0, 10);
+    
+    // Format as XXX-XXX-XXXX
+    if (limitedPhone.length <= 3) {
+      return limitedPhone;
+    } else if (limitedPhone.length <= 6) {
+      return `${limitedPhone.slice(0, 3)}-${limitedPhone.slice(3)}`;
+    } else {
+      return `${limitedPhone.slice(0, 3)}-${limitedPhone.slice(3, 6)}-${limitedPhone.slice(6, 10)}`;
+    }
+  };
+
+  const validatePhoneNumber = (phone: string) => {
+    const digits = phone.replace(/\D/g, '');
+    return digits.length === 10;
+  };
+
+  const getPhoneInputStyles = (phone: string) => {
+    if (phone.length === 0) {
+      // No input yet - default style
+      return "w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300";
+    }
+    
+    const isValid = validatePhoneNumber(phone);
+    if (isValid) {
+      // Valid phone number - green border
+      return "w-full px-4 py-3 rounded-lg border border-green-300 focus:border-green-500 focus:ring-2 focus:ring-green-500/20 outline-none transition-all duration-300";
+    } else {
+      // Invalid phone number - red border
+      return "w-full px-4 py-3 rounded-lg border border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 outline-none transition-all duration-300";
+    }
+  };
 
   const handleInputChange = (
     field: keyof FormData,
     value: string | boolean
   ) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    if (field === 'phone' || field === 'emergencyContactPhone') {
+      // Format phone numbers
+      const formattedPhone = typeof value === 'string' ? formatPhoneNumber(value) : value;
+      setFormData(prev => ({ ...prev, [field]: formattedPhone }));
+    } else {
+      setFormData(prev => ({ ...prev, [field]: value }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -89,6 +128,27 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
       return;
     }
 
+    // Validate phone numbers have exactly 10 digits
+    if (!validatePhoneNumber(formData.phone)) {
+      showNotification({
+        type: "error",
+        title: "Invalid Phone Number",
+        message: "Please enter a valid 10-digit phone number.",
+        duration: 5000,
+      });
+      return;
+    }
+
+    if (!validatePhoneNumber(formData.emergencyContactPhone)) {
+      showNotification({
+        type: "error",
+        title: "Invalid Emergency Contact Phone",
+        message: "Please enter a valid 10-digit emergency contact phone number.",
+        duration: 5000,
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -97,13 +157,15 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
           sport_type: sportType,
           first_name: formData.firstName,
           last_name: formData.lastName,
+          preferred_pronouns: formData.preferredPronouns,
+          age: parseInt(formData.age),
           email: formData.email.toLowerCase(),
           phone: formData.phone,
           shirt_size: formData.shirtSize,
           emergency_contact_name: formData.emergencyContactName,
           emergency_contact_phone: formData.emergencyContactPhone,
           experience_level: formData.experienceLevel,
-          how_did_you_hear: formData.howDidYouHear,
+          team_request: formData.teamRequest || null,
           dietary_restrictions: formData.dietaryRestrictions || null,
           medical_conditions: formData.medicalConditions || null,
           agree_to_terms: formData.agreeToTerms,
@@ -125,13 +187,15 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
       setFormData({
         firstName: "",
         lastName: "",
+        preferredPronouns: "",
+        age: "",
         email: "",
         phone: "",
         shirtSize: "M",
         emergencyContactName: "",
         emergencyContactPhone: "",
         experienceLevel: "beginner",
-        howDidYouHear: "",
+        teamRequest: "",
         dietaryRestrictions: "",
         medicalConditions: "",
         agreeToTerms: false,
@@ -185,7 +249,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               type="text"
               value={formData.firstName}
               onChange={e => handleInputChange("firstName", e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
               placeholder="Enter your first name"
               required
             />
@@ -199,8 +263,38 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               type="text"
               value={formData.lastName}
               onChange={e => handleInputChange("lastName", e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
               placeholder="Enter your last name"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Preferred Pronouns *
+            </label>
+            <input
+              type="text"
+              value={formData.preferredPronouns}
+              onChange={e => handleInputChange("preferredPronouns", e.target.value)}
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
+              placeholder="e.g., he/him, she/her, they/them"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Age *
+            </label>
+            <input
+              type="number"
+              min="18"
+              max="100"
+              value={formData.age}
+              onChange={e => handleInputChange("age", e.target.value)}
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
+              placeholder="Enter your age"
               required
             />
           </div>
@@ -213,7 +307,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               type="email"
               value={formData.email}
               onChange={e => handleInputChange("email", e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
               placeholder="your.email@example.com"
               required
             />
@@ -227,8 +321,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               type="tel"
               value={formData.phone}
               onChange={e => handleInputChange("phone", e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300"
-              placeholder="(555) 123-4567"
+              className={getPhoneInputStyles(formData.phone)}
+              placeholder="123-456-7890"
               required
             />
           </div>
@@ -240,10 +334,10 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             <select
               value={formData.shirtSize}
               onChange={e => handleInputChange("shirtSize", e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
               required
             >
-              {["XS", "S", "M", "L", "XL", "XXL"].map(size => (
+              {["XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL"].map(size => (
                 <option key={size} value={size}>
                   {size}
                 </option>
@@ -268,7 +362,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               onChange={e =>
                 handleInputChange("emergencyContactName", e.target.value)
               }
-              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
               placeholder="Contact person's name"
               required
             />
@@ -284,8 +378,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               onChange={e =>
                 handleInputChange("emergencyContactPhone", e.target.value)
               }
-              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300"
-              placeholder="(555) 123-4567"
+              className={getPhoneInputStyles(formData.emergencyContactPhone)}
+              placeholder="123-456-7890"
               required
             />
           </div>
@@ -308,7 +402,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                     onChange={e =>
                       handleInputChange("experienceLevel", e.target.value)
                     }
-                    className="h-4 w-4 text-brand-teal focus:ring-brand-teal focus:ring-offset-0"
+                    className="h-4 w-4 text-brand-blue focus:ring-brand-blue focus:ring-offset-0"
                   />
                   <span className="ml-3 text-2xl">{level.emoji}</span>
                   <span className="ml-2 text-sm font-medium text-gray-900">
@@ -321,20 +415,15 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              How did you hear about us?
+              Team Request (Optional)
             </label>
-            <select
-              value={formData.howDidYouHear}
-              onChange={e => handleInputChange("howDidYouHear", e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300"
-            >
-              <option value="">Select an option</option>
-              {hearAboutOptions.map(option => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
+            <textarea
+              value={formData.teamRequest}
+              onChange={e => handleInputChange("teamRequest", e.target.value)}
+              rows={4}
+              className="w-full px-2 py-2 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300 resize-none"
+              placeholder="Request up to 3 specific players to be on your team (e.g., 'John Smith, Jane Doe, Alex Johnson'). We'll do our best to accommodate requests while maintaining team balance."
+            />
           </div>
         </div>
       </div>
@@ -351,7 +440,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               handleInputChange("dietaryRestrictions", e.target.value)
             }
             rows={3}
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300 resize-none"
+            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300 resize-none"
             placeholder="Please list any dietary restrictions, allergies, or special accommodations..."
           />
         </div>
@@ -366,7 +455,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               handleInputChange("medicalConditions", e.target.value)
             }
             rows={3}
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-300 resize-none"
+            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300 resize-none"
             placeholder="Please list any medical conditions or injuries we should be aware of..."
           />
         </div>
@@ -380,13 +469,13 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             id="agreeToTerms"
             checked={formData.agreeToTerms}
             onChange={e => handleInputChange("agreeToTerms", e.target.checked)}
-            className="mt-1 h-4 w-4 text-brand-teal focus:ring-brand-teal focus:ring-offset-0 rounded"
+            className="mt-1 h-4 w-4 text-brand-blue focus:ring-brand-blue focus:ring-offset-0 rounded"
           />
           <label htmlFor="agreeToTerms" className="ml-3 text-sm text-gray-600">
             I agree to the{" "}
             <a
               href="#terms"
-              className="text-brand-teal hover:text-brand-teal-dark font-medium"
+              className="text-brand-blue hover:text-brand-blue-dark font-medium"
             >
               Terms and Conditions
             </a>{" "}
@@ -403,7 +492,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             onChange={e =>
               handleInputChange("agreeToEmailUpdates", e.target.checked)
             }
-            className="mt-1 h-4 w-4 text-brand-teal focus:ring-brand-teal focus:ring-offset-0 rounded"
+            className="mt-1 h-4 w-4 text-brand-blue focus:ring-brand-blue focus:ring-offset-0 rounded"
           />
           <label
             htmlFor="agreeToEmailUpdates"
@@ -425,7 +514,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
           className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all duration-300 ${
             loading
               ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-              : "bg-gradient-to-r from-brand-teal to-brand-blue text-white hover:shadow-lg hover:-translate-y-0.5"
+              : "bg-gradient-primary text-white hover:shadow-lg hover:-translate-y-0.5"
           }`}
         >
           {loading ? (

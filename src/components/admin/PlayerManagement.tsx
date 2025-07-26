@@ -161,11 +161,19 @@ export const PlayerManagement: React.FC = () => {
     const team = teams.find(t => t.id === teamId);
     const gradientClasses = {
       orange: "from-orange-400 to-red-500",
-      teal: "from-teal-400 to-cyan-500",
+      green: "from-green-400 to-emerald-500",
       blue: "from-blue-400 to-indigo-500",
-      purple: "from-purple-400 to-pink-500",
+      pink: "from-pink-400 to-rose-500",
+      white: "from-gray-100 to-gray-200",
+      black: "from-gray-700 to-gray-900",
+      gray: "from-gray-400 to-gray-600",
+      brown: "from-amber-600 to-amber-800",
+      purple: "from-purple-400 to-purple-600",
+      yellow: "from-yellow-400 to-yellow-600",
+      red: "from-red-400 to-red-600",
+      cyan: "from-cyan-300 to-cyan-500",
     };
-    return team ? gradientClasses[team.gradient] : gradientClasses.blue;
+    return team ? gradientClasses[team.gradient as keyof typeof gradientClasses] || gradientClasses.blue : gradientClasses.blue;
   };
 
   const filteredPlayers = players.filter(player => {

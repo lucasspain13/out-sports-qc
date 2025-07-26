@@ -51,12 +51,12 @@ export const coreValues: CoreValue[] = [
 // Contact Information
 export const contactInfo: ContactInfo = {
   email: "hello@outsportsleague.com",
-  phone: "(555) OUT-PLAY",
+  phone: "(563) 381-0504",
   address: {
-    street: "1234 Rainbow Drive",
-    city: "Austin",
-    state: "TX",
-    zipCode: "78701",
+    street: "",
+    city: "Davenport",
+    state: "IA",
+    zipCode: "52807",
   },
   socialMedia: {
     facebook: "https://facebook.com/outsportsleague",
@@ -75,12 +75,12 @@ export const leagueInfo: LeagueInfo = {
   mission:
     "To create an inclusive, welcoming sports community where everyone can play, grow, and belong. We believe that sports have the power to bring people together, build confidence, and create lasting friendships that extend far beyond the playing field.",
   history:
-    "Founded in 2019 by a group of friends who wanted to create a more inclusive recreational sports experience, OUT Sports League began with just two kickball teams and a dream. What started as weekend games in a local park has grown into a thriving community of over 300 members across multiple sports, united by our commitment to fun, friendship, and acceptance.",
+    "Founded in 2024 by a group of friends who wanted to create a more inclusive recreational sports experience, OUT Sports League began with just two kickball teams and a dream. What started as weekend games in a local park has grown into a thriving community of over 300 members across multiple sports, united by our commitment to fun, friendship, and acceptance.",
   values: coreValues,
   contact: contactInfo,
-  foundedYear: 2019,
-  memberCount: 312,
-  seasonsCompleted: 18,
+  foundedYear: 2024,
+  memberCount: 62,
+  seasonsCompleted: 1,
 };
 
 // Leadership Team
@@ -92,7 +92,7 @@ export const leadership: LeadershipMember[] = [
     bio: "Alex founded OUT Sports League with a vision of creating inclusive recreational sports for everyone. With 8 years of experience in community organizing and a passion for kickball, Alex ensures our league stays true to its core values while continuing to grow.",
     avatar: "",
     email: "alex@outsportsleague.com",
-    joinedYear: 2019,
+    joinedYear: 2024,
     specialties: [
       "Community Building",
       "Strategic Planning",
@@ -257,7 +257,7 @@ export const testimonials: Testimonial[] = [
     avatar: "",
     teamName: "Thunder Kickers",
     sportType: "kickball",
-    memberSince: 2019,
+    memberSince: 2024,
     location: "Austin, TX",
   },
   {
@@ -414,8 +414,8 @@ export const faqs: FAQ[] = [
 const timelineMilestones: TimelineMilestone[] = [
   {
     id: "milestone-1",
-    year: 2019,
-    month: "March",
+    year: 2024,
+    month: "May",
     title: "League Founded",
     description:
       "OUT Sports League officially launched with 2 kickball teams and 24 founding members at Zilker Park.",
@@ -423,7 +423,7 @@ const timelineMilestones: TimelineMilestone[] = [
   },
   {
     id: "milestone-2",
-    year: 2019,
+    year: 2024,
     month: "August",
     title: "First Championship",
     description:

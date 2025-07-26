@@ -175,11 +175,12 @@ All components use the established design system:
 Components expect data in the format defined in `src/types/index.ts`:
 
 ```typescript
+```typescript
 interface Team {
   id: string;
   name: string;
   sportType: "kickball" | "dodgeball";
-  gradient: "orange" | "teal" | "blue" | "purple";
+  gradient: "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan";
   description: string;
   players: Player[];
   captain?: string; // Player ID
@@ -188,6 +189,7 @@ interface Team {
   losses: number;
   motto: string;
 }
+```
 
 interface Player {
   id: string;

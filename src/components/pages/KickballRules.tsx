@@ -27,7 +27,7 @@ const KickballRules: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            ⚽ Kickball League Rules
+            ☄️ Kickball League Rules
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Welcome to Out Sports League Kickball! These rules are designed to
@@ -45,7 +45,7 @@ const KickballRules: React.FC = () => {
             Out Sports League is all about <strong>Fun First</strong>! We
             prioritize sportsmanship, inclusivity, and community building over
             intense competition. Everyone plays, everyone belongs, and everyone
-            has a voice. Let's kick some balls and make some friends! ⚽️
+            has a voice. Let's kick some balls and make some friends! ☄️
           </p>
         </div>
 
@@ -55,29 +55,27 @@ const KickballRules: React.FC = () => {
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Team Size:</strong> 10-12 players per roster (minimum 8
+                <strong>Team Size:</strong> 16 players per roster (minimum 8
                 to field a team)
               </span>
             </li>
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Field Players:</strong> 8 players on the field at one
-                time (1 pitcher, 1 catcher, 6 fielders)
+                <strong>Offense:</strong> All team members kick in a predetermined order, cycling through the entire lineup and repeating
               </span>
             </li>
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Gender Balance:</strong> No gender restrictions - all
-                identities welcome!
+                <strong>Defense:</strong> 11 players on the field at one
+                time (1 pitcher, 1 catcher, 9 fielders)
               </span>
             </li>
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Substitutions:</strong> Players can be substituted at
-                any time between innings
+                <strong>Substitutions:</strong> The defensive team can make changes between innings. Substitute players are allowed if a team's attendance before the game begins is below 8 players
               </span>
             </li>
           </ul>
@@ -150,7 +148,7 @@ const KickballRules: React.FC = () => {
               <span className="inline-block w-2 h-2 bg-red-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
                 <strong>Kicking Style:</strong> Must kick with foot only - no
-                punting or drop kicking
+                punting, drop kicking, or bunting allowed
               </span>
             </li>
           </ul>
@@ -162,29 +160,26 @@ const KickballRules: React.FC = () => {
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-indigo-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Leading Off:</strong> Runners can lead off base once the
-                ball is kicked
+                <strong>Leading Off:</strong> Runners must keep one foot on the base until the ball is kicked - no early leads
               </span>
             </li>
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-indigo-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Force Outs:</strong> Runner is out if forced and fielder
-                has control of ball at base
+                <strong>Force Outs:</strong> When a runner must advance to the next base, they're out if the fielder touches that base while holding the ball
               </span>
             </li>
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-indigo-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
                 <strong>Tag Outs:</strong> Must be tagged with the ball (thrown
-                balls count if they hit the runner)
+                balls count if they hit the runner - head shots are NOT allowed)
               </span>
             </li>
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-indigo-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Overthrows:</strong> Runners may advance on overthrown
-                balls
+                <strong>House Rule:</strong> If a kicked ball gets caught, it is no longer in play - runners can safely return to their original base
               </span>
             </li>
             <li className="flex items-start">
@@ -226,6 +221,12 @@ const KickballRules: React.FC = () => {
               <span>
                 <strong>Fly Balls:</strong> Catching a fly ball = automatic out
                 for the kicker
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 bg-yellow-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span>
+                <strong>Bunt Line:</strong> House rule - we use a shorter bunt line that's closer to home plate than the traditional line, making it easier to get past
               </span>
             </li>
           </ul>
@@ -273,7 +274,7 @@ const KickballRules: React.FC = () => {
             other.
           </p>
           <p className="text-cyan-800 font-medium">
-            Contact us: info@outsportsleague.com
+            Contact us: Travis Stanger, 563-381-0504
           </p>
         </div>
       </div>

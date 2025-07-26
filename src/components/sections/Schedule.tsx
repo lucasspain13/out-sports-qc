@@ -87,7 +87,7 @@ const Schedule: React.FC<ScheduleSectionProps> = ({
 
     return [
       { key: "all" as const, label: "All Sports", emoji: "🏆" },
-      { key: "kickball" as const, label: "Kickball", emoji: "⚽" },
+      { key: "kickball" as const, label: "Kickball", emoji: "☄️" },
       // Temporarily disabled - dodgeball coming soon
       // { key: "dodgeball" as const, label: "Dodgeball", emoji: "🏐" },
     ];
@@ -281,12 +281,12 @@ const Schedule: React.FC<ScheduleSectionProps> = ({
             ) : (
               <div className="flex items-center justify-center space-x-4">
                 <motion.a
-                  href="#kickball-schedule"
+                  href="#summer-kickball-schedule"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="btn-secondary inline-flex items-center"
                 >
-                  <span className="mr-2">⚽</span>
+                  <span className="mr-2">☄️</span>
                   Kickball Schedule
                 </motion.a>
                 {/* Temporarily disabled - dodgeball coming soon

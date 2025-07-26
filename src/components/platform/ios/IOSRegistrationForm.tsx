@@ -49,7 +49,7 @@ const IOSRegistrationForm: React.FC<IOSRegistrationFormProps> = ({
 
   const sportDisplayName =
     sportType.charAt(0).toUpperCase() + sportType.slice(1);
-  const sportEmoji = sportType === "kickball" ? "⚽" : "🏐";
+  const sportEmoji = sportType === "kickball" ? "☄️" : "🏐";
 
   const totalSteps = 4;
   const progressPercentage = (currentStep / totalSteps) * 100;

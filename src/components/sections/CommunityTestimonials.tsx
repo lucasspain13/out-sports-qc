@@ -39,7 +39,7 @@ const CommunityTestimonials: React.FC<CommunityTestimonialsProps> = ({
   const getSportGradient = (sportType?: "kickball" | "dodgeball") => {
     if (sportType === "kickball")
       return "from-brand-orange to-brand-orange-light";
-    if (sportType === "dodgeball") return "from-brand-teal to-brand-teal-light";
+    if (sportType === "dodgeball") return "bg-gradient-primary";
     return "from-brand-blue to-brand-blue-light";
   };
 
@@ -47,7 +47,7 @@ const CommunityTestimonials: React.FC<CommunityTestimonialsProps> = ({
     const roleColors = {
       "Team Captain": "bg-brand-purple text-white",
       Player: "bg-brand-blue text-white",
-      "Volunteer Referee": "bg-brand-teal text-white",
+      "Volunteer Referee": "bg-brand-blue text-white",
     };
     return (
       roleColors[role as keyof typeof roleColors] || "bg-gray-600 text-white"
@@ -101,7 +101,7 @@ const CommunityTestimonials: React.FC<CommunityTestimonialsProps> = ({
             >
               {[
                 { key: "all", label: "All Sports", icon: "🏆" },
-                { key: "kickball", label: "Kickball", icon: "⚽" },
+                { key: "kickball", label: "Kickball", icon: "☄️" },
                 // Temporarily disabled - dodgeball coming soon
                 // { key: "dodgeball", label: "Dodgeball", icon: "🏐" },
               ].map(filter => (
@@ -113,7 +113,7 @@ const CommunityTestimonials: React.FC<CommunityTestimonialsProps> = ({
                   }}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-full font-medium transition-all duration-300 ${
                     selectedFilter === filter.key
-                      ? "bg-gradient-to-r from-brand-teal to-brand-blue text-white shadow-lg"
+                      ? "bg-gradient-primary text-white shadow-lg"
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
                 >
@@ -133,7 +133,7 @@ const CommunityTestimonials: React.FC<CommunityTestimonialsProps> = ({
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={prevTestimonial}
-              className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-brand-teal transition-colors"
+              className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-brand-blue transition-colors"
             >
               <svg
                 className="w-6 h-6"
@@ -156,7 +156,7 @@ const CommunityTestimonials: React.FC<CommunityTestimonialsProps> = ({
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={nextTestimonial}
-              className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-brand-teal transition-colors"
+              className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-brand-blue transition-colors"
             >
               <svg
                 className="w-6 h-6"
@@ -243,7 +243,7 @@ const CommunityTestimonials: React.FC<CommunityTestimonialsProps> = ({
                       {testimonial.sportType && (
                         <span className="flex items-center space-x-1">
                           <span>
-                            {testimonial.sportType === "kickball" ? "⚽" : "🏐"}
+                            {testimonial.sportType === "kickball" ? "☄️" : "🏐"}
                           </span>
                           <span className="capitalize">
                             {testimonial.sportType}
@@ -276,7 +276,7 @@ const CommunityTestimonials: React.FC<CommunityTestimonialsProps> = ({
                 onClick={() => setCurrentIndex(index * 3)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   Math.floor(currentIndex / 3) === index
-                    ? "bg-brand-teal scale-125"
+                    ? "bg-brand-blue scale-125"
                     : "bg-gray-300 hover:bg-gray-400"
                 }`}
               />

@@ -16,9 +16,17 @@ const GameDetail: React.FC<GameDetailProps> = ({
 }) => {
   const gradientClasses = {
     orange: "bg-gradient-card-orange",
-    teal: "bg-gradient-card-teal",
+    green: "bg-gradient-card-green",
     blue: "bg-gradient-card-blue",
+    pink: "bg-gradient-card-pink",
+    white: "bg-gradient-card-white",
+    black: "bg-gradient-card-black",
+    gray: "bg-gradient-card-gray",
+    brown: "bg-gradient-card-brown",
     purple: "bg-gradient-card-purple",
+    yellow: "bg-gradient-card-yellow",
+    red: "bg-gradient-card-red",
+    cyan: "bg-gradient-card-cyan",
   };
 
   const statusConfig = {
@@ -127,7 +135,7 @@ const GameDetail: React.FC<GameDetailProps> = ({
         >
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-white shadow-sm border border-gray-200 mb-6">
             <span className="text-2xl mr-2">
-              {game.sportType === "kickball" ? "⚽" : "🏐"}
+              {game.sportType === "kickball" ? "☄️" : "🏐"}
             </span>
             <span className="text-sm font-medium text-gray-600">
               {game.sportType.charAt(0).toUpperCase() + game.sportType.slice(1)}{" "}

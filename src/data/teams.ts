@@ -663,7 +663,7 @@ export const kickballTeams: Team[] = [
     id: "kb-team2",
     name: "Rainbow Runners",
     sportType: "kickball",
-    gradient: "teal",
+    gradient: "green",
     description:
       "Bringing color and joy to every game with their vibrant spirit and inclusive team culture. Champions of diversity and excellence.",
     players: kickballPlayers.filter(p => p.teamId === "kb-team2"),
@@ -691,7 +691,7 @@ export const kickballTeams: Team[] = [
     id: "kb-team4",
     name: "Purple Power",
     sportType: "kickball",
-    gradient: "purple",
+    gradient: "pink",
     description:
       "Royal treatment for every game. This team brings elegance and power to the kickball diamond.",
     players: kickballPlayers.filter(p => p.teamId === "kb-team4"),
@@ -722,7 +722,7 @@ export const dodgeballTeams: Team[] = [
     id: "db-team2",
     name: "Teal Tornadoes",
     sportType: "dodgeball",
-    gradient: "teal",
+    gradient: "green",
     description:
       "Spinning into victory with whirlwind tactics and storm-like intensity. Known for their unpredictable and dynamic play style.",
     players: dodgeballPlayers.filter(p => p.teamId === "db-team2"),
@@ -750,7 +750,7 @@ export const dodgeballTeams: Team[] = [
     id: "db-team4",
     name: "Purple Panthers",
     sportType: "dodgeball",
-    gradient: "purple",
+    gradient: "pink",
     description:
       "Prowling the court with panther-like agility and purple pride. Fierce competitors with a strong pack mentality.",
     players: dodgeballPlayers.filter(p => p.teamId === "db-team4"),

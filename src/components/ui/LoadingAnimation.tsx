@@ -23,7 +23,7 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({
   };
 
   const colorClasses = {
-    primary: "text-brand-teal",
+    primary: "text-brand-blue",
     secondary: "text-brand-orange",
     white: "text-white",
   };

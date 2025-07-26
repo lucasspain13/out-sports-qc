@@ -47,7 +47,7 @@ const AnimationDemo: React.FC<AnimationDemoProps> = ({ className = "" }) => {
       title: "Fade Animations",
       description: "Smooth fade transitions with directional movement",
       variant: fadeIn,
-      color: "from-brand-teal to-brand-teal-dark",
+      color: "bg-gradient-primary",
     },
     {
       title: "Scale Effects",
@@ -74,13 +74,13 @@ const AnimationDemo: React.FC<AnimationDemoProps> = ({ className = "" }) => {
 
       {/* Hero Section with Floating Elements */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-blue via-brand-purple to-brand-teal opacity-10" />
+        <div className="absolute inset-0 bg-gradient-primary opacity-10" />
 
         {/* Floating Background Elements */}
         <motion.div
           variants={float}
           animate="animate"
-          className="absolute top-20 left-10 w-20 h-20 bg-brand-teal/20 rounded-full blur-xl"
+          className="absolute top-20 left-10 w-20 h-20 bg-brand-blue/20 rounded-full blur-xl"
         />
         <motion.div
           variants={breathe}
@@ -100,7 +100,7 @@ const AnimationDemo: React.FC<AnimationDemoProps> = ({ className = "" }) => {
             animate="visible"
             className="text-5xl lg:text-7xl font-bold mb-6"
           >
-            <span className="bg-gradient-to-r from-brand-teal via-brand-orange to-brand-purple bg-clip-text text-transparent">
+            <span className="bg-gradient-primary bg-clip-text text-transparent">
               Enhanced Animations
             </span>
           </motion.h1>
@@ -216,7 +216,7 @@ const AnimationDemo: React.FC<AnimationDemoProps> = ({ className = "" }) => {
                   onClick={() => setLoadingType(type as any)}
                   className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                     loadingType === type
-                      ? "bg-brand-teal text-white"
+                      ? "bg-brand-blue text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
@@ -309,7 +309,7 @@ const AnimationDemo: React.FC<AnimationDemoProps> = ({ className = "" }) => {
                 className="bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-700 transition-colors"
               >
                 <motion.div
-                  className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-brand-teal to-brand-orange rounded-full flex items-center justify-center text-2xl font-bold"
+                  className="w-16 h-16 mx-auto mb-4 bg-gradient-primary rounded-full flex items-center justify-center text-2xl font-bold"
                   whileHover={{
                     rotate: 360,
                     transition: { duration: 0.5 },
@@ -335,7 +335,7 @@ const AnimationDemo: React.FC<AnimationDemoProps> = ({ className = "" }) => {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 1 }}
-        className="bg-brand-teal py-12 text-white text-center"
+        className="bg-brand-blue py-12 text-white text-center"
       >
         <motion.div
           animate={{

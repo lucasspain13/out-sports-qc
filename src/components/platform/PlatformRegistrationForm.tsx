@@ -1,8 +1,5 @@
 import React from "react";
-import { usePlatform } from "../../hooks/usePlatform";
 import RegistrationForm from "../ui/RegistrationForm";
-import AndroidRegistrationForm from "./android/AndroidRegistrationForm";
-import IOSRegistrationForm from "./ios/IOSRegistrationForm";
 
 interface PlatformRegistrationFormProps {
   sportType: "kickball" | "dodgeball";
@@ -13,22 +10,8 @@ const PlatformRegistrationForm: React.FC<PlatformRegistrationFormProps> = ({
   sportType,
   onSuccess,
 }) => {
-  const platform = usePlatform();
-
-  // Render platform-specific forms for mobile
-  if (platform.isMobile) {
-    if (platform.isIOS) {
-      return (
-        <IOSRegistrationForm sportType={sportType} onSuccess={onSuccess} />
-      );
-    } else if (platform.isAndroid) {
-      return (
-        <AndroidRegistrationForm sportType={sportType} onSuccess={onSuccess} />
-      );
-    }
-  }
-
-  // Fallback to original form for web/desktop
+  // Use the main registration form for all platforms for now
+  // This ensures consistency and avoids mobile-specific issues
   return <RegistrationForm sportType={sportType} onSuccess={onSuccess} />;
 };
 
