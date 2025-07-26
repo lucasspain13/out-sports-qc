@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Build and Test
 
 on:
   push:
@@ -6,13 +6,21 @@ on:
   pull_request:
     branches: [ main ]
 
+# Add permissions for GitHub token
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
-  build-and-deploy:
+  build-and-test:
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
       
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -26,9 +34,9 @@ jobs:
     - name: Build
       run: npm run build
       
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/Travis'
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
+    - name: Test build output
+      run: |
+        echo "Build completed successfully"
+        ls -la dist/
+        echo "Build size:"
+        du -sh dist/
