@@ -8,6 +8,7 @@ export { default as LoadingAnimation, withLoading } from "./LoadingAnimation";
 export { default as LocationMap } from "./LocationMap";
 export { default as PlayerCard } from "./PlayerCard";
 export { default as RegistrationForm } from "./RegistrationForm";
+export { default as ReportIssueModal } from "./ReportIssueModal";
 export { default as ScheduleWeek } from "./ScheduleWeek";
 export { default as SportCard } from "./SportCard";
 export { default as TeamCard } from "./TeamCard";

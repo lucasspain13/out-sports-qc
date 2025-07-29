@@ -18,6 +18,7 @@ import { SportsInfoManagement } from "../admin/SportsInfoManagement";
 import { TeamManagement } from "../admin/TeamManagement";
 import TestimonialsManagement from "../admin/TestimonialsManagement";
 import { TimelineManagement } from "../admin/TimelineManagement";
+import WebsiteFeedbackManagement from "../admin/WebsiteFeedbackManagement";
 import { ProtectedRoute } from "../auth/ProtectedRoute";
 
 const AdminDashboardContent: React.FC = () => {
@@ -61,6 +62,8 @@ const AdminDashboardContent: React.FC = () => {
         return <LiveScoreBoard />;
       case "locations":
         return <LocationManagement />;
+      case "feedback":
+        return <WebsiteFeedbackManagement />;
       default:
         return <DashboardOverview onNavigate={setCurrentPage} />;
     }

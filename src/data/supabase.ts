@@ -12,6 +12,8 @@ import {
   scheduleApi,
   teamsApi,
 } from "../lib/database";
+import { gameLocations } from "./locations";
+import { Team } from "../types";
 
 // Export all the APIs for direct use
 export {
@@ -33,11 +35,11 @@ export const getAllTeams = () => teamsApi.getAll();
 export const getKickballTeams = () => teamsApi.getBySport("kickball");
 export const getDodgeballTeams = () => teamsApi.getBySport("dodgeball");
 export const getAllPlayers = () => playersApi.getAll();
-export const getAllLocations = () => locationsApi.getAll();
+export const getAllLocations = () => Promise.resolve(gameLocations); // Use local file data
 export const getAllGames = () => gamesApi.getAll();
 
 // Helper functions that maintain compatibility with existing code
-export const getTeamCaptain = async (team: any) => {
+export const getTeamCaptain = async (team: Team) => {
   if (!team.captain) return undefined;
   return await getPlayerById(team.captain);
 };
@@ -76,12 +78,17 @@ export const getLocationsByFieldType = async (fieldType: string) => {
 
 export const getLocationsWithConcessions = async () => {
   const locations = await getAllLocations();
-  return locations.filter(location => location.concessions);
+  return locations.filter(location => 
+    location.facilities.some(facility => 
+      facility.toLowerCase().includes('concession')
+    )
+  );
 };
 
-export const getLocationsByCapacity = async (minCapacity: number) => {
+export const getLocationsByCapacity = async (_minCapacity: number) => {
   const locations = await getAllLocations();
-  return locations.filter(location => (location.capacity || 0) >= minCapacity);
+  // Since GameLocation doesn't have capacity, return all locations
+  return locations;
 };
 
 export const getGamesByLocation = (locationId: string) => {

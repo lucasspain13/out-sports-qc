@@ -1,6 +1,7 @@
 import React from "react";
 import { navigateTo } from "../../lib/navigation";
 import { Feature, SportInfo } from "../../types";
+import { kickballSchedule } from "../../data/schedules";
 import { useContentContext } from "../providers/ContentProvider";
 import { About, Hero, Sports } from "../sections";
 import { ContentSection } from "../ui/LoadingState";
@@ -24,8 +25,12 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
 
   // Handle sport card clicks
   const handleSportClick = (sport: SportInfo) => {
+    console.log('🎯 Sport clicked:', sport.name, 'comingSoon:', sport.comingSoon, 'rosterPath:', sport.rosterPath);
     if (sport.rosterPath) {
+      console.log('🚀 Navigating to:', sport.rosterPath);
       navigateTo(sport.rosterPath);
+    } else {
+      console.log('❌ No rosterPath found for sport:', sport.name);
     }
   };
 
@@ -33,6 +38,76 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
   const getDisplaySports = (): SportInfo[] => {
     // If no database data, use fallback sports data
     if (!sportsInfo.data || sportsInfo.data.length === 0) {
+      // Get the next upcoming kickball game - direct approach
+      const currentDate = new Date();
+      let nextKickballGame: Date | undefined;
+      
+      // Find the next scheduled game directly from the kickball schedule
+      for (const week of kickballSchedule.weeks) {
+        for (const game of week.games) {
+          if (game.status === "scheduled" && game.date > currentDate) {
+            if (!nextKickballGame || game.date < nextKickballGame) {
+              nextKickballGame = game.date;
+            }
+          }
+        }
+      }
+      
+      // Fallback if no scheduled game found
+      if (!nextKickballGame) {
+        nextKickballGame = new Date(2025, 7, 3); // August 3, 2025
+      }
+      
+      // Debug logging in development  
+      if (import.meta.env.DEV) {
+        console.log('📊 Current date:', currentDate.toLocaleDateString('en-US', { 
+          month: 'short', 
+          day: 'numeric',
+          year: 'numeric',
+          weekday: 'short'
+        }));
+        console.log('📊 Kickball schedule weeks:', kickballSchedule.weeks.length);
+        
+        // Show all kickball games with detailed info
+        const allKickballGames: any[] = [];
+        kickballSchedule.weeks.forEach(week => {
+          week.games.forEach(game => {
+            const isAfterToday = game.date > currentDate;
+            const isOnOrAfterToday = game.date >= currentDate;
+            allKickballGames.push({
+              id: game.id,
+              date: game.date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric',
+                weekday: 'short'
+              }),
+              status: game.status,
+              homeTeam: game.homeTeam.name,
+              awayTeam: game.awayTeam.name,
+              week: game.week,
+              isAfterToday,
+              isOnOrAfterToday,
+              daysDiff: Math.round((game.date.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24))
+            });
+          });
+        });
+        console.log('🎮 All kickball games:', allKickballGames);
+        
+        // Show only scheduled games that are in the future
+        const futureScheduledGames = allKickballGames.filter(g => 
+          g.status === "scheduled" && g.isAfterToday
+        );
+        console.log('📅 Future scheduled games:', futureScheduledGames);
+        
+        console.log('🎯 Next game found:', nextKickballGame.toLocaleDateString('en-US', { 
+          month: 'short', 
+          day: 'numeric',
+          year: 'numeric',
+          weekday: 'short'
+        }));
+      }
+
       return [
         {
           name: "kickball",
@@ -41,13 +116,14 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
             "A fun, accessible sport that combines the best of baseball and soccer. Teams alternate between kicking and fielding in this inclusive, beginner-friendly game perfect for building community connections.",
           gradient: "orange" as const,
           participants: 62,
+          nextGame: nextKickballGame,
           features: [
             "All skill levels welcome",
             "Equipment provided",
             "Weekend games",
           ],
           totalTeams: 4,
-          rosterPath: "#summer-kickball-teams",
+          rosterPath: "#summer-kickball-schedule",
           comingSoon: false,
         },
         {
@@ -75,7 +151,28 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
       description: sport.description,
       gradient: sport.gradient as "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan",
       participants: sport.participants || 0,
-      nextGame: sport.nextGame ? new Date(sport.nextGame) : undefined,
+      nextGame: sport.nextGame ? (() => {
+        try {
+          // Handle different date formats properly
+          const dateStr = sport.nextGame.toString();
+          let date: Date;
+          
+          if (dateStr.includes('T')) {
+            // Already has time component (ISO string)
+            date = new Date(dateStr);
+          } else {
+            // Date only (YYYY-MM-DD format) - parse as local date
+            const [year, month, day] = dateStr.split('-').map(Number);
+            date = new Date(year, month - 1, day); // month is 0-indexed
+          }
+          
+          // Validate the date
+          return isNaN(date.getTime()) ? undefined : date;
+        } catch (error) {
+          console.warn('Invalid date format for nextGame:', sport.nextGame);
+          return undefined;
+        }
+      })() : undefined,
       features: sport.features || [],
       totalTeams: sport.totalTeams || 0,
       rosterPath: sport.rosterPath || undefined,

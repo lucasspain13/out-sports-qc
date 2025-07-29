@@ -23,6 +23,7 @@ interface FormData {
   medicalConditions: string;
   agreeToTerms: boolean;
   agreeToEmailUpdates: boolean;
+  howDidYouHear: string;
 }
 
 const AndroidRegistrationForm: React.FC<AndroidRegistrationFormProps> = ({
@@ -47,6 +48,7 @@ const AndroidRegistrationForm: React.FC<AndroidRegistrationFormProps> = ({
     medicalConditions: "",
     agreeToTerms: false,
     agreeToEmailUpdates: true,
+    howDidYouHear: "",
   });
 
   const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -184,6 +186,8 @@ const AndroidRegistrationForm: React.FC<AndroidRegistrationFormProps> = ({
       setFormData({
         firstName: "",
         lastName: "",
+        preferredPronouns: "",
+        age: "",
         email: "",
         phone: "",
         shirtSize: "M",

@@ -1,20 +1,33 @@
 import { Icon, LatLngBounds } from "leaflet";
 import React, { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap, LayersControl } from "react-leaflet";
 import { LocationMapProps } from "../../types";
 
-// Custom marker icon
-const createCustomIcon = (color: string = "#4ecdc4") => {
+// Custom marker icon - red pin
+const createCustomIcon = () => {
+  const svgPin = `
+    <svg width="32" height="40" viewBox="0 0 32 40" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.3"/>
+        </filter>
+      </defs>
+      <!-- Pin shape -->
+      <path d="M16 0C7.2 0 0 7.2 0 16c0 8.8 16 24 16 24s16-15.2 16-24C32 7.2 24.8 0 16 0z" 
+            fill="#ef4444" stroke="#dc2626" stroke-width="2" filter="url(#shadow)"/>
+      <!-- Inner circle -->
+      <circle cx="16" cy="16" r="6" fill="#ffffff"/>
+    </svg>
+  `;
+  
+  const svgBlob = new Blob([svgPin], { type: 'image/svg+xml' });
+  const svgUrl = URL.createObjectURL(svgBlob);
+  
   return new Icon({
-    iconUrl: `data:image/svg+xml;base64,${btoa(`
-      <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12.5 0C5.6 0 0 5.6 0 12.5c0 12.5 12.5 28.5 12.5 28.5s12.5-16 12.5-28.5C25 5.6 19.4 0 12.5 0z" fill="${color}"/>
-        <circle cx="12.5" cy="12.5" r="6" fill="white"/>
-      </svg>
-    `)}`,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
+    iconUrl: svgUrl,
+    iconSize: [32, 40],
+    iconAnchor: [16, 40],
+    popupAnchor: [0, -40],
   });
 };
 
@@ -61,31 +74,6 @@ const LocationMap: React.FC<LocationMapProps> = ({
         ])
       : ([40.7589, -73.9851] as [number, number]); // Fallback to NYC
 
-  const getMarkerColor = (location: LocationMapProps["locations"][0]) => {
-    if (selectedLocation && selectedLocation.id === location.id) {
-      return "#ff6b35"; // Orange for selected
-    }
-    
-    // Use custom marker color if specified
-    if (location.markerColor) {
-      switch (location.markerColor) {
-        case "red":
-          return "#ef4444"; // Red
-        case "blue":
-          return "#3b82f6"; // Blue
-        case "yellow":
-          return "#eab308"; // Yellow
-        case "orange":
-          return "#f97316"; // Orange
-        case "green":
-        default:
-          return "#4ecdc4"; // Teal (default)
-      }
-    }
-    
-    return "#4ecdc4"; // Teal for default
-  };
-
   const getExternalMapUrl = (location: LocationMapProps["locations"][0]) => {
     const { lat, lng } = location.coordinates;
     return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
@@ -106,10 +94,21 @@ const LocationMap: React.FC<LocationMapProps> = ({
         className="rounded-lg overflow-hidden shadow-lg"
         whenReady={() => setMapReady(true)}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        <LayersControl position="topright">
+          <LayersControl.BaseLayer checked name="Terrain">
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+            />
+          </LayersControl.BaseLayer>
+          
+          <LayersControl.BaseLayer name="Satellite">
+            <TileLayer
+              attribution='&copy; <a href="https://www.esri.com/">Esri</a> &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            />
+          </LayersControl.BaseLayer>
+        </LayersControl>
 
         {mapReady && <FitBounds locations={displayLocations} />}
 
@@ -117,7 +116,7 @@ const LocationMap: React.FC<LocationMapProps> = ({
           <Marker
             key={location.id}
             position={[location.coordinates.lat, location.coordinates.lng]}
-            icon={createCustomIcon(getMarkerColor(location))}
+            icon={createCustomIcon()}
             eventHandlers={{
               click: () => {
                 if (onLocationSelect) {

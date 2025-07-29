@@ -150,6 +150,8 @@ export interface GameLocation {
   restrooms: boolean;
   waterFountains: boolean;
   markerColor?: "green" | "red" | "blue" | "yellow" | "orange";
+  capacity?: number;
+  concessions?: boolean;
 }
 
 export type GameStatus =
@@ -256,9 +258,8 @@ export interface ContactInfo {
     twitter?: string;
     discord?: string;
   };
-  officeHours: {
-    weekdays: string;
-    weekends: string;
+  officeHours?: {
+    [key: string]: string;
   };
 }
 

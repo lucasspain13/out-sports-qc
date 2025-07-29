@@ -42,14 +42,6 @@ const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
 }) => {
   const platform = usePlatform();
 
-  // Debug logging
-  console.log("AdaptiveNavigation render:", {
-    isNative: platform.isNative,
-    platform: platform.platform,
-    windowWidth: window.innerWidth,
-    currentRoute,
-  });
-
   // For NATIVE mobile platforms ONLY (iOS/Android apps), use simplified navigation
   // Browser should always use desktop layout regardless of screen size
   if (platform.isNative) {
@@ -57,18 +49,9 @@ const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
     const currentTab =
       routeToTabMap[currentRoute || "#home"] || TabId.LIVE_SCORES;
 
-    console.log("Mobile navigation debug:", {
-      currentRoute,
-      currentTab,
-      routeToTabMap,
-      tabToRouteMap,
-    });
-
     const handleTabChange = (tabId: TabId) => {
-      console.log("Tab change requested:", tabId);
       // Navigate to corresponding route
       const route = tabToRouteMap[tabId];
-      console.log("Navigating to route:", route);
       if (route && route !== currentRoute) {
         window.location.hash = route;
       }
@@ -76,7 +59,6 @@ const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
 
     // Mobile content based on active tab
     const renderMobileContent = () => {
-      console.log("Rendering mobile content for tab:", currentTab);
       switch (currentTab) {
         case TabId.LIVE_SCORES:
           return <LiveScoresScreen />;
@@ -85,10 +67,8 @@ const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
         case TabId.TEAMS:
           return <TeamsScreen />;
         case TabId.REGISTRATION:
-          console.log("Rendering registration page");
           return <RegistrationPage sportType="kickball" />;
         default:
-          console.log("Fallback to live scores");
           return <LiveScoresScreen />;
       }
     };

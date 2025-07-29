@@ -1,7 +1,7 @@
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X, AlertTriangle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { NavigationProps } from "../../types";
-import { LiveScoreWidget } from "../ui";
+import { LiveScoreWidget, ReportIssueModal } from "../ui";
 
 const Navigation: React.FC<NavigationProps> = ({
   logo,
@@ -14,6 +14,7 @@ const Navigation: React.FC<NavigationProps> = ({
   const [isScrolled, setIsScrolled] = useState(propIsScrolled || false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [isReportIssueOpen, setIsReportIssueOpen] = useState(false);
 
   // Determine if we need dark text (not on home page OR scrolled)
   const needsDarkText = currentRoute !== "#home" || isScrolled;
@@ -151,6 +152,25 @@ const Navigation: React.FC<NavigationProps> = ({
                 <LiveScoreWidget isDarkMode={needsDarkText} />
               </div>
             )}
+
+            {/* Feedback Button */}
+            <button
+              onClick={() => {
+                // Scroll to top to ensure modal is visible
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                // Small delay to ensure scroll completes before opening modal
+                setTimeout(() => setIsReportIssueOpen(true), 100);
+              }}
+              className={`ml-4 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                needsDarkText 
+                  ? "text-gray-600 hover:text-gray-900 hover:bg-gray-100" 
+                  : "text-white/80 hover:text-white hover:bg-white/10"
+              }`}
+              title="Share feedback or report issues"
+            >
+              <AlertTriangle className="w-4 h-4 inline mr-1" />
+              Give Feedback
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -228,10 +248,31 @@ const Navigation: React.FC<NavigationProps> = ({
                   )}
                 </div>
               ))}
+
+              {/* Feedback Button - Mobile */}
+              <button
+                onClick={() => {
+                  // Scroll to top to ensure modal is visible
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  setIsMobileMenuOpen(false);
+                  // Small delay to ensure scroll completes before opening modal
+                  setTimeout(() => setIsReportIssueOpen(true), 100);
+                }}
+                className="w-full text-left px-3 py-2 text-gray-900 hover:bg-gray-100 rounded-md flex items-center"
+              >
+                <AlertTriangle className="w-4 h-4 mr-2" />
+                Give Feedback
+              </button>
             </div>
           </div>
         )}
       </div>
+
+      {/* Website Feedback Modal */}
+      <ReportIssueModal 
+        isOpen={isReportIssueOpen} 
+        onClose={() => setIsReportIssueOpen(false)} 
+      />
     </nav>
   );
 };

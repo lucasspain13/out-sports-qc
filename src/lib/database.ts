@@ -78,6 +78,7 @@ const transformLocation = (dbLocation: DbLocation): GameLocation => ({
   capacity: dbLocation.capacity || undefined,
   parking: dbLocation.parking,
   restrooms: dbLocation.restrooms,
+  waterFountains: dbLocation.restrooms || false, // Using restrooms as fallback since water_fountains doesn't exist
   concessions: dbLocation.concessions,
 });
 

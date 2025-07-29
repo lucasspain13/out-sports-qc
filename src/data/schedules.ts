@@ -1,9 +1,9 @@
-import { Game, GameStatus, Schedule, ScheduleWeek } from "../types";
+import { Game, GameStatus, Schedule, ScheduleWeek, Team } from "../types";
 import { gameLocations } from "./locations";
 import { dodgeballTeams, kickballTeams } from "./teams";
 
 // Helper function to create round-robin matchups
-const createRoundRobinMatchups = (teams: any[]) => {
+const createRoundRobinMatchups = (teams: Team[]) => {
   const matchups = [];
   for (let i = 0; i < teams.length; i++) {
     for (let j = i + 1; j < teams.length; j++) {
@@ -46,10 +46,10 @@ const generateScore = () => ({
 const createKickballSchedule = (): Schedule => {
   const matchups = createRoundRobinMatchups(kickballTeams);
   const weeks: ScheduleWeek[] = [];
-  const season = "Spring 2024";
+  const season = "Summer 2025";
 
-  // Start date for the season
-  const startDate = new Date("2024-03-01");
+  // Start date for the season - updated to current timeframe
+  const startDate = new Date("2025-07-01");
 
   let gameId = 1;
   let weekNumber = 1;
@@ -123,10 +123,10 @@ const createKickballSchedule = (): Schedule => {
 const createDodgeballSchedule = (): Schedule => {
   const matchups = createRoundRobinMatchups(dodgeballTeams);
   const weeks: ScheduleWeek[] = [];
-  const season = "Spring 2024";
+  const season = "Summer 2025";
 
   // Start date for the season (offset by a few days from kickball)
-  const startDate = new Date("2024-03-03");
+  const startDate = new Date("2025-07-03");
 
   let gameId = 1;
   let weekNumber = 1;

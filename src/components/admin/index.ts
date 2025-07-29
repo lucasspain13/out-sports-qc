@@ -9,3 +9,4 @@ export { PlayerManagement } from "./PlayerManagement";
 export { RegistrationManagement } from "./RegistrationManagement";
 export { TeamManagement } from "./TeamManagement";
 export { useAdminErrorHandling } from "./useAdminErrorHandling";
+export { default as WebsiteFeedbackManagement } from "./WebsiteFeedbackManagement";

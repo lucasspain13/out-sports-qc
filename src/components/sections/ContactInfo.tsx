@@ -1,6 +1,8 @@
 import { motion, useInView } from "framer-motion";
 import React, { useRef } from "react";
 import { ContactInfo as ContactInfoType } from "../../types";
+import LocationMap from "../ui/LocationMap";
+import { gameLocations } from "../../data/locations";
 
 interface ContactInfoProps {
   contact: ContactInfoType;
@@ -38,40 +40,11 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
     {
       icon: "📍",
       label: "Address",
-      value: `${contact.address.street}, ${contact.address.city}, ${contact.address.state} ${contact.address.zipCode}`,
-      href: `https://maps.google.com/?q=${encodeURIComponent(
-        `${contact.address.street}, ${contact.address.city}, ${contact.address.state} ${contact.address.zipCode}`
-      )}`,
+      value: "Quad Cities, IA/IL",
+      href: "https://www.google.com/maps/search/?api=1&query=41.55526369651487,-90.57899561557102",
       gradient: "from-brand-orange to-brand-orange-light",
     },
   ];
-
-  const socialPlatforms = [
-    {
-      name: "Facebook",
-      icon: "📘",
-      url: contact.socialMedia.facebook,
-      color: "hover:text-blue-600",
-    },
-    {
-      name: "Instagram",
-      icon: "📷",
-      url: contact.socialMedia.instagram,
-      color: "hover:text-pink-600",
-    },
-    {
-      name: "Twitter",
-      icon: "🐦",
-      url: contact.socialMedia.twitter,
-      color: "hover:text-blue-400",
-    },
-    {
-      name: "Discord",
-      icon: "💬",
-      url: contact.socialMedia.discord,
-      color: "hover:text-indigo-600",
-    },
-  ].filter(platform => platform.url);
 
   return (
     <section className={`py-20 bg-white ${className}`} ref={ref}>
@@ -97,6 +70,44 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
             transition={{ duration: 0.8, delay: 0.2 }}
             className="space-y-8"
           >
+            {/* Facebook */}
+            {contact.socialMedia.facebook && (
+              <motion.a
+                href={contact.socialMedia.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                whileHover={{ scale: 1.02, y: -4 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border border-blue-200 hover:shadow-lg transition-all duration-300 group"
+              >
+                <div className="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center text-white text-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900 mb-1">Facebook</h3>
+                  <p className="text-gray-600 text-sm">Follow us on Facebook</p>
+                </div>
+                <div className="text-blue-500 group-hover:translate-x-1 transition-transform duration-300">
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </motion.a>
+            )}
+
             {/* Contact Methods */}
             <div className="space-y-6">
               {contactMethods.map((method, index) => (
@@ -111,7 +122,7 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
                   }
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+                  transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
                   whileHover={{ scale: 1.02, x: 8 }}
                   className="flex items-center space-x-4 p-6 bg-gradient-to-r from-gray-50 to-white rounded-2xl border border-gray-100 hover:shadow-lg transition-all duration-300 group cursor-pointer"
                 >
@@ -145,51 +156,8 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
               ))}
             </div>
 
-            {/* Office Hours */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="bg-gradient-to-br from-brand-blue/5 to-brand-blue/5 rounded-2xl p-6 border border-gray-100"
-            >
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-                <span className="text-2xl mr-3">🕒</span>
-                Office Hours
-              </h3>
-              <div className="space-y-2 text-gray-600">
-                <p>{contact.officeHours.weekdays}</p>
-                <p>{contact.officeHours.weekends}</p>
-              </div>
-            </motion.div>
 
-            {/* Social Media */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.7 }}
-              className="bg-gradient-to-br from-brand-purple/5 to-brand-orange/5 rounded-2xl p-6 border border-gray-100"
-            >
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-                <span className="text-2xl mr-3">🌐</span>
-                Follow Us
-              </h3>
-              <div className="flex space-x-4">
-                {socialPlatforms.map(platform => (
-                  <motion.a
-                    key={platform.name}
-                    href={platform.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center text-xl text-gray-600 ${platform.color} transition-all duration-300 hover:shadow-lg`}
-                    title={platform.name}
-                  >
-                    {platform.icon}
-                  </motion.a>
-                ))}
-              </div>
-            </motion.div>
+
           </motion.div>
 
           {/* Map or Contact Form */}
@@ -200,43 +168,23 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
             className="lg:sticky lg:top-8"
           >
             {showMap ? (
-              /* Map Placeholder */
-              <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl h-96 flex items-center justify-center border border-gray-200 overflow-hidden relative">
-                <div className="text-center">
-                  <div className="text-6xl mb-4">🗺️</div>
+              /* Quad Cities Locations Map */
+              <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+                <div className="p-6 border-b border-gray-100">
                   <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                    Interactive Map
+                    Our Locations
                   </h3>
-                  <p className="text-gray-600 mb-4">
-                    Find us in the heart of Austin
+                  <p className="text-gray-600">
+                    Find us throughout the Quad Cities, IA/IL
                   </p>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() =>
-                      window.open(
-                        `https://maps.google.com/?q=${encodeURIComponent(
-                          `${contact.address.street}, ${contact.address.city}, ${contact.address.state} ${contact.address.zipCode}`
-                        )}`,
-                        "_blank"
-                      )
-                    }
-                    className="bg-gradient-primary text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    Open in Maps
-                  </motion.button>
                 </div>
-
-                {/* Decorative map elements */}
-                <div className="absolute top-4 left-4 w-3 h-3 bg-brand-orange rounded-full animate-pulse" />
-                <div
-                  className="absolute bottom-8 right-8 w-2 h-2 bg-brand-blue rounded-full animate-pulse"
-                  style={{ animationDelay: "1s" }}
-                />
-                <div
-                  className="absolute top-1/3 right-1/4 w-2 h-2 bg-brand-purple rounded-full animate-pulse"
-                  style={{ animationDelay: "2s" }}
-                />
+                <div className="relative">
+                  <LocationMap
+                    locations={gameLocations}
+                    height="400px"
+                    showAllMarkers={true}
+                  />
+                </div>
               </div>
             ) : (
               /* Quick Contact Form */

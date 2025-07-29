@@ -26,14 +26,14 @@ import {
   navigateToSportRoster,
   navigateToTeam,
 } from "./lib/navigation";
-import { MenuItem, Team } from "./types";
+import { MenuItem, Team, Player } from "./types";
 
 // Team detail wrapper component that loads team by ID
 const TeamDetailWrapper: React.FC<{
   teamId: string;
   sportType: "kickball" | "dodgeball";
   onBack: () => void;
-  onPlayerSelect: (player: any) => void;
+  onPlayerSelect: (player: Player) => void;
 }> = ({ teamId, sportType, onBack, onPlayerSelect }) => {
   const [team, setTeam] = useState<Team | null>(null);
   const [loading, setLoading] = useState(true);
@@ -175,7 +175,6 @@ function AppContent() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash || "#home";
-      console.log("Route changed to:", hash);
       setCurrentRoute(hash);
 
       // Scroll to top of page on navigation
@@ -304,8 +303,8 @@ function AppContent() {
           teamId={selectedTeam.id}
           sportType={selectedTeam.sportType as "kickball" | "dodgeball"}
           onBack={handleBackToRoster}
-          onPlayerSelect={player => {
-            console.log("Player selected:", player);
+          onPlayerSelect={() => {
+            // Player selected for detail view
           }}
         />
       );

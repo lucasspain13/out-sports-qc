@@ -41,6 +41,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
     { id: "players", label: "Players", icon: "🏃" },
     { id: "games", label: "Games", icon: "🏆" },
     { id: "locations", label: "Locations", icon: "📍" },
+    { id: "feedback", label: "Website Feedback", icon: "💭" },
   ];
 
   // Mobile Tab Bar Component for iOS-style navigation
@@ -124,13 +125,14 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
         <div
           className={`${
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
+          } fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 flex flex-col`}
         >
-          <div className="flex items-center justify-center h-16 px-4 bg-blue-600">
+          <div className="flex items-center justify-center h-16 px-4 bg-blue-600 flex-shrink-0">
             <h1 className="text-xl font-bold text-white">Admin Dashboard</h1>
           </div>
 
-          <nav className="mt-8">
+          {/* Navigation Menu - Scrollable */}
+          <nav className="flex-1 overflow-y-auto py-4" style={{ paddingBottom: '6rem' }}>
             {menuItems.map(item => (
               <button
                 key={item.id}
@@ -150,8 +152,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             ))}
           </nav>
 
-          {/* User info and logout at bottom of sidebar */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-gray-50">
+          {/* User info and logout at bottom of sidebar - Fixed position */}
+          <div className="flex-shrink-0 p-4 border-t bg-gray-50">
             <div className="text-xs text-gray-600 mb-2 truncate">
               {user?.email}
             </div>

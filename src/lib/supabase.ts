@@ -744,6 +744,46 @@ export interface Database {
           updated_by?: string;
         };
       };
+      website_feedback: {
+        Row: {
+          id: string;
+          url: string;
+          user_agent: string;
+          issue_description: string;
+          feedback_type: 'bug' | 'suggestion' | 'content' | 'other';
+          status: 'new' | 'in_progress' | 'resolved' | 'dismissed';
+          priority: 'low' | 'medium' | 'high';
+          created_at: string;
+          updated_at: string;
+          resolved_at?: string;
+          admin_notes?: string;
+        };
+        Insert: {
+          id?: string;
+          url: string;
+          user_agent: string;
+          issue_description: string;
+          feedback_type?: 'bug' | 'suggestion' | 'content' | 'other';
+          status?: 'new' | 'in_progress' | 'resolved' | 'dismissed';
+          priority?: 'low' | 'medium' | 'high';
+          created_at?: string;
+          updated_at?: string;
+          resolved_at?: string;
+          admin_notes?: string;
+        };
+        Update: {
+          id?: string;
+          url?: string;
+          user_agent?: string;
+          issue_description?: string;
+          feedback_type?: 'bug' | 'suggestion' | 'content' | 'other';
+          status?: 'new' | 'in_progress' | 'resolved' | 'dismissed';
+          priority?: 'low' | 'medium' | 'high';
+          updated_at?: string;
+          resolved_at?: string;
+          admin_notes?: string;
+        };
+      };
     };
     Views: {
       [_ in never]: never;

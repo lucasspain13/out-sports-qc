@@ -42,10 +42,6 @@ export const ContentManagement: React.FC<ContentManagementProps> = () => {
       twitter: "",
       discord: "",
     },
-    officeHours: {
-      weekdays: "",
-      weekends: "",
-    },
   });
 
   useEffect(() => {
@@ -83,7 +79,6 @@ export const ContentManagement: React.FC<ContentManagementProps> = () => {
             twitter: contactData.socialMedia.twitter || "",
             discord: contactData.socialMedia.discord || "",
           },
-          officeHours: contactData.officeHours,
         });
       }
     } catch (err) {
@@ -307,76 +302,7 @@ export const ContentManagement: React.FC<ContentManagementProps> = () => {
             </div>
           </div>
 
-          <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-3">Address</h3>
-            <div className="space-y-3">
-              <input
-                type="text"
-                placeholder="Street Address"
-                value={contactFormData.address.street}
-                onChange={e =>
-                  setContactFormData({
-                    ...contactFormData,
-                    address: {
-                      ...contactFormData.address,
-                      street: e.target.value,
-                    },
-                  })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-brand-blue focus:border-brand-blue"
-              />
 
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                <input
-                  type="text"
-                  placeholder="City"
-                  value={contactFormData.address.city}
-                  onChange={e =>
-                    setContactFormData({
-                      ...contactFormData,
-                      address: {
-                        ...contactFormData.address,
-                        city: e.target.value,
-                      },
-                    })
-                  }
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-brand-blue focus:border-brand-blue"
-                />
-
-                <input
-                  type="text"
-                  placeholder="State"
-                  value={contactFormData.address.state}
-                  onChange={e =>
-                    setContactFormData({
-                      ...contactFormData,
-                      address: {
-                        ...contactFormData.address,
-                        state: e.target.value,
-                      },
-                    })
-                  }
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-brand-blue focus:border-brand-blue"
-                />
-
-                <input
-                  type="text"
-                  placeholder="ZIP Code"
-                  value={contactFormData.address.zipCode}
-                  onChange={e =>
-                    setContactFormData({
-                      ...contactFormData,
-                      address: {
-                        ...contactFormData.address,
-                        zipCode: e.target.value,
-                      },
-                    })
-                  }
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:ring-brand-blue focus:border-brand-blue"
-                />
-              </div>
-            </div>
-          </div>
 
           <div>
             <h3 className="text-lg font-medium text-gray-900 mb-3">
@@ -449,44 +375,7 @@ export const ContentManagement: React.FC<ContentManagementProps> = () => {
             </div>
           </div>
 
-          <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-3">
-              Office Hours
-            </h3>
-            <div className="space-y-3">
-              <input
-                type="text"
-                placeholder="Weekday Hours (e.g., Monday - Friday: 9:00 AM - 6:00 PM)"
-                value={contactFormData.officeHours.weekdays}
-                onChange={e =>
-                  setContactFormData({
-                    ...contactFormData,
-                    officeHours: {
-                      ...contactFormData.officeHours,
-                      weekdays: e.target.value,
-                    },
-                  })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-brand-blue focus:border-brand-blue"
-              />
 
-              <input
-                type="text"
-                placeholder="Weekend Hours (e.g., Saturday: 10:00 AM - 4:00 PM, Sunday: Closed)"
-                value={contactFormData.officeHours.weekends}
-                onChange={e =>
-                  setContactFormData({
-                    ...contactFormData,
-                    officeHours: {
-                      ...contactFormData.officeHours,
-                      weekends: e.target.value,
-                    },
-                  })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-brand-blue focus:border-brand-blue"
-              />
-            </div>
-          </div>
 
           <button
             onClick={handleSaveContactInfo}
