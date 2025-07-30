@@ -242,40 +242,6 @@ const FAQ: React.FC<FAQProps> = ({
             </div>
           )}
         </div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-16 text-center"
-        >
-          <div className="bg-gradient-to-r from-brand-blue/5 via-brand-purple/5 to-brand-blue/5 rounded-3xl p-8 border border-gray-100">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Still have questions?
-            </h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Our friendly team is here to help! Reach out to us directly and
-              we'll get back to you as soon as possible.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-primary text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                Contact Us
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="border-2 border-brand-blue text-brand-blue px-8 py-4 rounded-full font-semibold hover:bg-brand-blue hover:text-white transition-all duration-300"
-              >
-                Join Our Discord
-              </motion.button>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

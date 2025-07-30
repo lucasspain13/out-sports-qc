@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DynamicAppContent } from "./components/app/DynamicAppContent";
 import { VerificationStatus } from "./components/auth/VerificationStatus";
 import AdaptiveNavigation from "./components/navigation/AdaptiveNavigation";
+import { DynamicNavigation } from "./components/navigation/DynamicNavigation";
 import {
   AdminDashboard,
   AdminLogin,
@@ -9,12 +10,17 @@ import {
   GameDetail,
   GeneralInfoPage,
   KickballRules,
+  LeagueRules,
+  LiabilityWaiverPage,
+  PhotoWaiverPage,
   RegistrationPage,
   RosterOverview,
   ScheduleOverview,
   TeamDetailPage,
 } from "./components/pages";
+import { SportAwarePage } from "./components/pages/SportAwarePage";
 import { ContentProvider } from "./components/providers/ContentProvider";
+import { SportProvider } from "./contexts/SportContext";
 import { useAuth } from "./contexts/AuthContext";
 import { useGame } from "./hooks/useGames";
 import { useRealtimeScores } from "./hooks/useRealtimeScores";
@@ -26,7 +32,7 @@ import {
   navigateToSportRoster,
   navigateToTeam,
 } from "./lib/navigation";
-import { MenuItem, Team, Player } from "./types";
+import { Team, Player } from "./types";
 
 // Team detail wrapper component that loads team by ID
 const TeamDetailWrapper: React.FC<{
@@ -174,8 +180,12 @@ function AppContent() {
   // Handle hash changes for routing
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash || "#home";
-      setCurrentRoute(hash);
+      const fullHash = window.location.hash || "#home";
+      // Split hash and query parameters for routing
+      const [hash] = fullHash.split('?');
+      const routeHash = hash || "#home";
+      
+      setCurrentRoute(routeHash);
 
       // Scroll to top of page on navigation
       window.scrollTo({
@@ -185,7 +195,7 @@ function AppContent() {
       });
 
       // Handle team detail routes - support both new seasonal and legacy routes
-      const teamDetailMatch = hash.match(/^#(summer-kickball|fall-kickball|kickball|dodgeball)-teams\/(.+)$/);
+      const teamDetailMatch = routeHash.match(/^#(summer-kickball|fall-kickball|kickball|dodgeball)-teams\/(.+)$/);
       if (teamDetailMatch) {
         const [, routeType, teamId] = teamDetailMatch;
         // Determine sport type from route
@@ -197,10 +207,10 @@ function AppContent() {
       }
 
       // Handle game detail routes
-      const gameDetailMatch = hash.match(/^#game\/(.+)$/);
+      const gameDetailMatch = routeHash.match(/^#game\/(.+)$/);
       if (gameDetailMatch) {
         // Store the full hash in currentRoute for game detail handling
-        setCurrentRoute(hash);
+        setCurrentRoute(routeHash);
       }
     };
 
@@ -211,39 +221,6 @@ function AppContent() {
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
-
-  // Navigation menu items
-  const menuItems: MenuItem[] = [
-    { label: "Home", href: "#home", isActive: currentRoute === "#home" },
-    {
-      label: "General Info",
-      href: "#info",
-      isActive: currentRoute === "#info",
-    },
-    {
-      label: "Kickball",
-      hasDropdown: true,
-      isActive: currentRoute.includes("kickball"),
-      dropdownItems: [
-        { label: "League Rules", href: "#kickball-rules" },
-        { label: "Summer 2025 Schedule", href: "#summer-kickball-schedule" },
-        { label: "Summer 2025 Teams", href: "#summer-kickball-teams" },
-        { label: "Fall 2025 Registration", href: "#fall-kickball-registration" },
-      ],
-    },
-    // Temporarily disabled - coming soon
-    // {
-    //   label: "Dodgeball",
-    //   hasDropdown: true,
-    //   isActive: currentRoute.startsWith("#dodgeball"),
-    //   dropdownItems: [
-    //     { label: "League Rules", href: "#dodgeball-rules" },
-    //     { label: "Schedule", href: "#dodgeball-schedule" },
-    //     { label: "Teams", href: "#dodgeball-teams" },
-    //     { label: "Registration", href: "#dodgeball-registration" },
-    //   ],
-    // },
-  ];
 
   // Handle team selection
   const handleTeamSelect = (team: Team) => {
@@ -397,22 +374,44 @@ function AppContent() {
 
     // Dodgeball schedule is temporarily disabled - handled by redirect above
 
-    // Registration pages - Only Fall Kickball (Summer registration removed)
-    if (currentRoute === "#fall-kickball-registration") {
-      return <RegistrationPage sportType="kickball" season="Fall 2025" />;
+    // Registration pages - Use sport context for dynamic season/sport selection
+    if (currentRoute === "#registration") {
+      return <SportAwarePage type="registration" />;
     }
 
     // Legacy kickball-registration route - redirect to Fall (since Summer registration removed)
     if (currentRoute === "#kickball-registration") {
       setTimeout(() => {
-        navigateTo("#fall-kickball-registration");
+        navigateTo("#registration");
       }, 0);
       return <RegistrationPage sportType="kickball" season="Fall 2025" />;
     }
 
     // Dodgeball registration is temporarily disabled - handled by redirect above
 
+    // Simplified routes that use sport context
+    if (currentRoute === "#teams") {
+      return (
+        <SportAwarePage 
+          type="teams"
+          onTeamSelect={handleTeamSelect} 
+        />
+      );
+    }
+
+    if (currentRoute === "#schedule") {
+      return (
+        <SportAwarePage
+          type="schedule"
+        />
+      );
+    }
+
     // Rules pages - Single kickball rules page for all seasons
+    if (currentRoute === "#league-rules") {
+      return <LeagueRules />;
+    }
+
     if (currentRoute === "#kickball-rules") {
       return <KickballRules />;
     }
@@ -441,56 +440,88 @@ function AppContent() {
       return <GeneralInfoPage />;
     }
 
+    // Liability Waiver page
+    if (currentRoute === "#liability-waiver") {
+      return <LiabilityWaiverPage />;
+    }
+
+    // Photo Waiver page
+    if (currentRoute === "#photo-waiver") {
+      return <PhotoWaiverPage />;
+    }
+
     // Animation Demo page
     if (currentRoute === "#animation-demo") {
       return <AnimationDemo />;
     }
 
-    // Default home page content - use dynamic content loader
+    // Home page
+    if (currentRoute === "#home") {
+      return (
+        <DynamicAppContent
+          currentRoute={currentRoute}
+          renderContent={() => <></>}
+        />
+      );
+    }
+
+    // Unknown route - redirect to home
+    console.warn(`Unknown route: ${currentRoute}, redirecting to home`);
+    setTimeout(() => {
+      window.location.hash = '#home';
+    }, 0);
+    
+    // Show home page while redirecting
     return (
       <DynamicAppContent
-        currentRoute={currentRoute}
+        currentRoute="#home"
         renderContent={() => <></>}
       />
     );
   };
 
   return (
-    <div className="App">
-      {/* Verification Status */}
-      <VerificationStatus
-        verificationStatus={verificationStatus}
-        onDismiss={clearVerificationStatus}
-      />
+    <SportProvider currentRoute={currentRoute}>
+      <DynamicNavigation currentRoute={currentRoute}>
+        {(menuItems) => (
+          <div className="App">
+            {/* Verification Status */}
+            <VerificationStatus
+              verificationStatus={verificationStatus}
+              onDismiss={clearVerificationStatus}
+            />
 
-      {/* Adaptive Navigation - Hide on admin pages */}
-      {!currentRoute.startsWith("#admin") &&
-        !currentRoute.startsWith("#sports-admin") && (
-          <AdaptiveNavigation
-            logo="/logo.png"
-            menuItems={menuItems}
-            showLiveScores={hasLiveGames}
-            currentRoute={currentRoute}
-          >
-            {/* Dynamic Content with proper spacing for fixed elements */}
-            <div
-              className={`${
-                currentRoute === "#home"
-                  ? "pt-0"
-                  : "mt-nav-safe bg-white min-h-screen"
-              }`}
-            >
-              {renderContent()}
-            </div>
-          </AdaptiveNavigation>
+            {/* Adaptive Navigation - Hide on admin pages */}
+            {!currentRoute.startsWith("#admin") &&
+              !currentRoute.startsWith("#sports-admin") && (
+                <AdaptiveNavigation
+                  logo="/logo.png"
+                  menuItems={menuItems}
+                  showLiveScores={hasLiveGames}
+                  currentRoute={currentRoute}
+                >
+                  {/* Dynamic Content with proper spacing for fixed elements */}
+                  <div
+                    className={`${
+                      currentRoute === "#home"
+                        ? "pt-0"
+                        : "mt-nav-safe bg-white min-h-screen"
+                    }`}
+                  >
+                    {renderContent()}
+                  </div>
+                </AdaptiveNavigation>
+              )}
+
+            {/* Admin pages without navigation */}
+            {(currentRoute.startsWith("#admin") ||
+              currentRoute.startsWith("#sports-admin")) && (
+              <div className="min-h-screen bg-white">{renderContent()}</div>
+            )}
+          </div>
         )}
-
-      {/* Admin pages without navigation */}
-      {(currentRoute.startsWith("#admin") ||
-        currentRoute.startsWith("#sports-admin")) && (
-        <div className="min-h-screen bg-white">{renderContent()}</div>
-      )}
-    </div>
+      </DynamicNavigation>
+    </SportProvider>
   );
 }
 

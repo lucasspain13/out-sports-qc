@@ -234,7 +234,7 @@ const IOSRegistrationForm: React.FC<IOSRegistrationFormProps> = ({
             value={formData.email}
             onChange={e => handleInputChange("email", e.target.value)}
             className="ios-text-input"
-            placeholder="your.email@example.com"
+            placeholder="OutSportsQC@gmail.com"
             required
           />
         </div>

@@ -1,6 +1,16 @@
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
 import { PlatformRegistrationForm } from "../platform";
+
+interface RegistrationDetails {
+  sport: string;
+  season: string;
+  duration: string;
+  game_time: string;
+  location: string;
+  team_size: string;
+}
 
 interface RegistrationPageProps {
   sportType: "kickball" | "dodgeball";
@@ -8,6 +18,8 @@ interface RegistrationPageProps {
 }
 
 const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }) => {
+  const [registrationDetails, setRegistrationDetails] = useState<RegistrationDetails | null>(null);
+  
   const sportDisplayName =
     sportType.charAt(0).toUpperCase() + sportType.slice(1);
   const sportEmoji = sportType === "kickball" ? "☄️" : "🏐";
@@ -19,6 +31,31 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
     if (currentRoute.includes("summer-kickball")) return "Summer 2025";
     return "Fall 2025"; // Default fallback
   })();
+
+  useEffect(() => {
+    fetchRegistrationDetails();
+  }, [sportType]);
+
+  const fetchRegistrationDetails = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("registration_details")
+        .select("*")
+        .eq("sport_type", sportType)
+        .single();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error("Error fetching registration details:", error);
+        return;
+      }
+      
+      if (data) {
+        setRegistrationDetails(data);
+      }
+    } catch (error) {
+      console.error("Error fetching registration details:", error);
+    }
+  };
 
   const sportColors = {
     kickball: {
@@ -44,12 +81,20 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
         "🏆 Competitive yet supportive",
         "🎉 End-of-season celebration",
       ],
-      gameDetails: {
+      gameDetails: registrationDetails ? {
+        sport: registrationDetails.sport,
+        season: registrationDetails.season,
+        duration: registrationDetails.duration,
+        gameTime: registrationDetails.game_time,
+        location: registrationDetails.location,
+        deadline: registrationDetails.team_size,
+      } : {
+        sport: "Kickball",
         season: currentSeason,
         duration: currentSeason === "Summer 2025" ? "8 weeks" : "7 weeks",
-        gameTime: "TBD",
+        gameTime: "Sundays 2-4pm",
         location: "TBD",
-        teamSize: "16 players",
+        deadline: "TBD",
       },
     },
     dodgeball: {
@@ -67,7 +112,7 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
         duration: "TBD",
         gameTime: "TBD",
         location: "TBD",
-        teamSize: "20 players",
+        deadline: "TBD",
       },
     },
   };
@@ -103,7 +148,7 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
               </p>
 
               {/* Quick Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
+              <div className="grid grid-cols-2 md:grid-cols-6 gap-4 max-w-6xl mx-auto">
                 {Object.entries(currentSport.gameDetails).map(
                   ([key, value]) => (
                     <motion.div
@@ -242,7 +287,10 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
                   </p>
                   <div className="space-y-2">
                     <div className="text-brand-blue font-medium">
-                      Travis Stanger : 563-381-0504
+                      Travis Stanger: 563-381-0504
+                    </div>
+                    <div className="text-brand-blue font-medium">
+                      Admin Email: OutSportsQC@gmail.com
                     </div>
                   </div>
                 </div>

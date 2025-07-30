@@ -71,6 +71,21 @@ const WebsiteFeedbackManagement: React.FC = () => {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to permanently delete this feedback entry? This action cannot be undone.")) {
+      return;
+    }
+    
+    try {
+      await websiteFeedbackApi.delete(id);
+      await loadFeedback();
+      await loadStatusCounts();
+    } catch (error) {
+      console.error("Error deleting feedback:", error);
+      setError("Failed to delete feedback");
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -305,27 +320,36 @@ const WebsiteFeedbackManagement: React.FC = () => {
                     {item.priority !== 'high' && (
                       <button
                         onClick={() => handlePriorityChange(item.id, 'high')}
-                        className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
+                        className="px-3 py-1 bg-gray-100 text-gray-700 border border-gray-300 rounded text-sm hover:bg-gray-200"
                       >
-                        High Priority
+                        Set to High Priority
                       </button>
                     )}
                     {item.priority !== 'medium' && (
                       <button
                         onClick={() => handlePriorityChange(item.id, 'medium')}
-                        className="px-3 py-1 bg-yellow-600 text-white rounded text-sm hover:bg-yellow-700"
+                        className="px-3 py-1 bg-gray-100 text-gray-700 border border-gray-300 rounded text-sm hover:bg-gray-200"
                       >
-                        Medium Priority
+                        Set to Medium Priority
                       </button>
                     )}
                     {item.priority !== 'low' && (
                       <button
                         onClick={() => handlePriorityChange(item.id, 'low')}
-                        className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700"
+                        className="px-3 py-1 bg-gray-100 text-gray-700 border border-gray-300 rounded text-sm hover:bg-gray-200"
                       >
-                        Low Priority
+                        Set to Low Priority
                       </button>
                     )}
+
+                    {/* Delete Button */}
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700 border border-red-700"
+                      title="Permanently delete this feedback"
+                    >
+                      Permanently Delete
+                    </button>
                   </div>
                 </div>
               )}

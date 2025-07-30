@@ -39,8 +39,6 @@ export const ContentManagement: React.FC<ContentManagementProps> = () => {
     socialMedia: {
       facebook: "",
       instagram: "",
-      twitter: "",
-      discord: "",
     },
   });
 
@@ -76,8 +74,6 @@ export const ContentManagement: React.FC<ContentManagementProps> = () => {
           socialMedia: {
             facebook: contactData.socialMedia.facebook || "",
             instagram: contactData.socialMedia.instagram || "",
-            twitter: contactData.socialMedia.twitter || "",
-            discord: contactData.socialMedia.discord || "",
           },
         });
       }
@@ -279,7 +275,7 @@ export const ContentManagement: React.FC<ContentManagementProps> = () => {
                   })
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-brand-blue focus:border-brand-blue"
-                placeholder="hello@yourleague.com"
+                placeholder="OutSportsQC@gmail.com"
               />
             </div>
 
@@ -335,38 +331,6 @@ export const ContentManagement: React.FC<ContentManagementProps> = () => {
                     socialMedia: {
                       ...contactFormData.socialMedia,
                       instagram: e.target.value,
-                    },
-                  })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-brand-blue focus:border-brand-blue"
-              />
-
-              <input
-                type="url"
-                placeholder="Twitter URL"
-                value={contactFormData.socialMedia.twitter || ""}
-                onChange={e =>
-                  setContactFormData({
-                    ...contactFormData,
-                    socialMedia: {
-                      ...contactFormData.socialMedia,
-                      twitter: e.target.value,
-                    },
-                  })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-brand-blue focus:border-brand-blue"
-              />
-
-              <input
-                type="url"
-                placeholder="Discord URL"
-                value={contactFormData.socialMedia.discord || ""}
-                onChange={e =>
-                  setContactFormData({
-                    ...contactFormData,
-                    socialMedia: {
-                      ...contactFormData.socialMedia,
-                      discord: e.target.value,
                     },
                   })
                 }

@@ -159,7 +159,8 @@ export type GameStatus =
   | "in-progress"
   | "completed"
   | "cancelled"
-  | "postponed";
+  | "postponed"
+  | "archived";
 
 export interface GameScore {
   homeScore: number;
@@ -179,6 +180,7 @@ export interface Game {
   sportType: "kickball" | "dodgeball";
   week: number;
   season: string;
+  year: number;
 }
 
 export interface ScheduleWeek {
@@ -255,8 +257,6 @@ export interface ContactInfo {
   socialMedia: {
     facebook?: string;
     instagram?: string;
-    twitter?: string;
-    discord?: string;
   };
   officeHours?: {
     [key: string]: string;

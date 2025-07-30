@@ -8,12 +8,14 @@ interface MissionHeroProps {
   leagueInfo: LeagueInfo;
   onJoinClick?: () => void;
   className?: string;
+  showLearnMore?: boolean;
 }
 
 const MissionHero: React.FC<MissionHeroProps> = ({
   leagueInfo,
   onJoinClick,
   className = "",
+  showLearnMore = false,
 }) => {
   // Get completed games count from database
   const { games, loading: gamesLoading } = useGames();
@@ -165,17 +167,19 @@ const MissionHero: React.FC<MissionHeroProps> = ({
               onClick={onJoinClick}
               className="w-full sm:w-auto bg-brand-blue hover:bg-brand-blue-dark text-white border-0 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
-              Join Our Community
+              Register for Fall Kickball
             </Button>
 
-            <Button
-              variant="outline"
-              size="large"
-              href="#learn-more"
-              className="w-full sm:w-auto border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
-            >
-              Learn More
-            </Button>
+            {showLearnMore && (
+              <Button
+                variant="outline"
+                size="large"
+                href="#info"
+                className="w-full sm:w-auto border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
+              >
+                Learn More
+              </Button>
+            )}
           </motion.div>
         </motion.div>
       </div>

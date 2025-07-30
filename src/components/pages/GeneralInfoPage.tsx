@@ -37,7 +37,7 @@ const GeneralInfoPage: React.FC<GeneralInfoPageProps> = ({
   const faqs = useFAQs();
 
   const handleJoinClick = () => {
-    navigateTo("signup");
+    navigateTo("#registration");
   };
 
   // Transform data to match component expectations
@@ -122,6 +122,7 @@ const GeneralInfoPage: React.FC<GeneralInfoPageProps> = ({
               <MissionHero
                 leagueInfo={transformedLeagueInfo}
                 onJoinClick={handleJoinClick}
+                showLearnMore={false}
               />
             )
           );

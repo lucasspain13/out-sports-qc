@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import React from "react";
 import { SportCardProps } from "../../types";
+import { navigateTo } from "../../lib/navigation";
 
 const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
   const gradientClasses = {
@@ -20,7 +21,8 @@ const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
 
   const handleClick = () => {
     if (sport.comingSoon) {
-      // Don't navigate if coming soon
+      // Navigate to registration page for coming soon sports
+      navigateTo("#registration");
       return;
     }
     onClick?.();
@@ -28,12 +30,12 @@ const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
 
   return (
     <motion.div
-      whileHover={sport.comingSoon ? {} : { scale: 1.05, y: -8 }}
-      whileTap={sport.comingSoon ? {} : { scale: 0.98 }}
+      whileHover={{ scale: 1.05, y: -8 }}
+      whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className={`card-base ${
-        sport.comingSoon ? "opacity-70" : "card-hover cursor-pointer"
-      } group relative`}
+      className={`card-base card-hover cursor-pointer group relative ${
+        sport.comingSoon ? "opacity-90" : ""
+      }`}
       onClick={handleClick}
     >
       {/* Coming Soon Badge */}
@@ -46,9 +48,7 @@ const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
       <div
         className={`relative h-80 sm:h-96 ${
           gradientClasses[sport.gradient]
-        } p-6 sm:p-8 flex flex-col justify-end text-white ${
-          sport.comingSoon ? "cursor-not-allowed" : ""
-        }`}
+        } p-6 sm:p-8 flex flex-col justify-end text-white`}
       >
         {/* Background Pattern/Image */}
         {sport.image && (

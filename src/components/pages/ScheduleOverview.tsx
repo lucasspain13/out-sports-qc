@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import React, { useMemo, useState } from "react";
-import { gameLocations } from "../../data/locations";
+import React, { useMemo, useState, useEffect } from "react";
+import { getAllLocations } from "../../data/supabase";
 import { useGames } from "../../hooks/useGames";
-import { Game } from "../../types";
+import { Game, GameLocation } from "../../types";
 import LocationMap from "../ui/LocationMap";
 import ScheduleWeek from "../ui/ScheduleWeek";
 
@@ -19,9 +19,23 @@ const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
 }) => {
   const [filter, setFilter] = useState<FilterType>("all");
   const [showMap, setShowMap] = useState(false);
+  const [gameLocations, setGameLocations] = useState<GameLocation[]>([]);
 
   // Use the database-driven hook
   const { games, scheduleWeeks, loading, error } = useGames(sportType);
+
+  // Load locations from database
+  useEffect(() => {
+    const loadLocations = async () => {
+      try {
+        const locations = await getAllLocations();
+        setGameLocations(locations);
+      } catch (error) {
+        console.error("Failed to load locations:", error);
+      }
+    };
+    loadLocations();
+  }, []);
 
   const sportDisplayName =
     sportType.charAt(0).toUpperCase() + sportType.slice(1);
@@ -52,7 +66,7 @@ const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
   const completedCount = completedGames.length;
   const upcomingCount = upcomingGames.length;
   const totalWeeks = scheduleWeeks.length;
-  const currentSeason = games.length > 0 ? games[0].season : "Spring 2024";
+  const currentSeason = games.length > 0 ? games[0].season : "Summer 2025";
 
   // Early returns AFTER all hooks have been called
   if (loading) {

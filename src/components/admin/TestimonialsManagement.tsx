@@ -461,7 +461,7 @@ export const TestimonialsManagement: React.FC<
                   <input
                     type="checkbox"
                     id="isActive"
-                    checked={formData.isActive}
+                    checked={Boolean(formData.isActive)}
                     onChange={e =>
                       setFormData({ ...formData, isActive: e.target.checked })
                     }

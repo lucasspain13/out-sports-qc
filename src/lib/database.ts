@@ -65,10 +65,13 @@ const transformPlayer = (dbPlayer: DbPlayer): Player => ({
 });
 
 // Transform database location to application location type
-const transformLocation = (dbLocation: DbLocation): GameLocation => ({
+const transformLocation = (dbLocation: any): GameLocation => ({
   id: dbLocation.id,
   name: dbLocation.name,
   address: dbLocation.address,
+  city: dbLocation.city || "",
+  state: dbLocation.state || "",
+  zipCode: dbLocation.zip_code || "",
   coordinates: {
     lat: Number(dbLocation.latitude) || 0,
     lng: Number(dbLocation.longitude) || 0,
@@ -78,7 +81,7 @@ const transformLocation = (dbLocation: DbLocation): GameLocation => ({
   capacity: dbLocation.capacity || undefined,
   parking: dbLocation.parking,
   restrooms: dbLocation.restrooms,
-  waterFountains: dbLocation.restrooms || false, // Using restrooms as fallback since water_fountains doesn't exist
+  waterFountains: dbLocation.water_fountains || false,
   concessions: dbLocation.concessions,
 });
 
@@ -105,7 +108,8 @@ const transformGame = (
       : undefined,
   sportType: dbGame.sport_type as "kickball" | "dodgeball",
   week: dbGame.week_number || 1,
-  season: dbGame.season || "Spring 2024",
+  season: dbGame.season || "Summer 2025",
+  year: (dbGame as any).year || new Date(dbGame.scheduled_at).getFullYear(),
 });
 
 // Teams API
@@ -671,7 +675,7 @@ export const scheduleApi = {
     weeks.sort((a, b) => a.weekNumber - b.weekNumber);
 
     return {
-      season: games[0]?.season || "Spring 2024",
+      season: games[0]?.season || "Summer 2025",
       sportType,
       weeks,
       totalWeeks: weeks.length,
@@ -771,12 +775,14 @@ export const adminApi = {
     sport_type: "kickball" | "dodgeball";
     week_number: number;
     season: string;
+    year: number;
     status:
       | "scheduled"
       | "in-progress"
       | "completed"
       | "cancelled"
-      | "postponed";
+      | "postponed"
+      | "archived";
     home_score?: number;
     away_score?: number;
   }) {
@@ -801,12 +807,14 @@ export const adminApi = {
       sport_type: "kickball" | "dodgeball";
       week_number: number;
       season: string;
+      year: number;
       status:
         | "scheduled"
         | "in-progress"
         | "completed"
         | "cancelled"
-        | "postponed";
+        | "postponed"
+        | "archived";
       home_score: number;
       away_score: number;
     }>

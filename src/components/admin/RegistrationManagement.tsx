@@ -2,6 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useNotification } from "../../contexts/NotificationContext";
 import { supabase } from "../../lib/supabase";
 
+interface RegistrationDetails {
+  id: string;
+  sport: string;
+  season: string;
+  duration: string;
+  game_time: string;
+  location: string;
+  team_size: string;
+  sport_type: "kickball" | "dodgeball";
+  created_at?: string;
+  updated_at?: string;
+}
+
 interface Registration {
   id: string;
   sport_type: "kickball" | "dodgeball";
@@ -38,17 +51,93 @@ interface RegistrationSummary {
 export const RegistrationManagement: React.FC = () => {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [summary, setSummary] = useState<RegistrationSummary[]>([]);
+  const [registrationDetails, setRegistrationDetails] = useState<RegistrationDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedSport, setSelectedSport] = useState<
     "all" | "kickball" | "dodgeball"
   >("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState<"registrations" | "details">("registrations");
   const { showNotification } = useNotification();
 
   useEffect(() => {
     fetchRegistrations();
     fetchSummary();
+    fetchRegistrationDetails();
   }, []);
+
+  const fetchRegistrationDetails = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("registration_details")
+        .select("*")
+        .eq("sport_type", "kickball")
+        .single();
+
+      if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows returned
+      
+      if (data) {
+        setRegistrationDetails(data);
+      } else {
+        // Create default registration details if none exist
+        const defaultDetails: Partial<RegistrationDetails> = {
+          sport: "Kickball",
+          season: "Fall 2025",
+          duration: "7 weeks",
+          game_time: "Sundays 2-4pm",
+          location: "TBD",
+          team_size: "16 players",
+          sport_type: "kickball"
+        };
+        
+        const { data: newData, error: insertError } = await supabase
+          .from("registration_details")
+          .insert(defaultDetails)
+          .select()
+          .single();
+          
+        if (insertError) throw insertError;
+        setRegistrationDetails(newData);
+      }
+    } catch (error: any) {
+      console.error("Error fetching registration details:", error);
+      showNotification({
+        type: "error",
+        title: "Error Loading Registration Details",
+        message: error.message,
+        duration: 5000,
+      });
+    }
+  };
+
+  const updateRegistrationDetails = async (details: Partial<RegistrationDetails>) => {
+    try {
+      const { data, error } = await supabase
+        .from("registration_details")
+        .update(details)
+        .eq("sport_type", "kickball")
+        .select()
+        .single();
+
+      if (error) throw error;
+      
+      setRegistrationDetails(data);
+      showNotification({
+        type: "success",
+        title: "Details Updated",
+        message: "Registration details have been updated successfully",
+        duration: 3000,
+      });
+    } catch (error: any) {
+      console.error("Error updating registration details:", error);
+      showNotification({
+        type: "error",
+        title: "Update Failed",
+        message: error.message,
+        duration: 5000,
+      });
+    }
+  };
 
   const fetchRegistrations = async () => {
     try {
@@ -190,8 +279,131 @@ export const RegistrationManagement: React.FC = () => {
         </p>
       </div>
 
-      {/* Summary Cards */}
-      {summary.length > 0 && (
+      {/* Tab Navigation */}
+      <div className="mb-6">
+        <div className="border-b border-gray-200">
+          <nav className="-mb-px flex space-x-8">
+            <button
+              onClick={() => setActiveTab("registrations")}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === "registrations"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              Registrations
+            </button>
+            <button
+              onClick={() => setActiveTab("details")}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === "details"
+                  ? "border-blue-500 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              Registration Details
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      {/* Registration Details Tab */}
+      {activeTab === "details" && registrationDetails && (
+        <div className="bg-white rounded-lg shadow p-6 mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Registration Page Information
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Update the information displayed in the 6 boxes at the top of the registration form.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Sport
+              </label>
+              <input
+                type="text"
+                value={registrationDetails.sport}
+                onChange={(e) => updateRegistrationDetails({ sport: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="e.g., Kickball"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Season
+              </label>
+              <input
+                type="text"
+                value={registrationDetails.season}
+                onChange={(e) => updateRegistrationDetails({ season: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="e.g., Fall 2025"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Duration
+              </label>
+              <input
+                type="text"
+                value={registrationDetails.duration}
+                onChange={(e) => updateRegistrationDetails({ duration: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="e.g., 7 weeks"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Game Time
+              </label>
+              <input
+                type="text"
+                value={registrationDetails.game_time}
+                onChange={(e) => updateRegistrationDetails({ game_time: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="e.g., Sundays 2-4pm"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Location
+              </label>
+              <input
+                type="text"
+                value={registrationDetails.location}
+                onChange={(e) => updateRegistrationDetails({ location: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="e.g., TBD"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Deadline
+              </label>
+              <input
+                type="text"
+                value={registrationDetails.team_size}
+                onChange={(e) => updateRegistrationDetails({ team_size: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="e.g., TBD"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Registrations Tab Content */}
+      {activeTab === "registrations" && (
+        <>
+          {/* Summary Cards */}
+          {summary.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {summary.map(stat => (
             <div
@@ -393,6 +605,8 @@ export const RegistrationManagement: React.FC = () => {
           </div>
         )}
       </div>
+        </>
+      )}
     </div>
   );
 };

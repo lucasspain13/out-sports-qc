@@ -18,7 +18,6 @@ interface FormData {
   shirtSize: "XS" | "S" | "M" | "L" | "XL" | "XXL" | "3XL" | "4XL";
   emergencyContactName: string;
   emergencyContactPhone: string;
-  experienceLevel: "beginner" | "intermediate" | "advanced";
   teamRequest: string;
   dietaryRestrictions: string;
   medicalConditions: string;
@@ -42,27 +41,16 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     shirtSize: "M",
     emergencyContactName: "",
     emergencyContactPhone: "",
-    experienceLevel: "beginner",
     teamRequest: "",
     dietaryRestrictions: "",
     medicalConditions: "",
     agreeToTerms: false,
-    agreeToEmailUpdates: true,
+    agreeToEmailUpdates: false,
   });
 
   const sportDisplayName =
     sportType.charAt(0).toUpperCase() + sportType.slice(1);
   const sportEmoji = sportType === "kickball" ? "☄️" : "🏐";
-
-  const experienceLevels = [
-    { value: "beginner", label: "Beginner - I'm new to this!", emoji: "🌱" },
-    {
-      value: "intermediate",
-      label: "Intermediate - I've played before",
-      emoji: "⭐",
-    },
-    { value: "advanced", label: "Advanced - I'm pretty good!", emoji: "🏆" },
-  ];
 
   const formatPhoneNumber = (value: string) => {
     // Remove all non-numeric characters
@@ -164,7 +152,6 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
           shirt_size: formData.shirtSize,
           emergency_contact_name: formData.emergencyContactName,
           emergency_contact_phone: formData.emergencyContactPhone,
-          experience_level: formData.experienceLevel,
           team_request: formData.teamRequest || null,
           dietary_restrictions: formData.dietaryRestrictions || null,
           medical_conditions: formData.medicalConditions || null,
@@ -194,12 +181,11 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         shirtSize: "M",
         emergencyContactName: "",
         emergencyContactPhone: "",
-        experienceLevel: "beginner",
         teamRequest: "",
         dietaryRestrictions: "",
         medicalConditions: "",
         agreeToTerms: false,
-        agreeToEmailUpdates: true,
+        agreeToEmailUpdates: false,
       });
 
       onSuccess?.();
@@ -243,7 +229,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              First Name *
+              First Name (required)
             </label>
             <input
               type="text"
@@ -257,7 +243,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Last Name *
+              Last Name (required)
             </label>
             <input
               type="text"
@@ -271,7 +257,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Preferred Pronouns *
+              Preferred Pronouns (required)
             </label>
             <input
               type="text"
@@ -285,7 +271,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Age *
+              Age (required)
             </label>
             <input
               type="number"
@@ -301,21 +287,21 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address *
+              Email Address (required)
             </label>
             <input
               type="email"
               value={formData.email}
               onChange={e => handleInputChange("email", e.target.value)}
               className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
-              placeholder="your.email@example.com"
+              placeholder="OutSportsQC@gmail.com"
               required
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Phone Number *
+              Phone Number (required)
             </label>
             <input
               type="tel"
@@ -329,7 +315,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Shirt Size *
+              Shirt Size (required)
             </label>
             <select
               value={formData.shirtSize}
@@ -354,7 +340,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Emergency Contact Name *
+              Emergency Contact Name (required)
             </label>
             <input
               type="text"
@@ -370,7 +356,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Emergency Contact Phone *
+              Emergency Contact Phone (required)
             </label>
             <input
               type="tel"
@@ -385,37 +371,38 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              Experience Level *
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Dietary Restrictions or Allergies (optional)
             </label>
-            <div className="space-y-3">
-              {experienceLevels.map(level => (
-                <label
-                  key={level.value}
-                  className="flex items-center p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors"
-                >
-                  <input
-                    type="radio"
-                    name="experienceLevel"
-                    value={level.value}
-                    checked={formData.experienceLevel === level.value}
-                    onChange={e =>
-                      handleInputChange("experienceLevel", e.target.value)
-                    }
-                    className="h-4 w-4 text-brand-blue focus:ring-brand-blue focus:ring-offset-0"
-                  />
-                  <span className="ml-3 text-2xl">{level.emoji}</span>
-                  <span className="ml-2 text-sm font-medium text-gray-900">
-                    {level.label}
-                  </span>
-                </label>
-              ))}
-            </div>
+            <textarea
+              value={formData.dietaryRestrictions}
+              onChange={e =>
+                handleInputChange("dietaryRestrictions", e.target.value)
+              }
+              rows={3}
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300 resize-none"
+              placeholder="Please list any dietary restrictions, allergies, or special accommodations..."
+            />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Team Request (Optional)
+              Medical Conditions or Injuries (optional)
+            </label>
+            <textarea
+              value={formData.medicalConditions}
+              onChange={e =>
+                handleInputChange("medicalConditions", e.target.value)
+              }
+              rows={3}
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300 resize-none"
+              placeholder="Please list any medical conditions or injuries we should be aware of..."
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Team Request (optional)
             </label>
             <textarea
               value={formData.teamRequest}
@@ -425,39 +412,6 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               placeholder="Request up to 3 specific players to be on your team (e.g., 'John Smith, Jane Doe, Alex Johnson'). We'll do our best to accommodate requests while maintaining team balance."
             />
           </div>
-        </div>
-      </div>
-
-      {/* Full-width fields */}
-      <div className="grid grid-cols-1 gap-6 mt-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Dietary Restrictions or Allergies
-          </label>
-          <textarea
-            value={formData.dietaryRestrictions}
-            onChange={e =>
-              handleInputChange("dietaryRestrictions", e.target.value)
-            }
-            rows={3}
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300 resize-none"
-            placeholder="Please list any dietary restrictions, allergies, or special accommodations..."
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Medical Conditions or Injuries
-          </label>
-          <textarea
-            value={formData.medicalConditions}
-            onChange={e =>
-              handleInputChange("medicalConditions", e.target.value)
-            }
-            rows={3}
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300 resize-none"
-            placeholder="Please list any medical conditions or injuries we should be aware of..."
-          />
         </div>
       </div>
 
@@ -480,7 +434,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
               Terms and Conditions
             </a>{" "}
             and understand the risks associated with participating in{" "}
-            {sportDisplayName.toLowerCase()} activities. *
+            {sportDisplayName.toLowerCase()} activities. (required)
           </label>
         </div>
 
@@ -499,7 +453,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             className="ml-3 text-sm text-gray-600"
           >
             I would like to receive email updates about league news, events, and
-            game schedules.
+            game schedules. (optional)
           </label>
         </div>
       </div>

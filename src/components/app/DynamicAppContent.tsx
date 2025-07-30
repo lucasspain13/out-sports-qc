@@ -34,6 +34,28 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
     }
   };
 
+  // Generate dynamic hero button text based on coming soon sports
+  const getDynamicHeroButtonText = (): string => {
+    if (!sportsInfo.data || sportsInfo.data.length === 0) {
+      return "Register for Upcoming Season"; // Fallback
+    }
+
+    // Find the first sport that is coming soon
+    const comingSoonSport = sportsInfo.data.find(sport => sport.comingSoon);
+    
+    if (comingSoonSport) {
+      // Parse the sport name like "Fall 2025 Kickball" to extract season and sport
+      const nameParts = comingSoonSport.name.split(' ');
+      if (nameParts.length >= 3) {
+        const season = nameParts[0]; // Fall
+        const sport = nameParts.slice(2).join(' '); // Kickball
+        return `Register for ${season} ${sport}`;
+      }
+    }
+    
+    return "Register for Upcoming Season"; // Fallback
+  };
+
   // Convert database sports info to display format
   const getDisplaySports = (): SportInfo[] => {
     // If no database data, use fallback sports data
@@ -145,7 +167,11 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
       ];
     }
 
-    return sportsInfo.data.map(sport => ({
+    // Filter to show only Active and Coming Soon sports (exclude archived)
+    const filteredSports = sportsInfo.data.filter(sport => sport.isActive || sport.comingSoon);
+
+    // Convert and sort sports
+    const displaySports = filteredSports.map(sport => ({
       name: sport.name,
       title: sport.title,
       description: sport.description,
@@ -175,9 +201,18 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
       })() : undefined,
       features: sport.features || [],
       totalTeams: sport.totalTeams || 0,
-      rosterPath: sport.rosterPath || undefined,
+      // Fix routing path to use simple #teams instead of complex generated paths
+      rosterPath: sport.comingSoon ? "#registration" : "#teams",
       comingSoon: sport.comingSoon || false,
+      createdAt: sport.createdAt
     }));
+
+    // Simple sorting by created_at descending (newest first)
+    return displaySports.sort((a, b) => {
+      const dateA = new Date(a.createdAt || 0).getTime();
+      const dateB = new Date(b.createdAt || 0).getTime();
+      return dateB - dateA; // Descending order
+    });
   };
 
   // Convert database about features to display format
@@ -208,7 +243,7 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
                 "Building an inclusive sports community where everyone can play, compete, and belong."
               }
               primaryCTA={{
-                text: heroContent.data?.primaryCtaText || "Join the League",
+                text: heroContent.data?.primaryCtaText || getDynamicHeroButtonText(),
                 variant: "primary",
                 href: "#registration",
               }}

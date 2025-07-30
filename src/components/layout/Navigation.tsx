@@ -119,7 +119,7 @@ const Navigation: React.FC<NavigationProps> = ({
                     </button>
 
                     {activeDropdown === item.label && item.dropdownItems && (
-                      <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+                      <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
                         {item.dropdownItems.map(dropdownItem => (
                           <a
                             key={dropdownItem.label}
@@ -169,7 +169,7 @@ const Navigation: React.FC<NavigationProps> = ({
               title="Share feedback or report issues"
             >
               <AlertTriangle className="w-4 h-4 inline mr-1" />
-              Give Feedback
+              Give Website Feedback
             </button>
           </div>
 
@@ -261,7 +261,7 @@ const Navigation: React.FC<NavigationProps> = ({
                 className="w-full text-left px-3 py-2 text-gray-900 hover:bg-gray-100 rounded-md flex items-center"
               >
                 <AlertTriangle className="w-4 h-4 mr-2" />
-                Give Feedback
+                Give Website Feedback
               </button>
             </div>
           </div>

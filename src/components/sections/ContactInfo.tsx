@@ -1,8 +1,8 @@
 import { motion, useInView } from "framer-motion";
-import React, { useRef } from "react";
-import { ContactInfo as ContactInfoType } from "../../types";
+import React, { useRef, useEffect, useState } from "react";
+import { ContactInfo as ContactInfoType, GameLocation } from "../../types";
 import LocationMap from "../ui/LocationMap";
-import { gameLocations } from "../../data/locations";
+import { getAllLocations } from "../../data/supabase";
 
 interface ContactInfoProps {
   contact: ContactInfoType;
@@ -21,6 +21,20 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [gameLocations, setGameLocations] = useState<GameLocation[]>([]);
+
+  // Load locations from database
+  useEffect(() => {
+    const loadLocations = async () => {
+      try {
+        const locations = await getAllLocations();
+        setGameLocations(locations);
+      } catch (error) {
+        console.error("Failed to load locations:", error);
+      }
+    };
+    loadLocations();
+  }, []);
 
   const contactMethods = [
     {
@@ -210,7 +224,7 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
                     <input
                       type="email"
                       className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
-                      placeholder="your@email.com"
+                      placeholder="OutSportsQC@gmail.com"
                     />
                   </div>
                   <div>

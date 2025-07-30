@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { gameLocations } from "../../data/locations";
+import React, { useState, useEffect } from "react";
+import { getAllLocations } from "../../data/supabase";
 import { dodgeballSchedule, kickballSchedule } from "../../data/schedules";
 import { Game, GameLocation } from "../../types";
 import { GameCard, LocationMap, ScheduleWeek } from "../ui";
@@ -12,6 +12,20 @@ const ScheduleDemo: React.FC = () => {
   const [selectedSport, setSelectedSport] = useState<"kickball" | "dodgeball">(
     "kickball"
   );
+  const [gameLocations, setGameLocations] = useState<GameLocation[]>([]);
+
+  // Load locations from database
+  useEffect(() => {
+    const loadLocations = async () => {
+      try {
+        const locations = await getAllLocations();
+        setGameLocations(locations);
+      } catch (error) {
+        console.error("Failed to load locations:", error);
+      }
+    };
+    loadLocations();
+  }, []);
 
   const currentSchedule =
     selectedSport === "kickball" ? kickballSchedule : dodgeballSchedule;

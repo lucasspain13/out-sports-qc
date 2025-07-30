@@ -343,7 +343,7 @@ export const LeadershipManagement: React.FC<LeadershipManagementProps> = () => {
                       setFormData({ ...formData, email: e.target.value })
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-brand-blue focus:border-brand-blue"
-                    placeholder="alex@example.com"
+                    placeholder="OutSportsQC@gmail.com"
                   />
                 </div>
 
@@ -450,25 +450,23 @@ export const LeadershipManagement: React.FC<LeadershipManagementProps> = () => {
                 />
               </div>
 
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="isActive"
-                  checked={formData.isActive}
-                  onChange={e =>
-                    setFormData({ ...formData, isActive: e.target.checked })
-                  }
-                  className="h-4 w-4 text-brand-blue focus:ring-brand-blue border-gray-300 rounded"
-                />
-                <label
-                  htmlFor="isActive"
-                  className="ml-2 text-sm text-gray-700"
-                >
-                  Active (visible on website)
-                </label>
-              </div>
-
-              <div className="flex space-x-3 pt-4">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="isActive"
+                    checked={Boolean(formData.isActive)}
+                    onChange={e =>
+                      setFormData({ ...formData, isActive: e.target.checked })
+                    }
+                    className="h-4 w-4 text-brand-blue focus:ring-brand-blue border-gray-300 rounded"
+                  />
+                  <label
+                    htmlFor="isActive"
+                    className="ml-2 text-sm text-gray-700"
+                  >
+                    Active (visible on website)
+                  </label>
+                </div>              <div className="flex space-x-3 pt-4">
                 <button
                   onClick={handleSave}
                   className="px-4 py-2 bg-brand-blue text-white rounded-md hover:bg-brand-blue-dark"

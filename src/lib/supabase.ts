@@ -367,8 +367,6 @@ export interface Database {
           office_hours_weekends: string;
           facebook_url?: string;
           instagram_url?: string;
-          twitter_url?: string;
-          discord_url?: string;
           created_at: string;
           updated_at: string;
           updated_by?: string;
@@ -385,8 +383,6 @@ export interface Database {
           office_hours_weekends?: string;
           facebook_url?: string;
           instagram_url?: string;
-          twitter_url?: string;
-          discord_url?: string;
           created_at?: string;
           updated_at?: string;
           updated_by?: string;
@@ -403,8 +399,6 @@ export interface Database {
           office_hours_weekends?: string;
           facebook_url?: string;
           instagram_url?: string;
-          twitter_url?: string;
-          discord_url?: string;
           updated_at?: string;
           updated_by?: string;
         };

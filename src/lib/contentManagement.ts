@@ -81,8 +81,6 @@ export interface ContactInfo {
   socialMedia: {
     facebook?: string;
     instagram?: string;
-    twitter?: string;
-    discord?: string;
   };
   officeHours: {
     weekdays: string;
@@ -159,6 +157,9 @@ export interface SportsInfo {
   rosterPath?: string;
   comingSoon: boolean;
   isActive: boolean;
+  season: string;
+  year: number;
+  createdAt: string;
 }
 
 export interface AboutFeature {
@@ -216,8 +217,6 @@ const transformContactInfo = (db: DbContactInfo): ContactInfo => ({
   socialMedia: {
     facebook: db.facebook_url || undefined,
     instagram: db.instagram_url || undefined,
-    twitter: db.twitter_url || undefined,
-    discord: db.discord_url || undefined,
   },
   officeHours: {
     weekdays: db.office_hours_weekdays,
@@ -281,20 +280,43 @@ const transformTimelineMilestone = (db: DbTimeline): TimelineMilestone => ({
   isActive: db.is_active,
 });
 
-const transformSportsInfo = (db: DbSportsInfo): SportsInfo => ({
-  id: db.id,
-  name: db.name,
-  title: db.title,
-  description: db.description,
-  gradient: db.gradient,
-  participants: db.participants,
-  nextGame: db.next_game ? new Date(db.next_game) : undefined,
-  features: db.features || [],
-  totalTeams: db.total_teams,
-  rosterPath: db.roster_path || undefined,
-  comingSoon: db.coming_soon,
-  isActive: db.is_active,
-});
+const transformSportsInfo = (db: DbSportsInfo): SportsInfo => {
+  // Extract season and year from name like "Summer 2025 Kickball"
+  let season = "Spring";
+  let year = new Date().getFullYear();
+  
+  const nameParts = db.name.split(' ');
+  if (nameParts.length >= 3) {
+    const possibleSeason = nameParts[0];
+    const possibleYear = parseInt(nameParts[1]);
+    
+    if (['Spring', 'Summer', 'Fall', 'Winter'].includes(possibleSeason)) {
+      season = possibleSeason;
+    }
+    
+    if (!isNaN(possibleYear) && possibleYear >= 2020 && possibleYear <= 2030) {
+      year = possibleYear;
+    }
+  }
+  
+  return {
+    id: db.id,
+    name: db.name,
+    title: db.title,
+    description: db.description,
+    gradient: db.gradient,
+    participants: db.participants,
+    nextGame: db.next_game ? new Date(db.next_game) : undefined,
+    features: db.features || [],
+    totalTeams: db.total_teams,
+    rosterPath: db.roster_path || undefined,
+    comingSoon: db.coming_soon,
+    isActive: db.is_active,
+    season: season,
+    year: year,
+    createdAt: db.created_at,
+  };
+};
 
 const transformAboutFeature = (db: DbAboutFeature): AboutFeature => ({
   id: db.id,
@@ -418,8 +440,6 @@ export const contactInfoApi = {
           office_hours_weekends: updates.officeHours?.weekends,
           facebook_url: updates.socialMedia?.facebook,
           instagram_url: updates.socialMedia?.instagram,
-          twitter_url: updates.socialMedia?.twitter,
-          discord_url: updates.socialMedia?.discord,
         })
         .eq("id", existing.id)
         .select()
@@ -442,8 +462,6 @@ export const contactInfoApi = {
           office_hours_weekends: updates.officeHours?.weekends || "",
           facebook_url: updates.socialMedia?.facebook,
           instagram_url: updates.socialMedia?.instagram,
-          twitter_url: updates.socialMedia?.twitter,
-          discord_url: updates.socialMedia?.discord,
         })
         .select()
         .single();
@@ -928,6 +946,8 @@ export const sportsInfoApi = {
         roster_path: sport.rosterPath,
         coming_soon: sport.comingSoon,
         is_active: sport.isActive,
+        season: sport.season,
+        year: sport.year,
       })
       .select()
       .single();
@@ -954,6 +974,8 @@ export const sportsInfoApi = {
         roster_path: updates.rosterPath,
         coming_soon: updates.comingSoon,
         is_active: updates.isActive,
+        season: updates.season,
+        year: updates.year,
       })
       .eq("id", id)
       .select()
@@ -1273,7 +1295,7 @@ export const heroContentApi = {
         title: "Welcome to Out Sports League",
         subtitle:
           "Join our inclusive LGBTQ+ sports community where everyone belongs. Experience the joy of competition, friendship, and athletic achievement in a welcoming environment.",
-        primary_cta_text: "League Info",
+        primary_cta_text: "Register for Fall Kickball",
         primary_cta_action: "info",
         secondary_cta_text: "View Teams",
         secondary_cta_action: "teams",
@@ -1285,7 +1307,7 @@ export const heroContentApi = {
         title: "Building Community Through Inclusive Sports",
         subtitle:
           "Creating an inclusive, welcoming sports community where everyone can play, grow, and belong.",
-        primary_cta_text: "Join Our Community",
+        primary_cta_text: "Register for Fall Kickball",
         primary_cta_action: "signup",
         secondary_cta_text: "Learn More",
         secondary_cta_action: "learn-more",

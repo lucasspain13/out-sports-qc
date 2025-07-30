@@ -14,7 +14,7 @@ const routeToTabMap: Record<string, TabId> = {
   "#fall-kickball-schedule": TabId.SCHEDULE,
   "#summer-kickball-teams": TabId.TEAMS,
   "#fall-kickball-teams": TabId.TEAMS,
-  "#fall-kickball-registration": TabId.REGISTRATION,
+  "#registration": TabId.REGISTRATION,
   // Legacy routes
   "#kickball-schedule": TabId.SCHEDULE,
   "#kickball-teams": TabId.TEAMS,
@@ -25,7 +25,7 @@ const tabToRouteMap: Record<TabId, string> = {
   [TabId.LIVE_SCORES]: "#home",
   [TabId.SCHEDULE]: "#summer-kickball-schedule", // Default to summer kickball schedule
   [TabId.TEAMS]: "#summer-kickball-teams", // Default to summer kickball teams
-  [TabId.REGISTRATION]: "#fall-kickball-registration", // Default to fall kickball registration
+  [TabId.REGISTRATION]: "#registration", // Default to fall kickball registration
 };
 
 export interface AdaptiveNavigationProps extends NavigationProps {

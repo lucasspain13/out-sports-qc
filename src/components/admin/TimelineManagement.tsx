@@ -316,23 +316,23 @@ export const TimelineManagement: React.FC<TimelineManagementProps> = () => {
                   </select>
                 </div>
 
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="milestone-active"
-                    checked={formData.isActive}
-                    onChange={e =>
-                      setFormData({ ...formData, isActive: e.target.checked })
-                    }
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <label
-                    htmlFor="milestone-active"
-                    className="ml-2 block text-sm text-gray-900"
-                  >
-                    Active (visible on timeline)
-                  </label>
-                </div>
+                                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="milestone-active"
+                      checked={Boolean(formData.isActive)}
+                      onChange={e =>
+                        setFormData({ ...formData, isActive: e.target.checked })
+                      }
+                      className="h-4 w-4 text-brand-blue focus:ring-brand-blue border-gray-300 rounded"
+                    />
+                    <label
+                      htmlFor="milestone-active"
+                      className="ml-2 text-sm text-gray-700"
+                    >
+                      Active (visible on timeline)
+                    </label>
+                  </div>
               </div>
 
               <div>

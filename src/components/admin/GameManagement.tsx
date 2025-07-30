@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { gamesApi, locationsApi, teamsApi } from "../../lib/database";
+import { sportsInfoApi } from "../../lib/contentManagement";
 import { supabase } from "../../lib/supabase";
 import { Game, GameLocation, Team } from "../../types";
+import { SportsInfo } from "../../lib/contentManagement";
 
 interface GameFormData {
   homeTeamId: string;
@@ -12,15 +14,18 @@ interface GameFormData {
   sportType: "kickball" | "dodgeball";
   weekNumber: number;
   season: string;
-  status: "scheduled" | "in-progress" | "completed" | "cancelled" | "postponed";
+  year: number;
+  status: "scheduled" | "in-progress" | "completed" | "cancelled" | "postponed" | "archived";
   homeScore?: number;
   awayScore?: number;
+  selectedSportInfo?: SportsInfo; // Store the complete sports info for the selected sport
 }
 
 export const GameManagement: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [locations, setLocations] = useState<GameLocation[]>([]);
+  const [sportsInfo, setSportsInfo] = useState<SportsInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -37,7 +42,8 @@ export const GameManagement: React.FC = () => {
     gameTime: "",
     sportType: "kickball",
     weekNumber: 1,
-    season: "Spring 2024",
+    season: "Summer 2025",
+    year: new Date().getFullYear(),
     status: "scheduled",
   });
 
@@ -48,14 +54,16 @@ export const GameManagement: React.FC = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [gamesData, teamsData, locationsData] = await Promise.all([
+      const [gamesData, teamsData, locationsData, sportsData] = await Promise.all([
         gamesApi.getAll(),
         teamsApi.getAll(),
         locationsApi.getAll(),
+        sportsInfoApi.getAll(),
       ]);
       setGames(gamesData);
       setTeams(teamsData);
       setLocations(locationsData);
+      setSportsInfo(sportsData);
     } catch (err) {
       setError("Failed to load data");
       console.error("Data fetch error:", err);
@@ -81,6 +89,7 @@ export const GameManagement: React.FC = () => {
         sport_type: formData.sportType,
         week_number: formData.weekNumber,
         season: formData.season,
+        year: formData.year,
         status: formData.status,
         home_score:
           formData.homeScore !== undefined ? formData.homeScore : null,
@@ -113,6 +122,13 @@ export const GameManagement: React.FC = () => {
 
   const handleEdit = (game: Game) => {
     setEditingGame(game);
+    // Find the corresponding sports info for this game
+    const correspondingSport = sportsInfo.find(sport => 
+      sport.name === game.sportType && 
+      sport.season === game.season && 
+      sport.year === game.year
+    );
+    
     setFormData({
       homeTeamId: game.homeTeam.id,
       awayTeamId: game.awayTeam.id,
@@ -122,9 +138,11 @@ export const GameManagement: React.FC = () => {
       sportType: game.sportType,
       weekNumber: game.week,
       season: game.season,
+      year: game.year,
       status: game.status,
       homeScore: game.scores?.homeScore,
       awayScore: game.scores?.awayScore,
+      selectedSportInfo: correspondingSport,
     });
     setShowForm(true);
   };
@@ -155,12 +173,47 @@ export const GameManagement: React.FC = () => {
       gameTime: "",
       sportType: "kickball",
       weekNumber: 1,
-      season: "Spring 2024",
+      season: "",
+      year: new Date().getFullYear(),
       status: "scheduled",
+      selectedSportInfo: undefined,
     });
     setEditingGame(null);
     setShowForm(false);
     setError(null);
+  };
+
+  // Archive games by season, year, and sport
+  const archiveGamesByCriteria = async (season: string, year: number, sportType: "kickball" | "dodgeball") => {
+    try {
+      const gamesToArchive = games.filter(
+        game => 
+          game.season === season && 
+          game.year === year && 
+          game.sportType === sportType &&
+          game.status !== "archived"
+      );
+
+      if (gamesToArchive.length === 0) {
+        alert("No games found matching the criteria.");
+        return;
+      }
+
+      const confirmMessage = `Archive ${gamesToArchive.length} games from ${season} ${year} ${sportType}?`;
+      if (!confirm(confirmMessage)) return;
+
+      for (const game of gamesToArchive) {
+        await supabase
+          .from("games")
+          .update({ status: "archived" })
+          .eq("id", game.id);
+      }
+
+      await fetchData();
+      alert(`Successfully archived ${gamesToArchive.length} games.`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to archive games");
+    }
   };
 
   const filteredGames = games.filter(game => {
@@ -175,6 +228,28 @@ export const GameManagement: React.FC = () => {
     team => team.sportType === formData.sportType
   );
 
+  // Get active and coming soon sports for the dropdown
+  const getAvailableSports = () => {
+    return sportsInfo
+      .filter(sport => sport.isActive || sport.comingSoon)
+      .sort((a, b) => {
+        // Sort by year ascending, then season order, then sport name
+        const seasonOrder = { "Spring": 1, "Summer": 2, "Fall": 3, "Winter": 4 };
+        
+        if (a.year !== b.year) {
+          return (a.year || 0) - (b.year || 0);
+        }
+        
+        const seasonA = seasonOrder[a.season as keyof typeof seasonOrder] || 999;
+        const seasonB = seasonOrder[b.season as keyof typeof seasonOrder] || 999;
+        if (seasonA !== seasonB) {
+          return seasonA - seasonB;
+        }
+        
+        return (a.name || "").localeCompare(b.name || "");
+      });
+  };
+
   const getStatusColor = (status: string) => {
     const colors = {
       scheduled: "bg-blue-100 text-blue-800",
@@ -182,6 +257,7 @@ export const GameManagement: React.FC = () => {
       completed: "bg-green-100 text-green-800",
       cancelled: "bg-red-100 text-red-800",
       postponed: "bg-gray-100 text-gray-800",
+      archived: "bg-purple-100 text-purple-800",
     };
     return colors[status as keyof typeof colors] || "bg-gray-100 text-gray-800";
   };
@@ -227,6 +303,7 @@ export const GameManagement: React.FC = () => {
               <option value="completed">Completed</option>
               <option value="cancelled">Cancelled</option>
               <option value="postponed">Postponed</option>
+              <option value="archived">Archived</option>
             </select>
           </div>
           <div>
@@ -257,6 +334,15 @@ export const GameManagement: React.FC = () => {
                   Game
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Season
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Year
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Sport
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Date & Time
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -281,9 +367,24 @@ export const GameManagement: React.FC = () => {
                       <div className="text-sm font-medium text-gray-900">
                         {game.homeTeam.name} vs {game.awayTeam.name}
                       </div>
-                      <div className="text-sm text-gray-500 capitalize">
-                        {game.sportType} • Week {game.week}
+                      <div className="text-sm text-gray-500">
+                        Week {game.week}
                       </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {game.season}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {game.year}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900 capitalize">
+                      {game.sportType}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -371,22 +472,30 @@ export const GameManagement: React.FC = () => {
                     Sport
                   </label>
                   <select
-                    value={formData.sportType}
+                    value={formData.selectedSportInfo?.id || ""}
                     onChange={e => {
-                      const newSportType = e.target.value as
-                        | "kickball"
-                        | "dodgeball";
-                      setFormData({
-                        ...formData,
-                        sportType: newSportType,
-                        homeTeamId: "",
-                        awayTeamId: "",
-                      });
+                      const selectedSport = getAvailableSports().find(sport => sport.id === e.target.value);
+                      if (selectedSport) {
+                        setFormData({
+                          ...formData,
+                          selectedSportInfo: selectedSport,
+                          sportType: selectedSport.name as "kickball" | "dodgeball",
+                          season: selectedSport.season || "",
+                          year: selectedSport.year || new Date().getFullYear(),
+                          homeTeamId: "",
+                          awayTeamId: "",
+                        });
+                      }
                     }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
                   >
-                    <option value="kickball">Kickball</option>
-                    <option value="dodgeball">Dodgeball</option>
+                    <option value="">Select Sport</option>
+                    {getAvailableSports().map(sport => (
+                      <option key={sport.id} value={sport.id}>
+                        {sport.season} {sport.year} {sport.title}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -520,20 +629,6 @@ export const GameManagement: React.FC = () => {
                         ...formData,
                         weekNumber: parseInt(e.target.value),
                       })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Season
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.season}
-                    onChange={e =>
-                      setFormData({ ...formData, season: e.target.value })
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />

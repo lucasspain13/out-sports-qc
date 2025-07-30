@@ -35,7 +35,18 @@ export const getAllTeams = () => teamsApi.getAll();
 export const getKickballTeams = () => teamsApi.getBySport("kickball");
 export const getDodgeballTeams = () => teamsApi.getBySport("dodgeball");
 export const getAllPlayers = () => playersApi.getAll();
-export const getAllLocations = () => Promise.resolve(gameLocations); // Use local file data
+
+// Location functions - use database with fallback to static data
+export const getAllLocations = async () => {
+  try {
+    const dbLocations = await locationsApi.getAll();
+    // If database has locations, use them; otherwise fall back to static data
+    return dbLocations.length > 0 ? dbLocations : gameLocations;
+  } catch (error) {
+    console.warn("Failed to load locations from database, using static data:", error);
+    return gameLocations;
+  }
+};
 export const getAllGames = () => gamesApi.getAll();
 
 // Helper functions that maintain compatibility with existing code

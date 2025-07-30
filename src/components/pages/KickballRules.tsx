@@ -27,7 +27,7 @@ const KickballRules: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            ☄️ Kickball League Rules
+            ☄️ Out Sports Kickball Rules
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Welcome to Out Sports League Kickball! These rules are designed to
@@ -68,8 +68,8 @@ const KickballRules: React.FC = () => {
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Defense:</strong> 11 players on the field at one
-                time (1 pitcher, 1 catcher, 9 fielders)
+                <strong>Defense:</strong> 10 players on the field at one
+                time (1 pitcher, 1 catcher, 8 fielders)
               </span>
             </li>
             <li className="flex items-start">

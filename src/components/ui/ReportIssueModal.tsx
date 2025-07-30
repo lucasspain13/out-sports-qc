@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { websiteFeedbackApi } from "../../lib/websiteFeedback";
 
 interface ReportIssueModalProps {
@@ -13,6 +13,22 @@ const ReportIssueModal: React.FC<ReportIssueModalProps> = ({ isOpen, onClose }) 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Lock/unlock page scrolling when modal opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      // Store the original overflow style
+      const originalOverflow = document.body.style.overflow;
+      
+      // Disable scrolling
+      document.body.style.overflow = 'hidden';
+      
+      // Cleanup function to restore scrolling when modal closes
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
 
   const currentUrl = window.location.href;
 
