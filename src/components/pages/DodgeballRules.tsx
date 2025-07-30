@@ -334,7 +334,7 @@ const DodgeballRules: React.FC = () => {
             community is here to help you learn and have an amazing time.
           </p>
           <p className="text-lime-800 font-medium">
-            Contact us: info@outsportsleague.com
+            Contact us: OutSportsQC@gmail.com
           </p>
         </div>
       </div>

@@ -50,7 +50,7 @@ export const coreValues: CoreValue[] = [
 
 // Contact Information
 export const contactInfo: ContactInfo = {
-  email: "hello@outsportsleague.com",
+  email: "OutSportsQC@gmail.com",
   phone: "(563) 381-0504",
   address: {
     street: "",
