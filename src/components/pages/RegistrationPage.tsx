@@ -225,7 +225,7 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
                 <div className="space-y-3 text-sm">
                   <p className="opacity-90">
                     <strong>After Registration:</strong> We'll send you a
-                    welcome email with team assignments and first game details.
+                    welcome email with team assignments and first game details by August 13.
                   </p>
                   <p className="opacity-90">
                     <strong>Team Formation:</strong> Teams are formed randomly to encourage new friendships and maximize socializing opportunities across our community.

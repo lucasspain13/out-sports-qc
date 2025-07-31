@@ -6,9 +6,6 @@ export interface WaiverFormData {
   participantEmail: string;
   participantPhone: string;
   participantDOB: string;
-  emergencyName: string;
-  emergencyPhone: string;
-  emergencyRelation: string;
   digitalSignature: string;
   acknowledgeTerms: boolean;
   voluntarySignature: boolean;
@@ -21,9 +18,6 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
     participantEmail: '',
     participantPhone: '',
     participantDOB: '',
-    emergencyName: '',
-    emergencyPhone: '',
-    emergencyRelation: '',
     digitalSignature: '',
     acknowledgeTerms: false,
     voluntarySignature: false,
@@ -98,28 +92,6 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
       }
     }
 
-    if (!formData.emergencyName.trim()) {
-      newErrors.emergencyName = 'Emergency contact name is required';
-    }
-
-    // Enhanced emergency phone validation
-    if (!formData.emergencyPhone.trim()) {
-      newErrors.emergencyPhone = 'Emergency contact phone is required';
-    } else {
-      const emergencyPhoneDigits = formData.emergencyPhone.replace(/\D/g, '');
-      if (emergencyPhoneDigits.length < 10) {
-        newErrors.emergencyPhone = 'Emergency contact phone must be at least 10 digits';
-      } else if (emergencyPhoneDigits.length > 11) {
-        newErrors.emergencyPhone = 'Emergency contact phone cannot exceed 11 digits';
-      } else if (emergencyPhoneDigits.length === 11 && !emergencyPhoneDigits.startsWith('1')) {
-        newErrors.emergencyPhone = 'Invalid emergency contact phone format';
-      }
-    }
-
-    if (!formData.emergencyRelation) {
-      newErrors.emergencyRelation = 'Emergency contact relationship is required';
-    }
-
     if (!formData.digitalSignature.trim()) {
       newErrors.digitalSignature = 'Digital signature is required';
     } else {
@@ -171,9 +143,9 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
         participantEmail: formData.participantEmail,
         participantPhone: formData.participantPhone,
         participantDOB: formData.participantDOB,
-        emergencyName: formData.emergencyName,
-        emergencyPhone: formData.emergencyPhone,
-        emergencyRelation: formData.emergencyRelation,
+        emergencyName: '', // No longer collected on waiver forms
+        emergencyPhone: '', // No longer collected on waiver forms
+        emergencyRelation: '', // No longer collected on waiver forms
         isMinor: false, // All participants must be 18+
         guardianName: undefined,
         guardianRelation: undefined,
@@ -193,9 +165,6 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
           participantEmail: '',
           participantPhone: '',
           participantDOB: '',
-          emergencyName: '',
-          emergencyPhone: '',
-          emergencyRelation: '',
           digitalSignature: '',
           acknowledgeTerms: false,
           voluntarySignature: false,
@@ -219,9 +188,6 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
       participantEmail: '',
       participantPhone: '',
       participantDOB: '',
-      emergencyName: '',
-      emergencyPhone: '',
-      emergencyRelation: '',
       digitalSignature: '',
       acknowledgeTerms: false,
       voluntarySignature: false,
