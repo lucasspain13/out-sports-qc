@@ -6,13 +6,13 @@ import LocationMap from "../ui/LocationMap";
 interface GameDetailProps {
   game: Game;
   onBack?: () => void;
-  onTeamSelect?: (teamId: string) => void;
+  // onTeamSelect?: (teamId: string) => void; // Temporarily disabled - teams not clickable
 }
 
 const GameDetail: React.FC<GameDetailProps> = ({
   game,
   onBack,
-  onTeamSelect,
+  // onTeamSelect, // Temporarily disabled - teams not clickable
 }) => {
   const gradientClasses = {
     orange: "bg-gradient-card-orange",
@@ -170,33 +170,33 @@ const GameDetail: React.FC<GameDetailProps> = ({
           {/* Teams Matchup */}
           <div className="p-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-              {/* Away Team */}
+              {/* Home Team */}
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                className={`text-center p-6 rounded-xl cursor-pointer transition-all ${
-                  winner === "away"
+                className={`text-center p-6 rounded-xl transition-all ${
+                  winner === "home"
                     ? "ring-2 ring-green-500 bg-green-50"
                     : "hover:bg-gray-50"
                 }`}
-                onClick={() => onTeamSelect?.(game.awayTeam.id)}
+                // onClick={() => onTeamSelect?.(game.homeTeam.id)} // Temporarily disabled - teams not clickable
               >
                 <div
-                  className={`w-20 h-20 mx-auto mb-4 rounded-full ${awayGradient} flex items-center justify-center`}
+                  className={`w-20 h-20 mx-auto mb-4 rounded-full ${homeGradient} flex items-center justify-center`}
                 >
                   <span className="text-white text-2xl font-bold">
-                    {game.awayTeam.name.charAt(0)}
+                    {game.homeTeam.name.charAt(0)}
                   </span>
                 </div>
                 <h3 className="heading-4 text-gray-900 mb-2">
-                  {game.awayTeam.name}
+                  {game.homeTeam.name}
                 </h3>
-                <p className="text-sm text-gray-600 mb-4">Away Team</p>
+                <p className="text-sm text-gray-600 mb-4">Home Team</p>
                 {game.scores && (
                   <div className="text-4xl font-bold text-gray-900">
-                    {game.scores.awayScore}
+                    {game.scores.homeScore}
                   </div>
                 )}
-                {winner === "away" && (
+                {winner === "home" && (
                   <div className="mt-2 text-green-600 font-medium text-sm">
                     Winner!
                   </div>
@@ -223,33 +223,33 @@ const GameDetail: React.FC<GameDetailProps> = ({
                 )}
               </div>
 
-              {/* Home Team */}
+              {/* Away Team */}
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                className={`text-center p-6 rounded-xl cursor-pointer transition-all ${
-                  winner === "home"
+                className={`text-center p-6 rounded-xl transition-all ${
+                  winner === "away"
                     ? "ring-2 ring-green-500 bg-green-50"
                     : "hover:bg-gray-50"
                 }`}
-                onClick={() => onTeamSelect?.(game.homeTeam.id)}
+                // onClick={() => onTeamSelect?.(game.awayTeam.id)} // Temporarily disabled - teams not clickable
               >
                 <div
-                  className={`w-20 h-20 mx-auto mb-4 rounded-full ${homeGradient} flex items-center justify-center`}
+                  className={`w-20 h-20 mx-auto mb-4 rounded-full ${awayGradient} flex items-center justify-center`}
                 >
                   <span className="text-white text-2xl font-bold">
-                    {game.homeTeam.name.charAt(0)}
+                    {game.awayTeam.name.charAt(0)}
                   </span>
                 </div>
                 <h3 className="heading-4 text-gray-900 mb-2">
-                  {game.homeTeam.name}
+                  {game.awayTeam.name}
                 </h3>
-                <p className="text-sm text-gray-600 mb-4">Home Team</p>
+                <p className="text-sm text-gray-600 mb-4">Away Team</p>
                 {game.scores && (
                   <div className="text-4xl font-bold text-gray-900">
-                    {game.scores.homeScore}
+                    {game.scores.awayScore}
                   </div>
                 )}
-                {winner === "home" && (
+                {winner === "away" && (
                   <div className="mt-2 text-green-600 font-medium text-sm">
                     Winner!
                   </div>
@@ -451,7 +451,7 @@ const GameDetail: React.FC<GameDetailProps> = ({
         >
           <div className="flex items-center justify-center space-x-4">
             <motion.a
-              href={`#${game.sportType}-schedule`}
+              href={`#schedule?sport=${encodeURIComponent(game.sportType.charAt(0).toUpperCase() + game.sportType.slice(1))}&season=${game.season}&year=${game.year}`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="btn-secondary inline-flex items-center"
@@ -471,7 +471,8 @@ const GameDetail: React.FC<GameDetailProps> = ({
               </svg>
               View Full Schedule
             </motion.a>
-            <motion.a
+            {/* TEMPORARILY HIDDEN - View Teams link */}
+            {/* <motion.a
               href={`#${game.sportType}-teams`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -491,7 +492,7 @@ const GameDetail: React.FC<GameDetailProps> = ({
                 />
               </svg>
               View Teams
-            </motion.a>
+            </motion.a> */}
           </div>
         </motion.div>
       </div>

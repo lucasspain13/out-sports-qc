@@ -19,6 +19,12 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
       month: "short",
       day: "numeric",
     });
+    
+    // If start and end dates are the same, show only one date
+    if (start === end) {
+      return start;
+    }
+    
     return `${start} - ${end}`;
   };
 

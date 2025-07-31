@@ -39,7 +39,7 @@ export interface HeroSectionProps {
   title: string;
   subtitle?: string;
   primaryCTA: CTAButton;
-  secondaryCTA: CTAButton;
+  secondaryCTA?: CTAButton; // Made optional for temporary disabling
   backgroundImage?: string;
 }
 

@@ -1,0 +1,6 @@
+# URL redirects for waiver forms
+/liability  /#liability  301
+/photo      /#photo      301
+
+# Catch-all rule for SPA routing
+/*  /index.html  200

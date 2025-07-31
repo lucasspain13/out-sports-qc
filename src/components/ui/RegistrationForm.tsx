@@ -12,7 +12,7 @@ interface FormData {
   firstName: string;
   lastName: string;
   preferredPronouns: string;
-  age: string;
+  dateOfBirth: string;
   email: string;
   phone: string;
   shirtSize: "XS" | "S" | "M" | "L" | "XL" | "XXL" | "3XL" | "4XL";
@@ -22,6 +22,8 @@ interface FormData {
   dietaryRestrictions: string;
   medicalConditions: string;
   agreeToTerms: boolean;
+  agreeToLiabilityWaiver: boolean;
+  agreeToPhotoRelease: boolean;
   agreeToEmailUpdates: boolean;
 }
 
@@ -35,7 +37,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     firstName: "",
     lastName: "",
     preferredPronouns: "",
-    age: "",
+    dateOfBirth: "",
     email: "",
     phone: "",
     shirtSize: "M",
@@ -45,6 +47,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     dietaryRestrictions: "",
     medicalConditions: "",
     agreeToTerms: false,
+    agreeToLiabilityWaiver: false,
+    agreeToPhotoRelease: false,
     agreeToEmailUpdates: false,
   });
 
@@ -103,14 +107,68 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     }
   };
 
+  // Calculate age from date of birth
+  const calculateAge = (dateOfBirth: string): number => {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    
+    return age;
+  };
+
+  // Get maximum date for 18+ validation (18 years ago)
+  const getMaxBirthDate = () => {
+    const today = new Date();
+    const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+    return maxDate.toISOString().split('T')[0];
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.agreeToTerms) {
+    // Validate required waiver agreements
+    if (!formData.agreeToLiabilityWaiver) {
       showNotification({
         type: "error",
-        title: "Agreement Required",
-        message: "Please agree to the terms and conditions to continue.",
+        title: "Liability Waiver Required",
+        message: "You must agree to submit the liability waiver to participate.",
+        duration: 5000,
+      });
+      return;
+    }
+
+    if (!formData.agreeToPhotoRelease) {
+      showNotification({
+        type: "error",
+        title: "Photo Release Required",
+        message: "You must agree to submit the photo release waiver to participate.",
+        duration: 5000,
+      });
+      return;
+    }
+
+    // Validate date of birth (must be 18 or older)
+    if (!formData.dateOfBirth) {
+      showNotification({
+        type: "error",
+        title: "Date of Birth Required",
+        message: "Please enter your date of birth.",
+        duration: 5000,
+      });
+      return;
+    }
+
+    const age = calculateAge(formData.dateOfBirth);
+    if (age < 18) {
+      showNotification({
+        type: "error",
+        title: "Age Requirement",
+        message: "You must be 18 or older to participate in our leagues.",
         duration: 5000,
       });
       return;
@@ -140,13 +198,16 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     setLoading(true);
 
     try {
+      const calculatedAge = calculateAge(formData.dateOfBirth);
+      
       const { error } = await supabase.from("player_registrations").insert([
         {
           sport_type: sportType,
           first_name: formData.firstName,
           last_name: formData.lastName,
           preferred_pronouns: formData.preferredPronouns,
-          age: parseInt(formData.age),
+          age: calculatedAge,
+          date_of_birth: formData.dateOfBirth,
           email: formData.email.toLowerCase(),
           phone: formData.phone,
           shirt_size: formData.shirtSize,
@@ -155,7 +216,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
           team_request: formData.teamRequest || null,
           dietary_restrictions: formData.dietaryRestrictions || null,
           medical_conditions: formData.medicalConditions || null,
-          agree_to_terms: formData.agreeToTerms,
+          agree_to_terms: true, // Default to true since checkbox is removed
           agree_to_email_updates: formData.agreeToEmailUpdates,
           registration_date: new Date().toISOString(),
         },
@@ -175,7 +236,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         firstName: "",
         lastName: "",
         preferredPronouns: "",
-        age: "",
+        dateOfBirth: "",
         email: "",
         phone: "",
         shirtSize: "M",
@@ -185,6 +246,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         dietaryRestrictions: "",
         medicalConditions: "",
         agreeToTerms: false,
+        agreeToLiabilityWaiver: false,
+        agreeToPhotoRelease: false,
         agreeToEmailUpdates: false,
       });
 
@@ -271,18 +334,19 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Age (required)
+              Date of Birth (required)
             </label>
             <input
-              type="number"
-              min="18"
-              max="100"
-              value={formData.age}
-              onChange={e => handleInputChange("age", e.target.value)}
+              type="date"
+              max={getMaxBirthDate()}
+              value={formData.dateOfBirth}
+              onChange={e => handleInputChange("dateOfBirth", e.target.value)}
               className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all duration-300"
-              placeholder="Enter your age"
               required
             />
+            <p className="text-xs text-gray-500 mt-1">
+              You must be 18 or older to participate
+            </p>
           </div>
 
           <div>
@@ -420,21 +484,54 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         <div className="flex items-start">
           <input
             type="checkbox"
-            id="agreeToTerms"
-            checked={formData.agreeToTerms}
-            onChange={e => handleInputChange("agreeToTerms", e.target.checked)}
+            id="agreeToLiabilityWaiver"
+            checked={formData.agreeToLiabilityWaiver}
+            onChange={e =>
+              handleInputChange("agreeToLiabilityWaiver", e.target.checked)
+            }
             className="mt-1 h-4 w-4 text-brand-blue focus:ring-brand-blue focus:ring-offset-0 rounded"
           />
-          <label htmlFor="agreeToTerms" className="ml-3 text-sm text-gray-600">
-            I agree to the{" "}
+          <label
+            htmlFor="agreeToLiabilityWaiver"
+            className="ml-3 text-sm text-gray-600"
+          >
+            I agree to submit the{" "}
             <a
-              href="#terms"
-              className="text-brand-blue hover:text-brand-blue-dark font-medium"
+              href="/liability"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand-blue hover:text-brand-blue-dark font-medium underline"
             >
-              Terms and Conditions
+              Liability Waiver
             </a>{" "}
-            and understand the risks associated with participating in{" "}
-            {sportDisplayName.toLowerCase()} activities. (required)
+            before participating in league activities. (required)
+          </label>
+        </div>
+
+        <div className="flex items-start">
+          <input
+            type="checkbox"
+            id="agreeToPhotoRelease"
+            checked={formData.agreeToPhotoRelease}
+            onChange={e =>
+              handleInputChange("agreeToPhotoRelease", e.target.checked)
+            }
+            className="mt-1 h-4 w-4 text-brand-blue focus:ring-brand-blue focus:ring-offset-0 rounded"
+          />
+          <label
+            htmlFor="agreeToPhotoRelease"
+            className="ml-3 text-sm text-gray-600"
+          >
+            I agree to submit the{" "}
+            <a
+              href="/photo"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand-blue hover:text-brand-blue-dark font-medium underline"
+            >
+              Photo Release Waiver
+            </a>{" "}
+            before participating in league activities. (required)
           </label>
         </div>
 

@@ -64,13 +64,9 @@ export const SportProvider: React.FC<SportProviderProps> = ({ children, currentR
             currentYear = yearParam;
             sportData = foundSport;
           } else {
-            // Invalid parameters - redirect to homepage
-            console.warn(`Invalid sport parameters: "${targetName}" not found. Available sports:`, 
-              sportsInfo.data.map(s => s.name).join(', '));
-            setTimeout(() => {
-              window.location.hash = '#home';
-            }, 0);
-            return;
+            // Invalid parameters but don't redirect - fall back to defaults
+            console.warn(`Sport "${targetName}" not found. Using fallback sport for ${currentRoute}.`);
+            // Continue to fallback logic below
           }
         } else {
           // Fallback to finding appropriate sport based on route type

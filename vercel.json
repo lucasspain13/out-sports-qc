@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/liability",
+      "destination": "/#liability"
+    },
+    {
+      "source": "/photo", 
+      "destination": "/#photo"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

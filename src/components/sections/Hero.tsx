@@ -83,15 +83,17 @@ const Hero: React.FC<HeroSectionProps> = ({
               {primaryCTA.text}
             </Button>
 
-            <Button
-              variant={secondaryCTA.variant}
-              size="large"
-              href={secondaryCTA.href}
-              onClick={secondaryCTA.onClick}
-              className="w-full sm:w-auto"
-            >
-              {secondaryCTA.text}
-            </Button>
+            {secondaryCTA && (
+              <Button
+                variant={secondaryCTA.variant}
+                size="large"
+                href={secondaryCTA.href}
+                onClick={secondaryCTA.onClick}
+                className="w-full sm:w-auto"
+              >
+                {secondaryCTA.text}
+              </Button>
+            )}
           </motion.div>
         </motion.div>
       </div>

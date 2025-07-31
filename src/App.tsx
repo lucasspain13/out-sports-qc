@@ -8,7 +8,7 @@ import {
   AdminLogin,
   AnimationDemo,
   GameDetail,
-  GeneralInfoPage,
+  // GeneralInfoPage, // Temporarily disabled
   KickballRules,
   LeagueRules,
   LiabilityWaiverPage,
@@ -214,6 +214,29 @@ function AppContent() {
       }
     };
 
+    // Handle direct URL navigation on app load
+    const handleInitialNavigation = () => {
+      const currentPath = window.location.pathname;
+      
+      // Handle direct waiver URLs
+      if (currentPath === '/liability') {
+        window.location.hash = '#liability';
+        return;
+      }
+      if (currentPath === '/photo') {
+        window.location.hash = '#photo';
+        return;
+      }
+      
+      // If no hash exists, set default
+      if (!window.location.hash) {
+        window.location.hash = '#home';
+      }
+    };
+
+    // Check for direct URL navigation first
+    handleInitialNavigation();
+    
     // Set initial route
     handleHashChange();
 
@@ -435,18 +458,18 @@ function AppContent() {
       return <AdminDashboard />;
     }
 
-    // General Info page
-    if (currentRoute === "#info") {
-      return <GeneralInfoPage />;
-    }
+    // General Info page - TEMPORARILY DISABLED
+    // if (currentRoute === "#info") {
+    //   return <GeneralInfoPage />;
+    // }
 
     // Liability Waiver page
-    if (currentRoute === "#liability-waiver") {
+    if (currentRoute === "#liability-waiver" || currentRoute === "#liability") {
       return <LiabilityWaiverPage />;
     }
 
     // Photo Waiver page
-    if (currentRoute === "#photo-waiver") {
+    if (currentRoute === "#photo-waiver" || currentRoute === "#photo") {
       return <PhotoWaiverPage />;
     }
 

@@ -1,0 +1,13 @@
+# URL rewrites for waiver forms
+RewriteEngine On
+
+# Redirect /liability to /#liability
+RewriteRule ^liability/?$ /#liability [R=301,L]
+
+# Redirect /photo to /#photo  
+RewriteRule ^photo/?$ /#photo [R=301,L]
+
+# Handle client-side routing
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]

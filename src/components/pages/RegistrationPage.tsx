@@ -185,7 +185,7 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
 
             {/* League Information Sidebar */}
             <div className="space-y-8">
-              {/* League Highlights */}
+              {/* Questions */}
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -193,50 +193,21 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
                 className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
               >
                 <h3 className="heading-4 text-gray-900 mb-4 flex items-center">
-                  <span className="text-2xl mr-3">✨</span>
-                  League Highlights
+                  <span className="text-2xl mr-3">💬</span>
+                  Questions?
                 </h3>
-                <ul className="space-y-3">
-                  {currentSport.highlights.map((highlight, index) => (
-                    <li key={index} className="flex items-start">
-                      <span className="text-lg mr-3">
-                        {highlight.split(" ")[0]}
-                      </span>
-                      <span className="text-gray-700 text-sm leading-relaxed">
-                        {highlight.substring(highlight.indexOf(" ") + 1)}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-
-              {/* Season Information */}
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
-              >
-                <h3 className="heading-4 text-gray-900 mb-4 flex items-center">
-                  <span className="text-2xl mr-3">📅</span>
-                  Season Details
-                </h3>
-                <div className="space-y-4">
-                  {Object.entries(currentSport.gameDetails).map(
-                    ([key, value]) => (
-                      <div
-                        key={key}
-                        className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0"
-                      >
-                        <span className="font-medium text-gray-600 capitalize text-sm">
-                          {key.replace(/([A-Z])/g, " $1").trim()}:
-                        </span>
-                        <span className="font-semibold text-gray-900 text-sm">
-                          {value}
-                        </span>
-                      </div>
-                    )
-                  )}
+                <div className="space-y-3 text-sm">
+                  <p className="text-gray-600">
+                    Have questions about the league? We're here to help!
+                  </p>
+                  <div className="space-y-2">
+                    <div className="text-brand-blue font-medium">
+                      Travis Stanger: 563-381-0504
+                    </div>
+                    <div className="text-brand-blue font-medium">
+                      Admin Email: OutSportsQC@gmail.com
+                    </div>
+                  </div>
                 </div>
               </motion.div>
 
@@ -244,7 +215,7 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
                 className={`bg-gradient-to-br ${colors.gradient} text-white rounded-2xl shadow-lg p-6`}
               >
                 <h3 className="heading-4 mb-4 flex items-center">
@@ -270,7 +241,32 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
                 </div>
               </motion.div>
 
-              {/* Contact Information */}
+              {/* League Highlights */}
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
+              >
+                <h3 className="heading-4 text-gray-900 mb-4 flex items-center">
+                  <span className="text-2xl mr-3">✨</span>
+                  League Highlights
+                </h3>
+                <ul className="space-y-3">
+                  {currentSport.highlights.map((highlight, index) => (
+                    <li key={index} className="flex items-start">
+                      <span className="text-lg mr-3">
+                        {highlight.split(" ")[0]}
+                      </span>
+                      <span className="text-gray-700 text-sm leading-relaxed">
+                        {highlight.substring(highlight.indexOf(" ") + 1)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+
+              {/* Season Information */}
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -278,21 +274,25 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
                 className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
               >
                 <h3 className="heading-4 text-gray-900 mb-4 flex items-center">
-                  <span className="text-2xl mr-3">💬</span>
-                  Questions?
+                  <span className="text-2xl mr-3">�</span>
+                  Season Details
                 </h3>
-                <div className="space-y-3 text-sm">
-                  <p className="text-gray-600">
-                    Have questions about the league? We're here to help!
-                  </p>
-                  <div className="space-y-2">
-                    <div className="text-brand-blue font-medium">
-                      Travis Stanger: 563-381-0504
-                    </div>
-                    <div className="text-brand-blue font-medium">
-                      Admin Email: OutSportsQC@gmail.com
-                    </div>
-                  </div>
+                <div className="space-y-4">
+                  {Object.entries(currentSport.gameDetails).map(
+                    ([key, value]) => (
+                      <div
+                        key={key}
+                        className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0"
+                      >
+                        <span className="font-medium text-gray-600 capitalize text-sm">
+                          {key.replace(/([A-Z])/g, " $1").trim()}:
+                        </span>
+                        <span className="font-semibold text-gray-900 text-sm">
+                          {value}
+                        </span>
+                      </div>
+                    )
+                  )}
                 </div>
               </motion.div>
             </div>

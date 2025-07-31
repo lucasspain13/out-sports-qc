@@ -123,3 +123,24 @@ export const navigateToSchedule = (sportType: string) => {
 export const navigateToRules = (sportType: string) => {
   navigateTo(`${sportType}-rules`);
 };
+
+/**
+ * Navigate to liability waiver page
+ */
+export const navigateToLiabilityWaiver = () => {
+  navigateTo("liability");
+};
+
+/**
+ * Navigate to photo release waiver page
+ */
+export const navigateToPhotoWaiver = () => {
+  navigateTo("photo");
+};
+
+/**
+ * Navigate to general info page
+ */
+export const navigateToGeneralInfo = () => {
+  navigateTo("info");
+};

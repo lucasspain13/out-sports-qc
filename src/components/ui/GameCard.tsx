@@ -133,37 +133,6 @@ const GameCard: React.FC<GameCardProps> = ({
         {/* Teams Matchup */}
         <div className="flex-1 min-h-0">
           <div className="space-y-2">
-            {/* Away Team */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
-                <div
-                  className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full ${awayGradient} flex items-center justify-center flex-shrink-0`}
-                >
-                  <span className="text-white text-xs font-bold">
-                    {game.awayTeam.name.charAt(0)}
-                  </span>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-gray-900 text-sm sm:text-base truncate">
-                    {game.awayTeam.name}
-                  </div>
-                  <div className="text-xs text-gray-500">Away</div>
-                </div>
-              </div>
-              {showScore && game.scores && (
-                <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 flex-shrink-0">
-                  {game.scores.awayScore}
-                </div>
-              )}
-            </div>
-
-            {/* VS Divider */}
-            <div className="flex items-center justify-center py-1">
-              <div className="text-xs text-gray-400 font-medium bg-gray-100 px-2 py-1 rounded">
-                VS
-              </div>
-            </div>
-
             {/* Home Team */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
@@ -184,6 +153,37 @@ const GameCard: React.FC<GameCardProps> = ({
               {showScore && game.scores && (
                 <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 flex-shrink-0">
                   {game.scores.homeScore}
+                </div>
+              )}
+            </div>
+
+            {/* VS Divider */}
+            <div className="flex items-center justify-center py-1">
+              <div className="text-xs text-gray-400 font-medium bg-gray-100 px-2 py-1 rounded">
+                VS
+              </div>
+            </div>
+
+            {/* Away Team */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+                <div
+                  className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full ${awayGradient} flex items-center justify-center flex-shrink-0`}
+                >
+                  <span className="text-white text-xs font-bold">
+                    {game.awayTeam.name.charAt(0)}
+                  </span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="font-semibold text-gray-900 text-sm sm:text-base truncate">
+                    {game.awayTeam.name}
+                  </div>
+                  <div className="text-xs text-gray-500">Away</div>
+                </div>
+              </div>
+              {showScore && game.scores && (
+                <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 flex-shrink-0">
+                  {game.scores.awayScore}
                 </div>
               )}
             </div>

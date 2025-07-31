@@ -247,11 +247,12 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
                 variant: "primary",
                 href: "#registration",
               }}
-              secondaryCTA={{
-                text: heroContent.data?.secondaryCtaText || "Learn More",
-                variant: "secondary",
-                href: "#info",
-              }}
+              // TEMPORARILY DISABLED - Learn More secondary CTA
+              // secondaryCTA={{
+              //   text: heroContent.data?.secondaryCtaText || "Learn More",
+              //   variant: "secondary",
+              //   href: "#info",
+              // }}
               backgroundImage={heroContent.data?.backgroundImageUrl}
             />
           )}

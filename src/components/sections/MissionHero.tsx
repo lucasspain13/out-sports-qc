@@ -8,14 +8,14 @@ interface MissionHeroProps {
   leagueInfo: LeagueInfo;
   onJoinClick?: () => void;
   className?: string;
-  showLearnMore?: boolean;
+  // showLearnMore?: boolean; // Temporarily disabled
 }
 
 const MissionHero: React.FC<MissionHeroProps> = ({
   leagueInfo,
   onJoinClick,
   className = "",
-  showLearnMore = false,
+  // showLearnMore = false, // Temporarily disabled
 }) => {
   // Get completed games count from database
   const { games, loading: gamesLoading } = useGames();
@@ -170,7 +170,8 @@ const MissionHero: React.FC<MissionHeroProps> = ({
               Register for Fall Kickball
             </Button>
 
-            {showLearnMore && (
+            {/* TEMPORARILY DISABLED - Learn More button */}
+            {/* {showLearnMore && (
               <Button
                 variant="outline"
                 size="large"
@@ -179,7 +180,7 @@ const MissionHero: React.FC<MissionHeroProps> = ({
               >
                 Learn More
               </Button>
-            )}
+            )} */}
           </motion.div>
         </motion.div>
       </div>

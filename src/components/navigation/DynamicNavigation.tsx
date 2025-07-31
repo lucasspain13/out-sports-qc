@@ -18,14 +18,14 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
     const staticItems: MenuItem[] = [
       { label: "Home", href: "#home", isActive: currentRoute === "#home" },
       {
-        label: "General Info",
+        label: "General",
         hasDropdown: true,
         isActive: currentRoute === "#info" || currentRoute === "#league-rules" || currentRoute === "#liability-waiver" || currentRoute === "#photo-waiver",
         dropdownItems: [
-          { label: "About Us", href: "#info" },
+          // { label: "About Us", href: "#info" }, // Temporarily disabled
           { label: "League Rules", href: "#league-rules" },
           { label: "General Liability Waiver", href: "#liability-waiver" },
-          { label: "Photo Waiver", href: "#photo-waiver" },
+          { label: "Photo Release Waiver", href: "#photo-waiver" },
         ],
       },
     ];
@@ -41,7 +41,7 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
           dropdownItems: [
             { label: "Kickball Rules", href: "#kickball-rules" },
             { label: "Summer 2025 Schedule", href: "#schedule" },
-            { label: "Summer 2025 Teams", href: "#teams" },
+            // { label: "Summer 2025 Teams", href: "#teams" }, // Temporarily hidden
             { label: "Fall 2025 Registration", href: "#registration" },
           ],
         },
@@ -93,8 +93,8 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
         const nameWithoutSport = activeSport.name.replace(` ${sportName}`, '');
         const [season, year] = nameWithoutSport.split(' ');
         dropdownItems.push(
-          { label: `${nameWithoutSport} Schedule`, href: `#schedule?sport=${encodeURIComponent(sportName)}&season=${season}&year=${year}` },
-          { label: `${nameWithoutSport} Teams`, href: `#teams?sport=${encodeURIComponent(sportName)}&season=${season}&year=${year}` }
+          { label: `${nameWithoutSport} Schedule`, href: `#schedule?sport=${encodeURIComponent(sportName)}&season=${season}&year=${year}` }
+          // { label: `${nameWithoutSport} Teams`, href: `#teams?sport=${encodeURIComponent(sportName)}&season=${season}&year=${year}` } // Temporarily hidden
         );
       }
       
