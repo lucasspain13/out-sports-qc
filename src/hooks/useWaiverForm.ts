@@ -3,8 +3,6 @@ import { waiverService, WaiverSignatureData, WaiverSubmissionResponse } from '..
 
 export interface WaiverFormData {
   participantName: string;
-  participantEmail: string;
-  participantPhone: string;
   participantDOB: string;
   digitalSignature: string;
   acknowledgeTerms: boolean;
@@ -15,8 +13,6 @@ export interface WaiverFormData {
 export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
   const [formData, setFormData] = useState<WaiverFormData>({
     participantName: '',
-    participantEmail: '',
-    participantPhone: '',
     participantDOB: '',
     digitalSignature: '',
     acknowledgeTerms: false,
@@ -46,31 +42,6 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
       const nameParts = formData.participantName.trim().split(/\s+/);
       if (nameParts.length < 2 || nameParts.some(part => part.length < 1)) {
         newErrors.participantName = 'Please enter your full name (first and last name)';
-      }
-    }
-
-    // Enhanced email validation
-    if (!formData.participantEmail.trim()) {
-      newErrors.participantEmail = 'Email address is required';
-    } else {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.participantEmail)) {
-        newErrors.participantEmail = 'Please enter a valid email address';
-      }
-    }
-
-    // Enhanced phone validation
-    if (!formData.participantPhone.trim()) {
-      newErrors.participantPhone = 'Phone number is required';
-    } else {
-      // Remove all non-digits for validation
-      const phoneDigits = formData.participantPhone.replace(/\D/g, '');
-      if (phoneDigits.length < 10) {
-        newErrors.participantPhone = 'Phone number must be at least 10 digits';
-      } else if (phoneDigits.length > 11) {
-        newErrors.participantPhone = 'Phone number cannot exceed 11 digits';
-      } else if (phoneDigits.length === 11 && !phoneDigits.startsWith('1')) {
-        newErrors.participantPhone = 'Invalid 11-digit phone number format';
       }
     }
 
@@ -140,8 +111,8 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
       const waiverData: WaiverSignatureData = {
         waiverType,
         participantName: formData.participantName,
-        participantEmail: formData.participantEmail,
-        participantPhone: formData.participantPhone,
+        participantEmail: '', // No longer collected on waiver forms
+        participantPhone: '', // No longer collected on waiver forms
         participantDOB: formData.participantDOB,
         emergencyName: '', // No longer collected on waiver forms
         emergencyPhone: '', // No longer collected on waiver forms
@@ -162,8 +133,6 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
         // Clear form on successful submission
         setFormData({
           participantName: '',
-          participantEmail: '',
-          participantPhone: '',
           participantDOB: '',
           digitalSignature: '',
           acknowledgeTerms: false,
@@ -185,8 +154,6 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
   const clearForm = () => {
     setFormData({
       participantName: '',
-      participantEmail: '',
-      participantPhone: '',
       participantDOB: '',
       digitalSignature: '',
       acknowledgeTerms: false,

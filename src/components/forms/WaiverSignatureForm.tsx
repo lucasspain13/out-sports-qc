@@ -24,29 +24,6 @@ const WaiverSignatureForm: React.FC<WaiverSignatureFormProps> = ({ waiverType, w
     return maxDate.toISOString().split('T')[0];
   };
 
-  // Format phone number as user types
-  const formatPhoneNumber = (value: string) => {
-    // Remove all non-digit characters
-    const phoneNumber = value.replace(/\D/g, '');
-    
-    // Format as (XXX) XXX-XXXX
-    if (phoneNumber.length <= 3) {
-      return phoneNumber;
-    } else if (phoneNumber.length <= 6) {
-      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-    } else if (phoneNumber.length <= 10) {
-      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}`;
-    } else {
-      // Handle 11-digit numbers (with country code)
-      return `+${phoneNumber.slice(0, 1)} (${phoneNumber.slice(1, 4)}) ${phoneNumber.slice(4, 7)}-${phoneNumber.slice(7, 11)}`;
-    }
-  };
-
-  const handlePhoneChange = (field: 'participantPhone' | 'emergencyPhone', value: string) => {
-    const formattedPhone = formatPhoneNumber(value);
-    updateFormData(field, formattedPhone);
-  };
-
   const getButtonColor = () => {
     return 'bg-blue-600 hover:bg-blue-700';
   };
@@ -108,49 +85,6 @@ const WaiverSignatureForm: React.FC<WaiverSignatureFormProps> = ({ waiverType, w
             />
             {errors.participantName && (
               <p className="text-red-600 text-sm mt-1">{errors.participantName}</p>
-            )}
-          </div>
-          <div>
-            <label htmlFor="participantEmail" className="block text-sm font-semibold text-gray-900 mb-2">
-              Email Address (required)
-            </label>
-            <input
-              type="email"
-              id="participantEmail"
-              name="participantEmail"
-              required
-              value={formData.participantEmail}
-              onChange={(e) => updateFormData('participantEmail', e.target.value)}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-                errors.participantEmail ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
-              placeholder="Enter email address"
-            />
-            {errors.participantEmail && (
-              <p className="text-red-600 text-sm mt-1">{errors.participantEmail}</p>
-            )}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="participantPhone" className="block text-sm font-semibold text-gray-900 mb-2">
-              Phone Number (required)
-            </label>
-            <input
-              type="tel"
-              id="participantPhone"
-              name="participantPhone"
-              required
-              value={formData.participantPhone}
-              onChange={(e) => handlePhoneChange('participantPhone', e.target.value)}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-                errors.participantPhone ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
-              placeholder="(555) 123-4567"
-            />
-            {errors.participantPhone && (
-              <p className="text-red-600 text-sm mt-1">{errors.participantPhone}</p>
             )}
           </div>
           <div>

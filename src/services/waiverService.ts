@@ -47,12 +47,12 @@ class WaiverService {
         waiver_type: data.waiverType,
         waiver_version: '1.0',
         participant_name: data.participantName.trim(),
-        participant_email: data.participantEmail.trim().toLowerCase(),
-        participant_phone: data.participantPhone.trim(),
+        participant_email: data.participantEmail?.trim().toLowerCase() || null,
+        participant_phone: data.participantPhone?.trim() || null,
         participant_dob: data.participantDOB,
-        emergency_name: data.emergencyName.trim(),
-        emergency_phone: data.emergencyPhone.trim(),
-        emergency_relation: data.emergencyRelation,
+        emergency_name: data.emergencyName?.trim() || null,
+        emergency_phone: data.emergencyPhone?.trim() || null,
+        emergency_relation: data.emergencyRelation || null,
         is_minor: data.isMinor,
         guardian_name: data.guardianName?.trim() || null,
         guardian_relation: data.guardianRelation || null,
@@ -150,15 +150,10 @@ class WaiverService {
    * Validate waiver data
    */
   private validateWaiverData(data: WaiverSignatureData): boolean {
-    // Check required fields
+    // Check required fields (only name, DOB, and signature are required now)
     const requiredFields = [
       data.participantName,
-      data.participantEmail,
-      data.participantPhone,
       data.participantDOB,
-      data.emergencyName,
-      data.emergencyPhone,
-      data.emergencyRelation,
       data.digitalSignature
     ];
 
@@ -171,10 +166,12 @@ class WaiverService {
       return false;
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.participantEmail)) {
-      return false;
+    // Validate email format only if provided
+    if (data.participantEmail && data.participantEmail.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.participantEmail)) {
+        return false;
+      }
     }
 
     // Validate digital signature matches participant name
