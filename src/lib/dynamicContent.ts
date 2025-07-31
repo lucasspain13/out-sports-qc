@@ -26,7 +26,7 @@ import {
 
 // Cache management
 const cache = new Map<string, { data: any; timestamp: number }>();
-const CACHE_DURATION = 1000; // 1 second for testing
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 function getCacheKey(key: string, params?: any): string {
   return params ? `${key}_${JSON.stringify(params)}` : key;
@@ -330,7 +330,6 @@ export async function getSportsInfo(): Promise<SportsInfo[]> {
 
   try {
     const data = await sportsInfoApi.getAll();
-    console.log("🔍 Fresh sports data loaded:", data.map(s => ({ name: s.name, gradient: s.gradient })));
     setCache(cacheKey, data);
     return data;
   } catch (error) {
