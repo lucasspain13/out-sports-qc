@@ -64,18 +64,18 @@ const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
         {/* Content */}
         <div className="relative z-10">
           {/* Sport Name */}
-          <h3 className="card-title mb-3 text-shadow">
+          <h3 className="text-xl sm:text-2xl font-bold mb-3 text-white drop-shadow-lg">
             {sport.title || sport.name}
           </h3>
 
           {/* Description */}
-          <p className="body-base mb-4 text-white/90 text-shadow">
+          <p className="text-sm sm:text-base mb-4 text-white/95 drop-shadow-md leading-relaxed">
             {sport.description}
           </p>
 
           {/* Stats */}
           <div className="flex items-center justify-between text-sm">
-            {sport.participants && (
+            {sport.participants && sport.participants > 0 && (
               <div className="flex items-center space-x-1">
                 <svg
                   className="w-4 h-4"
@@ -100,22 +100,6 @@ const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
               </div>
             )}
           </div>
-
-          {/* Features */}
-          {sport.features && sport.features.length > 0 && (
-            <div className="mt-4 pt-4 border-t border-white/20">
-              <div className="flex flex-wrap gap-2">
-                {sport.features.slice(0, 3).map((feature, index) => (
-                  <span
-                    key={index}
-                    className="text-xs bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full"
-                  >
-                    {feature}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Hover Arrow - Hidden for coming soon */}

@@ -274,7 +274,7 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
                 className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
               >
                 <h3 className="heading-4 text-gray-900 mb-4 flex items-center">
-                  <span className="text-2xl mr-3">�</span>
+                  <span className="text-2xl mr-3">📅</span>
                   Season Details
                 </h3>
                 <div className="space-y-4">

@@ -139,11 +139,6 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
           gradient: "orange" as const,
           participants: 62,
           nextGame: nextKickballGame,
-          features: [
-            "All skill levels welcome",
-            "Equipment provided",
-            "Weekend games",
-          ],
           totalTeams: 4,
           rosterPath: "#schedule?sport=Kickball&season=Summer&year=2025",
           comingSoon: false,
@@ -154,7 +149,6 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
           description:
             "Fast-paced indoor fun that emphasizes strategy, teamwork, and quick reflexes. Our modified rules ensure everyone gets to play and have a great time regardless of athletic background.",
           gradient: "green" as const,
-          participants: 140,
           features: [
             "Beginner to advanced",
             "Indoor play",
@@ -176,7 +170,7 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
       title: sport.title,
       description: sport.description,
       gradient: sport.gradient as "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan",
-      participants: sport.participants || 0,
+      participants: sport.comingSoon ? 0 : sport.participants || 0,
       nextGame: sport.nextGame ? (() => {
         try {
           // Handle different date formats properly
@@ -199,7 +193,6 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
           return undefined;
         }
       })() : undefined,
-      features: sport.features || [],
       totalTeams: sport.totalTeams || 0,
       // Fix routing path to use simple #teams instead of complex generated paths
       rosterPath: sport.comingSoon ? "#registration" : "#teams",
