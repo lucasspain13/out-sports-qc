@@ -234,8 +234,13 @@ const LeagueRules: React.FC = () => {
           <p className="text-green-800">
             Questions about these rules? Need clarification on anything? We're
             here to help! Contact us at{" "}
-            <strong>OutSportsQC@gmail.com</strong> or reach out to any league
-            organizer.
+            <a 
+              href="mailto:OutSportsQC@gmail.com"
+              className="font-bold text-blue-600 underline hover:text-blue-800 transition-colors duration-200"
+            >
+              OutSportsQC@gmail.com
+            </a>{" "}
+            or reach out to any league organizer.
           </p>
         </div>
 
@@ -246,10 +251,22 @@ const LeagueRules: React.FC = () => {
           </p>
           <div className="space-y-1">
             <p className="text-blue-600 font-medium">
-              📧 Email: OutSportsQC@gmail.com
+              📧 Email: 
+              <a 
+                href="mailto:OutSportsQC@gmail.com"
+                className="ml-1 underline hover:text-blue-800 transition-colors duration-200"
+              >
+                OutSportsQC@gmail.com
+              </a>
             </p>
             <p className="text-blue-600 font-medium">
-              📞 Phone: Travis Stanger - 563-381-0504
+              📞 Phone: 
+              <a 
+                href="tel:+15633810504"
+                className="ml-1 underline hover:text-blue-800 transition-colors duration-200"
+              >
+                Travis Stanger - 563-381-0504
+              </a>
             </p>
           </div>
         </div>

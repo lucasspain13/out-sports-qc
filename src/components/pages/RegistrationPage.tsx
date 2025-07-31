@@ -202,10 +202,21 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
                   </p>
                   <div className="space-y-2">
                     <div className="text-brand-blue font-medium">
-                      Travis Stanger: 563-381-0504
+                      <a 
+                        href="tel:+15633810504"
+                        className="underline hover:text-blue-800 transition-colors duration-200"
+                      >
+                        Travis Stanger: 563-381-0504
+                      </a>
                     </div>
                     <div className="text-brand-blue font-medium">
-                      Admin Email: OutSportsQC@gmail.com
+                      Admin Email: 
+                      <a 
+                        href="mailto:OutSportsQC@gmail.com"
+                        className="ml-1 underline hover:text-blue-800 transition-colors duration-200"
+                      >
+                        OutSportsQC@gmail.com
+                      </a>
                     </div>
                   </div>
                 </div>

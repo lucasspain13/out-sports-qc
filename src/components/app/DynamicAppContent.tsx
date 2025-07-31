@@ -25,12 +25,14 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
 
   // Handle sport card clicks
   const handleSportClick = (sport: SportInfo) => {
-    console.log('🎯 Sport clicked:', sport.name, 'comingSoon:', sport.comingSoon, 'rosterPath:', sport.rosterPath);
+    // Special routing for Summer 2025 Kickball - goes to schedule instead of teams
+    if (sport.name === 'Summer 2025 Kickball') {
+      navigateTo('#schedule');
+      return;
+    }
+    
     if (sport.rosterPath) {
-      console.log('🚀 Navigating to:', sport.rosterPath);
       navigateTo(sport.rosterPath);
-    } else {
-      console.log('❌ No rosterPath found for sport:', sport.name);
     }
   };
 
@@ -78,56 +80,6 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
       // Fallback if no scheduled game found
       if (!nextKickballGame) {
         nextKickballGame = new Date(2025, 7, 3); // August 3, 2025
-      }
-      
-      // Debug logging in development  
-      if (import.meta.env.DEV) {
-        console.log('📊 Current date:', currentDate.toLocaleDateString('en-US', { 
-          month: 'short', 
-          day: 'numeric',
-          year: 'numeric',
-          weekday: 'short'
-        }));
-        console.log('📊 Kickball schedule weeks:', kickballSchedule.weeks.length);
-        
-        // Show all kickball games with detailed info
-        const allKickballGames: any[] = [];
-        kickballSchedule.weeks.forEach(week => {
-          week.games.forEach(game => {
-            const isAfterToday = game.date > currentDate;
-            const isOnOrAfterToday = game.date >= currentDate;
-            allKickballGames.push({
-              id: game.id,
-              date: game.date.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric',
-                weekday: 'short'
-              }),
-              status: game.status,
-              homeTeam: game.homeTeam.name,
-              awayTeam: game.awayTeam.name,
-              week: game.week,
-              isAfterToday,
-              isOnOrAfterToday,
-              daysDiff: Math.round((game.date.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24))
-            });
-          });
-        });
-        console.log('🎮 All kickball games:', allKickballGames);
-        
-        // Show only scheduled games that are in the future
-        const futureScheduledGames = allKickballGames.filter(g => 
-          g.status === "scheduled" && g.isAfterToday
-        );
-        console.log('📅 Future scheduled games:', futureScheduledGames);
-        
-        console.log('🎯 Next game found:', nextKickballGame.toLocaleDateString('en-US', { 
-          month: 'short', 
-          day: 'numeric',
-          year: 'numeric',
-          weekday: 'short'
-        }));
       }
 
       return [
@@ -295,17 +247,39 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
                   <div>
                     <h4 className="heading-6 mb-4">Contact Info</h4>
                     <ul className="space-y-2 text-gray-300">
-                      <li>{contactInfo.data.email}</li>
-                      <li>{contactInfo.data.phone}</li>
+                      <li>
+                        <a 
+                          href={`mailto:${contactInfo.data.email}`}
+                          className="text-gray-300 hover:text-white transition-colors duration-200 underline decoration-transparent hover:decoration-white"
+                        >
+                          {contactInfo.data.email}
+                        </a>
+                      </li>
+                      <li>
+                        <a 
+                          href={`tel:${contactInfo.data.phone.replace(/[^0-9]/g, '')}`}
+                          className="text-gray-300 hover:text-white transition-colors duration-200 underline decoration-transparent hover:decoration-white"
+                        >
+                          {contactInfo.data.phone}
+                        </a>
+                      </li>
                       <li>
                         {contactInfo.data.address.street}<br />
-                        {contactInfo.data.address.city}, {contactInfo.data.address.state} {contactInfo.data.address.zipCode}
+                        {contactInfo.data.address.city}, {contactInfo.data.address.state}{" "}
+                        <a 
+                          href="https://www.instagram.com/56309.Photography/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-300 hover:text-white transition-colors duration-200 underline decoration-transparent hover:decoration-white"
+                        >
+                          {contactInfo.data.address.zipCode}
+                        </a>
                       </li>
                     </ul>
                   </div>
                 </div>
                 <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-                  <p>© 2024 Out Sports League. All rights reserved.</p>
+                  <p>© 2025 Out Sports League. All rights reserved.</p>
                 </div>
               </div>
             </footer>

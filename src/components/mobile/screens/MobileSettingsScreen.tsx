@@ -192,7 +192,7 @@ const MobileSettingsScreen: React.FC<MobileSettingsScreenProps> = ({
             <p>Out Sports League Mobile App</p>
             <p>Version 1.0.0</p>
             <p className="pt-2 text-xs text-gray-400">
-              © 2024 Out Sports League. All rights reserved.
+              © 2025 Out Sports League. All rights reserved.
             </p>
           </div>
         </div>
