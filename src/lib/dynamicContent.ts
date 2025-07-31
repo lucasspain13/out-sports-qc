@@ -26,7 +26,7 @@ import {
 
 // Cache management
 const cache = new Map<string, { data: any; timestamp: number }>();
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const CACHE_DURATION = 1000; // 1 second for testing
 
 function getCacheKey(key: string, params?: any): string {
   return params ? `${key}_${JSON.stringify(params)}` : key;
@@ -330,6 +330,7 @@ export async function getSportsInfo(): Promise<SportsInfo[]> {
 
   try {
     const data = await sportsInfoApi.getAll();
+    console.log("🔍 Fresh sports data loaded:", data.map(s => ({ name: s.name, gradient: s.gradient })));
     setCache(cacheKey, data);
     return data;
   } catch (error) {
@@ -449,6 +450,7 @@ export function useSiteSettings() {
 // Cache management utilities
 export function clearContentCache(): void {
   cache.clear();
+  console.log("🧹 Content cache cleared!");
 }
 
 export function invalidateCache(key: string): void {
@@ -457,4 +459,15 @@ export function invalidateCache(key: string): void {
       cache.delete(cacheKey);
     }
   }
+  console.log(`🧹 Cache cleared for: ${key}`);
+}
+
+// Add to window for browser console access
+if (typeof window !== "undefined") {
+  // @ts-ignore
+  window.clearSportsCache = () => {
+    invalidateCache("sports_info");
+    console.log("🔄 Sports cache cleared! Page will refresh...");
+    setTimeout(() => window.location.reload(), 500);
+  };
 }

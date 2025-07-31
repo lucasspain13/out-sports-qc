@@ -79,17 +79,6 @@ const Sports: React.FC<SportsProps> = ({ sports }) => {
         </motion.div>
 
         {/* Simplified CTA - removed redundant join messaging */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="text-center mt-12"
-        >
-          <p className="body-base text-gray-600 mb-6">
-            Explore our sports programs and find your perfect team!
-          </p>
-        </motion.div>
       </div>
     </section>
   );

@@ -64,7 +64,7 @@ async function setupKickballSports() {
     const summerKickball = {
       name: 'Summer 2025 Kickball',
       description: 'Join our inclusive kickball league where everyone plays, everyone matters, and everyone has fun! Experience the thrill of kickball in a welcoming, LGBTQ+ friendly community atmosphere.',
-      gradient: 'orange',
+      gradient: 'red',
       participants: 62,
       next_game: '2025-08-03',
       features: ['All skill levels welcome', 'Equipment provided', 'Weekend games', 'LGBTQ+ friendly environment'],
@@ -76,7 +76,7 @@ async function setupKickballSports() {
     const fallKickball = {
       name: 'Fall 2025 Kickball',
       description: 'Get ready for fall kickball fun! Join our inclusive community for another amazing season of kickball in a welcoming, LGBTQ+ friendly environment.',
-      gradient: 'orange',
+      gradient: 'brown',
       participants: 0, // No participants yet since it's coming soon
       next_game: null,
       features: ['All skill levels welcome', 'Equipment provided', 'Weekend games', 'LGBTQ+ friendly environment'],

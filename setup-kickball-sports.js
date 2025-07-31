@@ -53,7 +53,7 @@ async function setupKickballSports() {
       name: 'Summer 2025 Kickball',
       title: 'Summer 2025 Kickball League',
       description: 'Join our inclusive kickball league where everyone plays, everyone matters, and everyone has fun! Experience the thrill of kickball in a welcoming, LGBTQ+ friendly community atmosphere.',
-      gradient: 'orange',
+      gradient: 'red',
       participants: 62,
       nextGame: '2025-08-03',
       features: ['All skill levels welcome', 'Equipment provided', 'Weekend games', 'LGBTQ+ friendly environment'],
@@ -69,7 +69,7 @@ async function setupKickballSports() {
       name: 'Fall 2025 Kickball',
       title: 'Fall 2025 Kickball League',
       description: 'Get ready for fall kickball fun! Join our inclusive community for another amazing season of kickball in a welcoming, LGBTQ+ friendly environment.',
-      gradient: 'orange',
+      gradient: 'brown',
       participants: 0, // No participants yet since it's coming soon
       nextGame: null,
       features: ['All skill levels welcome', 'Equipment provided', 'Weekend games', 'LGBTQ+ friendly environment'],

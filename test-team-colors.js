@@ -1,12 +1,12 @@
 // Simple test script to verify color conversion logic
 const convertLegacyGradient = (gradient) => {
   const colorMap = {
-    "teal": "green",
-    "purple": "pink",
+    "green": "green",
+    "pink": "pink",
     "orange": "orange",
     "green": "green", 
     "blue": "blue",
-    "pink": "pink",
+    "purple": "purple",
     "white": "white",
     "black": "black",
     "gray": "gray",

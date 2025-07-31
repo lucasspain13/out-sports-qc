@@ -40,8 +40,8 @@ const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
     >
       {/* Coming Soon Badge */}
       {sport.comingSoon && (
-        <div className="absolute top-4 left-4 z-20 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-md">
-          Coming Soon
+        <div className="absolute top-4 left-4 z-20 bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-medium shadow-md">
+          Coming Soon - Registration Open
         </div>
       )}
 
@@ -75,7 +75,7 @@ const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
 
           {/* Stats */}
           <div className="flex items-center justify-between text-sm">
-            {sport.participants && sport.participants > 0 && !sport.comingSoon && (
+            {((sport.participants ?? 0) > 0 && !sport.comingSoon) && (
               <div className="flex items-center space-x-1">
                 <svg
                   className="w-4 h-4"
