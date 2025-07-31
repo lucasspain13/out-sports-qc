@@ -145,7 +145,7 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
             "Weekend games",
           ],
           totalTeams: 4,
-          rosterPath: "#summer-kickball-schedule",
+          rosterPath: "#schedule?sport=Kickball&season=Summer&year=2025",
           comingSoon: false,
         },
         {
@@ -290,7 +290,7 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
           {leagueInfo.data && contactInfo.data && (
             <footer className="bg-gray-900 text-white py-12">
               <div className="container-custom">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <h3 className="heading-5 mb-4 text-gradient-brand">
                       Out Sports League
@@ -305,31 +305,8 @@ export const DynamicAppContent: React.FC<DynamicAppContentProps> = ({
                       <li>{contactInfo.data.email}</li>
                       <li>{contactInfo.data.phone}</li>
                       <li>
-                        {contactInfo.data.address.street},{" "}
-                        {contactInfo.data.address.city},{" "}
-                        {contactInfo.data.address.state}{" "}
-                        {contactInfo.data.address.zipCode}
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="heading-6 mb-4">Quick Links</h4>
-                    <ul className="space-y-2">
-                      <li>
-                        <a
-                          href="#info"
-                          className="text-gray-300 hover:text-white transition-colors"
-                        >
-                          League Info
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#summer-kickball-teams"
-                          className="text-gray-300 hover:text-white transition-colors"
-                        >
-                          Kickball Teams
-                        </a>
+                        {contactInfo.data.address.street}<br />
+                        {contactInfo.data.address.city}, {contactInfo.data.address.state} {contactInfo.data.address.zipCode}
                       </li>
                     </ul>
                   </div>
