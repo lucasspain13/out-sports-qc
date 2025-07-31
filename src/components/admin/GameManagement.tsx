@@ -184,37 +184,37 @@ export const GameManagement: React.FC = () => {
   };
 
   // Archive games by season, year, and sport
-  const archiveGamesByCriteria = async (season: string, year: number, sportType: "kickball" | "dodgeball") => {
-    try {
-      const gamesToArchive = games.filter(
-        game => 
-          game.season === season && 
-          game.year === year && 
-          game.sportType === sportType &&
-          game.status !== "archived"
-      );
+  // const archiveGamesByCriteria = async (season: string, year: number, sportType: "kickball" | "dodgeball") => {
+  //   try {
+  //     const gamesToArchive = games.filter(
+  //       game => 
+  //         game.season === season && 
+  //         game.year === year && 
+  //         game.sportType === sportType &&
+  //         game.status !== "archived"
+  //     );
 
-      if (gamesToArchive.length === 0) {
-        alert("No games found matching the criteria.");
-        return;
-      }
+  //     if (gamesToArchive.length === 0) {
+  //       alert("No games found matching the criteria.");
+  //       return;
+  //     }
 
-      const confirmMessage = `Archive ${gamesToArchive.length} games from ${season} ${year} ${sportType}?`;
-      if (!confirm(confirmMessage)) return;
+  //     const confirmMessage = `Archive ${gamesToArchive.length} games from ${season} ${year} ${sportType}?`;
+  //     if (!confirm(confirmMessage)) return;
 
-      for (const game of gamesToArchive) {
-        await supabase
-          .from("games")
-          .update({ status: "archived" })
-          .eq("id", game.id);
-      }
+  //     for (const game of gamesToArchive) {
+  //       await supabase
+  //         .from("games")
+  //         .update({ status: "archived" })
+  //         .eq("id", game.id);
+  //     }
 
-      await fetchData();
-      alert(`Successfully archived ${gamesToArchive.length} games.`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to archive games");
-    }
-  };
+  //     await fetchData();
+  //     alert(`Successfully archived ${gamesToArchive.length} games.`);
+  //   } catch (err) {
+  //     setError(err instanceof Error ? err.message : "Failed to archive games");
+  //   }
+  // };
 
   const filteredGames = games.filter(game => {
     const matchesStatus =

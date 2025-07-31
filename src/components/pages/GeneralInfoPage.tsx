@@ -122,7 +122,6 @@ const GeneralInfoPage: React.FC<GeneralInfoPageProps> = ({
               <MissionHero
                 leagueInfo={transformedLeagueInfo}
                 onJoinClick={handleJoinClick}
-                showLearnMore={false}
               />
             )
           );

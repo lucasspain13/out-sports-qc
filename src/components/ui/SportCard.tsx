@@ -75,7 +75,7 @@ const SportCard: React.FC<SportCardProps> = ({ sport, onClick }) => {
 
           {/* Stats */}
           <div className="flex items-center justify-between text-sm">
-            {sport.participants && sport.participants > 0 && (
+            {sport.participants && sport.participants > 0 && !sport.comingSoon && (
               <div className="flex items-center space-x-1">
                 <svg
                   className="w-4 h-4"

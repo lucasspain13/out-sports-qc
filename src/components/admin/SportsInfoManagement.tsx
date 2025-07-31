@@ -97,7 +97,7 @@ export const SportsInfoManagement: React.FC<SportsInfoManagementProps> = () => {
       };
     }
     
-    const [, season, yearStr, sport] = match;
+    const [, , yearStr] = match;
     const year = parseInt(yearStr);
     
     if (year < 2025) {
@@ -140,7 +140,8 @@ export const SportsInfoManagement: React.FC<SportsInfoManagementProps> = () => {
         season,
         year,
         // Store the sport name component separately if needed for API compatibility
-        sportName: sportName.toLowerCase()
+        sportName: sportName.toLowerCase(),
+        createdAt: new Date().toISOString()
       };
 
       if (editingSport) {

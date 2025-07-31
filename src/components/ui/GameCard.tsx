@@ -50,6 +50,11 @@ const GameCard: React.FC<GameCardProps> = ({
       color: "bg-yellow-500",
       icon: "⏸️",
     },
+    archived: {
+      label: "Archived",
+      color: "bg-gray-400",
+      icon: "📁",
+    },
   };
 
   const status = statusConfig[game.status];

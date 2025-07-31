@@ -65,6 +65,13 @@ const GameDetail: React.FC<GameDetailProps> = ({
       bgColor: "bg-yellow-50",
       textColor: "text-yellow-700",
     },
+    archived: {
+      label: "Archived",
+      color: "bg-gray-400",
+      icon: "📁",
+      bgColor: "bg-gray-50",
+      textColor: "text-gray-600",
+    },
   };
 
   const status = statusConfig[game.status];

@@ -13,7 +13,6 @@ import { supabase } from "./supabase";
 type DbTeam = Database["public"]["Tables"]["teams"]["Row"];
 type DbPlayer = Database["public"]["Tables"]["players"]["Row"];
 type DbGame = Database["public"]["Tables"]["games"]["Row"];
-type DbLocation = Database["public"]["Tables"]["locations"]["Row"];
 
 // Helper function to convert old color values to new ones
 const convertLegacyGradient = (gradient: string): "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan" => {

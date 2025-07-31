@@ -100,8 +100,7 @@ const TeamDetailWrapper: React.FC<{
 };
 const GameDetailWrapper: React.FC<{
   gameId: string;
-  onTeamSelect: (teamId: string) => void;
-}> = ({ gameId, onTeamSelect }) => {
+}> = ({ gameId }) => {
   const { game, loading, error } = useGame(gameId);
 
   if (loading) {
@@ -141,7 +140,6 @@ const GameDetailWrapper: React.FC<{
     <GameDetail
       game={game}
       onBack={() => navigateBack()}
-      onTeamSelect={onTeamSelect}
     />
   );
 };
@@ -318,10 +316,6 @@ function AppContent() {
       return (
         <GameDetailWrapper
           gameId={gameId}
-          onTeamSelect={(teamId: string) => {
-            // Navigate to team route - team will be loaded by TeamDetailWrapper
-            navigateToTeam({ id: teamId } as Team);
-          }}
         />
       );
     }

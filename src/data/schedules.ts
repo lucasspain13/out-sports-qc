@@ -94,6 +94,7 @@ const createKickballSchedule = (): Schedule => {
           sportType: "kickball",
           week: weekNumber,
           season,
+          year: 2025,
         };
 
         weekGames.push(game);
@@ -171,6 +172,7 @@ const createDodgeballSchedule = (): Schedule => {
           sportType: "dodgeball",
           week: weekNumber,
           season,
+          year: 2025,
         };
 
         weekGames.push(game);

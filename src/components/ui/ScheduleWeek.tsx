@@ -49,6 +49,7 @@ const ScheduleWeek: React.FC<ScheduleWeekProps> = ({
       completed: 0,
       cancelled: 0,
       postponed: 0,
+      archived: 0,
     };
 
     week.games.forEach(game => {
