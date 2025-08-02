@@ -20,12 +20,12 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
       {
         label: "General",
         hasDropdown: true,
-        isActive: currentRoute === "#info" || currentRoute === "#league-rules" || currentRoute === "#liability-waiver" || currentRoute === "#photo-waiver",
+        isActive: currentRoute === "#info" || currentRoute === "#league-rules" || currentRoute === "#liability" || currentRoute === "#photo",
         dropdownItems: [
           // { label: "About Us", href: "#info" }, // Temporarily disabled
           { label: "League Rules", href: "#league-rules" },
-          { label: "General Liability Waiver", href: "#liability-waiver" },
-          { label: "Photo Release Waiver", href: "#photo-waiver" },
+          { label: "Liability Release Waiver", href: "#liability" },
+          { label: "Photo Release Waiver", href: "#photo" },
         ],
       },
     ];

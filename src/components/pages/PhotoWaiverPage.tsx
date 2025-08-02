@@ -35,86 +35,92 @@ const PhotoWaiverPage: React.FC = () => {
 
           <div className="space-y-4 text-gray-700">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">1. PERMISSION TO USE PHOTOS AND VIDEOS</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">1. PERMISSION FOR OUT SPORTS ADMINISTRATORS</h3>
               <p className="text-sm leading-relaxed">
-                I give Out Sports permission to use photographs, videos, and digital images of me 
-                taken during Out Sports activities. This includes the right to edit these materials 
-                as needed for promotional purposes.
+                I give Out Sports administrators and official representatives permission to take and use 
+                photographs, videos, and digital images of me during Out Sports activities. This permission 
+                applies only to photos/videos taken by Out Sports staff, volunteers, and authorized personnel. 
+                This includes the right to edit these materials as needed for promotional purposes.
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">2. HOW PHOTOS AND VIDEOS WILL BE USED</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">2. HOW OUT SPORTS WILL USE PHOTOS AND VIDEOS</h3>
               <p className="text-sm leading-relaxed">
-                These materials may be used for promotional materials, websites, social media, newsletters, 
-                brochures, advertisements, or other purposes that help promote Out Sports activities 
-                and build our community.
+                These materials taken by Out Sports administrators may be used for promotional materials, 
+                websites, social media, newsletters, brochures, advertisements, or other purposes that help 
+                promote Out Sports activities and build our community.
               </p>
             </div>
 
             <div>
               <h3 className="font-semibold text-gray-900 mb-2">3. NO PAYMENT EXPECTED</h3>
               <p className="text-sm leading-relaxed">
-                I understand that I will not receive any payment for the use of these photos and videos. 
-                This is a volunteer contribution to help promote our sports community.
+                I understand that I will not receive any payment for the use of photos and videos taken 
+                by Out Sports administrators. This is a volunteer contribution to help promote our sports community.
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">4. UNDERSTANDING ABOUT USAGE</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">4. RESPONSIBLE USAGE BY OUT SPORTS</h3>
               <p className="text-sm leading-relaxed">
-                I understand that Out Sports will handle these photos and videos responsibly and 
-                use them in a positive way to represent our sports community.
+                I understand that Out Sports administrators will handle photos and videos they take responsibly 
+                and use them in a positive way to represent our sports community.
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">5. OWNERSHIP</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">5. OWNERSHIP OF OUT SPORTS PHOTOS</h3>
               <p className="text-sm leading-relaxed">
-                I understand that Out Sports will own the rights to these photographs and videos 
-                once they are taken during activities.
+                I understand that Out Sports will own the rights to photographs and videos they take 
+                during activities through their administrators and authorized personnel.
               </p>
             </div>
 
             <div>
               <h3 className="font-semibold text-gray-900 mb-2">6. SHARING WITH PARTNERS</h3>
               <p className="text-sm leading-relaxed">
-                Out Sports may share these materials with media outlets, sponsors, partner organizations, 
-                or other groups that help support recreational sports and community activities.
+                Out Sports may share photos and videos they have taken with media outlets, sponsors, 
+                partner organizations, or other groups that help support recreational sports and community activities.
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">7. ONGOING PERMISSION</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">7. ONGOING PERMISSION FOR OUT SPORTS</h3>
               <p className="text-sm leading-relaxed">
-                This permission covers all photographs and videos taken during any Out Sports 
-                activity or event where I participate, and continues unless I request otherwise 
-                in writing.
+                This permission covers all photographs and videos taken by Out Sports administrators 
+                during any Out Sports activity or event where I participate, and continues unless I request 
+                otherwise in writing.
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">8. AGE REQUIREMENT</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">8. PUBLIC SPACE ACKNOWLEDGMENT</h3>
               <p className="text-sm leading-relaxed">
-                All participants must be 18 years of age or older. This ensures that everyone 
-                can make their own decisions about photo and video permissions.
+                I understand that Out Sports activities take place in public spaces where other individuals 
+                (participants, spectators, passersby) may take photos or videos that include me. This waiver 
+                only applies to photos/videos taken by Out Sports administrators and does not control what 
+                others may photograph in public spaces.
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">9. VOLUNTARY PARTICIPATION</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">9. VOLUNTARY PARTICIPATION WITH OUT SPORTS PHOTOGRAPHY</h3>
               <p className="text-sm leading-relaxed">
-                I understand that being in photos and videos is voluntary. I can ask to opt out 
-                of specific photo or video sessions while still participating in Out Sports activities.
+                I understand that being photographed by Out Sports administrators is voluntary. I can ask 
+                to opt out of specific Out Sports photo or video sessions while still participating in 
+                Out Sports activities. However, I acknowledge that others in public spaces may still 
+                take photos that include me.
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">10. MY AGREEMENT</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">10. MY AGREEMENT AND UNDERSTANDING</h3>
               <p className="text-sm leading-relaxed">
-                I have read this permission form, understand what it means, and agree to give 
-                Out Sports permission to use my photos and videos as described. I am providing 
-                this permission voluntarily.
+                I have read this permission form, understand that it applies specifically to Out Sports 
+                administrators taking and using photos/videos, and understand that others in public spaces 
+                may take photos that Out Sports has no control over. I am providing this permission to 
+                Out Sports voluntarily and only for their official photography and videography.
               </p>
             </div>
           </div>

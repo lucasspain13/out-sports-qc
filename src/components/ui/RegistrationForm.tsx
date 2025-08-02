@@ -497,12 +497,12 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
           >
             I agree to submit the{" "}
             <a
-              href="/liability"
+              href="#liability"
               target="_blank"
               rel="noopener noreferrer"
               className="text-brand-blue hover:text-brand-blue-dark font-medium underline"
             >
-              Liability Waiver
+              Liability Release Waiver
             </a>{" "}
             before participating in league activities. (required)
           </label>
@@ -524,7 +524,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
           >
             I agree to submit the{" "}
             <a
-              href="/photo"
+              href="#photo"
               target="_blank"
               rel="noopener noreferrer"
               className="text-brand-blue hover:text-brand-blue-dark font-medium underline"

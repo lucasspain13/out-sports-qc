@@ -3,15 +3,7 @@ import { supabase } from '../lib/supabase';
 export interface WaiverSignatureData {
   waiverType: 'liability' | 'photo_release';
   participantName: string;
-  participantEmail: string;
-  participantPhone: string;
   participantDOB: string;
-  emergencyName: string;
-  emergencyPhone: string;
-  emergencyRelation: string;
-  isMinor: boolean;
-  guardianName?: string;
-  guardianRelation?: string;
   digitalSignature: string;
   acknowledgeTerms: boolean;
   voluntarySignature: boolean;
@@ -47,15 +39,7 @@ class WaiverService {
         waiver_type: data.waiverType,
         waiver_version: '1.0',
         participant_name: data.participantName.trim(),
-        participant_email: data.participantEmail?.trim().toLowerCase() || null,
-        participant_phone: data.participantPhone?.trim() || null,
         participant_dob: data.participantDOB,
-        emergency_name: data.emergencyName?.trim() || null,
-        emergency_phone: data.emergencyPhone?.trim() || null,
-        emergency_relation: data.emergencyRelation || null,
-        is_minor: data.isMinor,
-        guardian_name: data.guardianName?.trim() || null,
-        guardian_relation: data.guardianRelation || null,
         digital_signature: data.digitalSignature.trim(),
         acknowledge_terms: data.acknowledgeTerms,
         voluntary_signature: data.voluntarySignature,
@@ -102,12 +86,13 @@ class WaiverService {
   /**
    * Check if a participant has already signed a specific waiver
    */
-  async hasSignedWaiver(email: string, waiverType: 'liability' | 'photo_release'): Promise<boolean> {
+  async hasSignedWaiver(participantName: string, participantDOB: string, waiverType: 'liability' | 'photo_release'): Promise<boolean> {
     try {
       const { data, error } = await supabase
         .from('waiver_signatures')
         .select('id')
-        .eq('participant_email', email.toLowerCase())
+        .eq('participant_name', participantName)
+        .eq('participant_dob', participantDOB)
         .eq('waiver_type', waiverType)
         .limit(1);
 
@@ -126,12 +111,13 @@ class WaiverService {
   /**
    * Get waiver signatures for a participant
    */
-  async getParticipantWaivers(email: string) {
+  async getParticipantWaivers(participantName: string, participantDOB: string) {
     try {
       const { data, error } = await supabase
         .from('waiver_signatures')
         .select('*')
-        .eq('participant_email', email.toLowerCase())
+        .eq('participant_name', participantName)
+        .eq('participant_dob', participantDOB)
         .order('signature_timestamp', { ascending: false });
 
       if (error) {
@@ -166,16 +152,8 @@ class WaiverService {
       return false;
     }
 
-    // Validate email format only if provided
-    if (data.participantEmail && data.participantEmail.trim()) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(data.participantEmail)) {
-        return false;
-      }
-    }
-
-    // Validate digital signature matches participant name
-    if (data.digitalSignature.toLowerCase().trim() !== data.participantName.toLowerCase().trim()) {
+    // Validate digital signature matches participant name EXACTLY
+    if (data.digitalSignature.trim() !== data.participantName.trim()) {
       return false;
     }
 
@@ -189,13 +167,6 @@ class WaiverService {
     const signatureParts = data.digitalSignature.trim().split(/\s+/);
     if (signatureParts.length < 2 || signatureParts.some(part => part.length < 1)) {
       return false;
-    }
-
-    // If minor, check guardian information
-    if (data.isMinor) {
-      if (!data.guardianName || !data.guardianRelation) {
-        return false;
-      }
     }
 
     return true;

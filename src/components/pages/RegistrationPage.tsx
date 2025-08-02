@@ -6,10 +6,10 @@ import { PlatformRegistrationForm } from "../platform";
 interface RegistrationDetails {
   sport: string;
   season: string;
-  duration: string;
+  game_dates: string;
   game_time: string;
   location: string;
-  team_size: string;
+  deadline: string;
 }
 
 interface RegistrationPageProps {
@@ -82,17 +82,17 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
         "🎉 End-of-season celebration",
       ],
       gameDetails: registrationDetails ? {
-        sport: registrationDetails.sport,
         season: registrationDetails.season,
-        duration: registrationDetails.duration,
+        sport: registrationDetails.sport,
         gameTime: registrationDetails.game_time,
+        gameDates: registrationDetails.game_dates,
         location: registrationDetails.location,
-        deadline: registrationDetails.team_size,
+        deadline: registrationDetails.deadline,
       } : {
-        sport: "Kickball",
         season: currentSeason,
-        duration: currentSeason === "Summer 2025" ? "8 weeks" : "7 weeks",
+        sport: "Kickball",
         gameTime: "Sundays 2-4pm",
+        gameDates: currentSeason === "Summer 2025" ? "8 weeks" : "7 weeks",
         location: "TBD",
         deadline: "TBD",
       },
@@ -109,7 +109,7 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
       ],
       gameDetails: {
         season: "Winter 2026",
-        duration: "TBD",
+        gameDates: "TBD",
         gameTime: "TBD",
         location: "TBD",
         deadline: "TBD",
@@ -202,11 +202,11 @@ const RegistrationPage: React.FC<RegistrationPageProps> = ({ sportType, season }
                   </p>
                   <div className="space-y-2">
                     <div className="text-brand-blue font-medium">
-                      <a 
+                      Travis Stanger: <a 
                         href="tel:+15633810504"
                         className="underline hover:text-blue-800 transition-colors duration-200"
                       >
-                        Travis Stanger: 563-381-0504
+                        563-381-0504
                       </a>
                     </div>
                     <div className="text-brand-blue font-medium">

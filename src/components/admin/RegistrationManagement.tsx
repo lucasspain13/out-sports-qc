@@ -6,10 +6,10 @@ interface RegistrationDetails {
   id: string;
   sport: string;
   season: string;
-  duration: string;
+  game_dates: string;
   game_time: string;
   location: string;
-  team_size: string;
+  deadline: string;
   sport_type: "kickball" | "dodgeball";
   created_at?: string;
   updated_at?: string;
@@ -24,7 +24,7 @@ interface Registration {
   phone: string;
   date_of_birth: string;
   shirt_size: string;
-  experience_level: "beginner" | "intermediate" | "advanced";
+  skill_level: "beginner" | "intermediate" | "advanced";
   emergency_contact_name: string;
   emergency_contact_phone: string;
   how_did_you_hear: string;
@@ -38,8 +38,8 @@ interface Registration {
 }
 
 interface WaiverStatus {
-  liability: boolean;
-  photo_release: boolean;
+  liability: 'signed' | 'incomplete' | 'none';
+  photo_release: 'signed' | 'incomplete' | 'none';
 }
 
 interface RegistrationSummary {
@@ -81,32 +81,44 @@ export const RegistrationManagement: React.FC = () => {
 
   const fetchWaiverStatuses = async () => {
     try {
-      const emails = registrations.map(reg => reg.email);
-      
-      if (emails.length === 0) return;
+      if (registrations.length === 0) return;
 
       const { data, error } = await supabase
         .from("waiver_signatures")
-        .select("participant_email, waiver_type")
-        .in("participant_email", emails);
+        .select("participant_name, participant_dob, waiver_type, acknowledge_terms");
 
       if (error) throw error;
 
-      // Group waivers by email
+      // Group waivers by participant (name + dob)
       const statusMap: Record<string, WaiverStatus> = {};
       
-      // Initialize all emails with false values
-      emails.forEach(email => {
-        statusMap[email] = { liability: false, photo_release: false };
+      // Initialize all registered players with 'none' status
+      registrations.forEach(reg => {
+        const playerKey = `${reg.first_name} ${reg.last_name}|${reg.date_of_birth}`;
+        statusMap[playerKey] = { liability: 'none', photo_release: 'none' };
       });
 
       // Update with actual waiver data
       data?.forEach(waiver => {
-        if (statusMap[waiver.participant_email]) {
-          if (waiver.waiver_type === 'liability') {
-            statusMap[waiver.participant_email].liability = true;
-          } else if (waiver.waiver_type === 'photo_release') {
-            statusMap[waiver.participant_email].photo_release = true;
+        const waiverPlayerKey = `${waiver.participant_name}|${waiver.participant_dob}`;
+        
+        // Find matching registration by name and DOB
+        const matchingReg = registrations.find(reg => {
+          const regPlayerKey = `${reg.first_name} ${reg.last_name}|${reg.date_of_birth}`;
+          return regPlayerKey === waiverPlayerKey;
+        });
+
+        if (matchingReg) {
+          const playerKey = `${matchingReg.first_name} ${matchingReg.last_name}|${matchingReg.date_of_birth}`;
+          
+          if (statusMap[playerKey]) {
+            const status = waiver.acknowledge_terms ? 'signed' : 'incomplete';
+            
+            if (waiver.waiver_type === 'liability') {
+              statusMap[playerKey].liability = status;
+            } else if (waiver.waiver_type === 'photo_release') {
+              statusMap[playerKey].photo_release = status;
+            }
           }
         }
       });
@@ -140,10 +152,10 @@ export const RegistrationManagement: React.FC = () => {
         const defaultDetails: Partial<RegistrationDetails> = {
           sport: "Kickball",
           season: "Fall 2025",
-          duration: "7 weeks",
+          game_dates: "7 weeks",
           game_time: "Sundays 2-4pm",
           location: "TBD",
-          team_size: "16 players",
+          deadline: "TBD",
           sport_type: "kickball"
         };
         
@@ -299,7 +311,10 @@ export const RegistrationManagement: React.FC = () => {
   const formatDateOfBirth = (dateStr: string | null | undefined): string => {
     if (!dateStr) return "";
     try {
+      // Parse the date string and add 1 day to fix timezone offset issue
       const date = new Date(dateStr);
+      date.setDate(date.getDate() + 1);
+      
       // Format as MM/DD/YYYY
       return date.toLocaleDateString('en-US', {
         month: '2-digit',
@@ -405,12 +420,12 @@ export const RegistrationManagement: React.FC = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Duration
+                Game Dates
               </label>
               <input
                 type="text"
-                value={registrationDetails.duration}
-                onChange={(e) => updateRegistrationDetails({ duration: e.target.value })}
+                value={registrationDetails.game_dates}
+                onChange={(e) => updateRegistrationDetails({ game_dates: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="e.g., 7 weeks"
               />
@@ -448,8 +463,8 @@ export const RegistrationManagement: React.FC = () => {
               </label>
               <input
                 type="text"
-                value={registrationDetails.team_size}
-                onChange={(e) => updateRegistrationDetails({ team_size: e.target.value })}
+                value={registrationDetails.deadline}
+                onChange={(e) => updateRegistrationDetails({ deadline: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="e.g., TBD"
               />
@@ -615,13 +630,21 @@ export const RegistrationManagement: React.FC = () => {
                       <div className="flex items-center space-x-2">
                         <span className="text-xs text-gray-500">Liability:</span>
                         <span className="text-lg">
-                          {waiverStatuses[registration.email]?.liability ? "✅" : "❌"}
+                          {(() => {
+                            const participantKey = `${registration.first_name} ${registration.last_name}|${registration.date_of_birth}`;
+                            const status = waiverStatuses[participantKey]?.liability;
+                            return status === 'signed' ? '✅' : status === 'incomplete' ? '⚠️' : '❌';
+                          })()}
                         </span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <span className="text-xs text-gray-500">Photo:</span>
                         <span className="text-lg">
-                          {waiverStatuses[registration.email]?.photo_release ? "✅" : "❌"}
+                          {(() => {
+                            const participantKey = `${registration.first_name} ${registration.last_name}|${registration.date_of_birth}`;
+                            const status = waiverStatuses[participantKey]?.photo_release;
+                            return status === 'signed' ? '✅' : status === 'incomplete' ? '⚠️' : '❌';
+                          })()}
                         </span>
                       </div>
                     </div>

@@ -787,12 +787,6 @@ export interface Database {
           participant_email: string;
           participant_phone: string;
           participant_dob: string;
-          emergency_name: string;
-          emergency_phone: string;
-          emergency_relation: string;
-          is_minor: boolean;
-          guardian_name?: string;
-          guardian_relation?: string;
           digital_signature: string;
           acknowledge_terms: boolean;
           voluntary_signature: boolean;
@@ -811,12 +805,6 @@ export interface Database {
           participant_email: string;
           participant_phone: string;
           participant_dob: string;
-          emergency_name: string;
-          emergency_phone: string;
-          emergency_relation: string;
-          is_minor?: boolean;
-          guardian_name?: string;
-          guardian_relation?: string;
           digital_signature: string;
           acknowledge_terms?: boolean;
           voluntary_signature?: boolean;
@@ -835,12 +823,6 @@ export interface Database {
           participant_email?: string;
           participant_phone?: string;
           participant_dob?: string;
-          emergency_name?: string;
-          emergency_phone?: string;
-          emergency_relation?: string;
-          is_minor?: boolean;
-          guardian_name?: string;
-          guardian_relation?: string;
           digital_signature?: string;
           acknowledge_terms?: boolean;
           voluntary_signature?: boolean;

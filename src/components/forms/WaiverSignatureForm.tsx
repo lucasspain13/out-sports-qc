@@ -142,21 +142,81 @@ const WaiverSignatureForm: React.FC<WaiverSignatureFormProps> = ({ waiverType, w
         {/* Terms Acknowledgment */}
         <div className="border-t pt-6">
           <div className="space-y-4">
-            <div className="flex items-start">
-              <input
-                type="checkbox"
-                id="acknowledgeTerms"
-                name="acknowledgeTerms"
-                required
-                checked={formData.acknowledgeTerms}
-                onChange={(e) => updateFormData('acknowledgeTerms', e.target.checked)}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1"
-              />
-              <label htmlFor="acknowledgeTerms" className="ml-3 text-sm text-gray-900">
-                <strong>I acknowledge</strong> that I have read and understood all terms and conditions of this {waiverTitle} and agree to be bound by them.
-              </label>
-            </div>
-            {errors.acknowledgeTerms && (
+            {waiverType === 'photo_release' ? (
+              // Photo release specific permission selection
+              <div>
+                <h4 className="text-lg font-semibold text-gray-900 mb-4">Photo Permission Selection</h4>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <p className="text-sm text-blue-800 leading-relaxed">
+                    Out Sports of the Quad Cities (OSQC) considers its members' preferences as a top priority. 
+                    This form ensures all members have control of their visibility to the community at large. <strong>Granting permission is NOT required to participate in Out Sports.</strong> Please read thoroughly 
+                    and make a selection to grant or withhold Out Sports of the Quad Cities permission to share 
+                    images in which you may appear.
+                  </p>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  Please select your preference for photo and video usage:
+                </p>
+                <div className="space-y-3">
+                  <div className="flex items-start border border-green-300 bg-green-50 rounded-lg p-4">
+                    <input
+                      type="radio"
+                      id="grantPermission"
+                      name="photoPermission"
+                      value="grant"
+                      checked={formData.photoPermission === 'grant'}
+                      onChange={(e) => updateFormData('photoPermission', e.target.value)}
+                      className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 mt-1"
+                    />
+                    <label htmlFor="grantPermission" className="ml-3 text-sm text-green-800">
+                      <strong>I GRANT permission</strong> for Out Sports of the Quad Cities (OSQC) to use my photography, image, video, 
+                      and likeness publicly to promote the league. I understand these images may be used in print, 
+                      website, and/or social media. I also understand that no royalty, fee or any other compensation 
+                      shall be made to me for such use.
+                    </label>
+                  </div>
+                  
+                  <div className="flex items-start border border-red-300 bg-red-50 rounded-lg p-4">
+                    <input
+                      type="radio"
+                      id="withholdPermission"
+                      name="photoPermission"
+                      value="withhold"
+                      checked={formData.photoPermission === 'withhold'}
+                      onChange={(e) => updateFormData('photoPermission', e.target.value)}
+                      className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 mt-1"
+                    />
+                    <label htmlFor="withholdPermission" className="ml-3 text-sm text-red-800">
+                      <strong>I WITHHOLD permission</strong> for Out Sports of the Quad Cities (OSQC) to use my photography, image, 
+                      video, or likeness publicly to promote the league. I understand this may mean exclusion to 
+                      protect my privacy during photo opportunities. I also understand that there is no perceived 
+                      privacy in public spaces and waive my right to hold OSQC liable for images taken and released by 
+                      individuals not part of the Administrative Team.
+                    </label>
+                  </div>
+                </div>
+                {errors.photoPermission && (
+                  <p className="text-red-600 text-sm mt-2">{errors.photoPermission}</p>
+                )}
+              </div>
+            ) : (
+              // Liability waiver acknowledgment checkbox
+              <div className="flex items-start">
+                <input
+                  type="checkbox"
+                  id="acknowledgeTerms"
+                  name="acknowledgeTerms"
+                  required
+                  checked={formData.acknowledgeTerms}
+                  onChange={(e) => updateFormData('acknowledgeTerms', e.target.checked)}
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1"
+                />
+                <label htmlFor="acknowledgeTerms" className="ml-3 text-sm text-gray-900">
+                  <strong>I acknowledge</strong> that I have read and understood all terms and conditions of this {waiverTitle} and agree to be bound by them.
+                </label>
+              </div>
+            )}
+            {waiverType === 'liability' && errors.acknowledgeTerms && (
               <p className="text-red-600 text-sm ml-7">{errors.acknowledgeTerms}</p>
             )}
             

@@ -274,12 +274,12 @@ const KickballRules: React.FC = () => {
             other.
           </p>
           <p className="text-cyan-800 font-medium">
-            Contact us: 
+            Contact us: Travis Stanger, 
             <a 
               href="tel:+15633810504"
               className="ml-1 underline hover:text-cyan-600 transition-colors duration-200"
             >
-              Travis Stanger, 563-381-0504
+              563-381-0504
             </a>
           </p>
         </div>

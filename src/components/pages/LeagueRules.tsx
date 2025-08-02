@@ -260,12 +260,12 @@ const LeagueRules: React.FC = () => {
               </a>
             </p>
             <p className="text-blue-600 font-medium">
-              📞 Phone: 
+              📞 Phone: Travis Stanger - 
               <a 
                 href="tel:+15633810504"
                 className="ml-1 underline hover:text-blue-800 transition-colors duration-200"
               >
-                Travis Stanger - 563-381-0504
+                563-381-0504
               </a>
             </p>
           </div>

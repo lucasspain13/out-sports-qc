@@ -8,6 +8,7 @@ export interface WaiverFormData {
   acknowledgeTerms: boolean;
   voluntarySignature: boolean;
   legalAgeCertification: boolean;
+  photoPermission?: 'grant' | 'withhold'; // For photo release waiver only
 }
 
 export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
@@ -18,6 +19,7 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
     acknowledgeTerms: false,
     voluntarySignature: false,
     legalAgeCertification: false,
+    photoPermission: undefined,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,7 +27,17 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
   const [errors, setErrors] = useState<Partial<Record<keyof WaiverFormData, string>>>({});
 
   const updateFormData = (field: keyof WaiverFormData, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    // For photo release, update acknowledgeTerms based on photoPermission selection
+    if (field === 'photoPermission' && waiverType === 'photo_release') {
+      setFormData(prev => ({ 
+        ...prev, 
+        photoPermission: value as 'grant' | 'withhold',
+        acknowledgeTerms: value === 'grant' ? true : false
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, [field]: value }));
+    }
+    
     // Clear error for this field when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
@@ -66,9 +78,9 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
     if (!formData.digitalSignature.trim()) {
       newErrors.digitalSignature = 'Digital signature is required';
     } else {
-      // Check if digital signature matches participant name
-      if (formData.digitalSignature.toLowerCase().trim() !== formData.participantName.toLowerCase().trim()) {
-        newErrors.digitalSignature = 'Digital signature must match participant name exactly';
+      // Check if digital signature matches participant name EXACTLY (case-sensitive)
+      if (formData.digitalSignature.trim() !== formData.participantName.trim()) {
+        newErrors.digitalSignature = 'Digital signature must match participant name exactly (including capitalization)';
       } else {
         // Check if digital signature is a full name
         const signatureParts = formData.digitalSignature.trim().split(/\s+/);
@@ -81,8 +93,16 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
     // Minor validation removed - all participants must be 18+
 
     // Acknowledgment validation
-    if (!formData.acknowledgeTerms) {
-      newErrors.acknowledgeTerms = 'You must acknowledge the terms';
+    if (waiverType === 'photo_release') {
+      // For photo release, require permission selection instead of acknowledgeTerms checkbox
+      if (!formData.photoPermission) {
+        newErrors.photoPermission = 'You must select either grant or withhold permission';
+      }
+    } else {
+      // For liability waiver, require acknowledgeTerms checkbox
+      if (!formData.acknowledgeTerms) {
+        newErrors.acknowledgeTerms = 'You must acknowledge the terms';
+      }
     }
 
     if (!formData.voluntarySignature) {
@@ -111,15 +131,7 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
       const waiverData: WaiverSignatureData = {
         waiverType,
         participantName: formData.participantName,
-        participantEmail: '', // No longer collected on waiver forms
-        participantPhone: '', // No longer collected on waiver forms
         participantDOB: formData.participantDOB,
-        emergencyName: '', // No longer collected on waiver forms
-        emergencyPhone: '', // No longer collected on waiver forms
-        emergencyRelation: '', // No longer collected on waiver forms
-        isMinor: false, // All participants must be 18+
-        guardianName: undefined,
-        guardianRelation: undefined,
         digitalSignature: formData.digitalSignature,
         acknowledgeTerms: formData.acknowledgeTerms,
         voluntarySignature: formData.voluntarySignature,
@@ -138,6 +150,7 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
           acknowledgeTerms: false,
           voluntarySignature: false,
           legalAgeCertification: false,
+          photoPermission: undefined,
         });
       }
     } catch (error) {
@@ -159,6 +172,7 @@ export const useWaiverForm = (waiverType: 'liability' | 'photo_release') => {
       acknowledgeTerms: false,
       voluntarySignature: false,
       legalAgeCertification: false,
+      photoPermission: undefined,
     });
     setErrors({});
     setSubmissionResult(null);
