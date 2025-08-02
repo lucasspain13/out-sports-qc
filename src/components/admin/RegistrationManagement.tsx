@@ -36,6 +36,11 @@ interface Registration {
   notes: string;
 }
 
+interface WaiverStatus {
+  liability: boolean;
+  photo_release: boolean;
+}
+
 interface RegistrationSummary {
   sport_type: "kickball" | "dodgeball";
   total_registrations: number;
@@ -52,6 +57,7 @@ export const RegistrationManagement: React.FC = () => {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [summary, setSummary] = useState<RegistrationSummary[]>([]);
   const [registrationDetails, setRegistrationDetails] = useState<RegistrationDetails | null>(null);
+  const [waiverStatuses, setWaiverStatuses] = useState<Record<string, WaiverStatus>>({});
   const [loading, setLoading] = useState(true);
   const [selectedSport, setSelectedSport] = useState<
     "all" | "kickball" | "dodgeball"
@@ -65,6 +71,56 @@ export const RegistrationManagement: React.FC = () => {
     fetchSummary();
     fetchRegistrationDetails();
   }, []);
+
+  useEffect(() => {
+    if (registrations.length > 0) {
+      fetchWaiverStatuses();
+    }
+  }, [registrations]);
+
+  const fetchWaiverStatuses = async () => {
+    try {
+      const emails = registrations.map(reg => reg.email);
+      
+      if (emails.length === 0) return;
+
+      const { data, error } = await supabase
+        .from("waiver_signatures")
+        .select("participant_email, waiver_type")
+        .in("participant_email", emails);
+
+      if (error) throw error;
+
+      // Group waivers by email
+      const statusMap: Record<string, WaiverStatus> = {};
+      
+      // Initialize all emails with false values
+      emails.forEach(email => {
+        statusMap[email] = { liability: false, photo_release: false };
+      });
+
+      // Update with actual waiver data
+      data?.forEach(waiver => {
+        if (statusMap[waiver.participant_email]) {
+          if (waiver.waiver_type === 'liability') {
+            statusMap[waiver.participant_email].liability = true;
+          } else if (waiver.waiver_type === 'photo_release') {
+            statusMap[waiver.participant_email].photo_release = true;
+          }
+        }
+      });
+
+      setWaiverStatuses(statusMap);
+    } catch (error: any) {
+      console.error("Error fetching waiver statuses:", error);
+      showNotification({
+        type: "error",
+        title: "Error Loading Waiver Statuses",
+        message: error.message,
+        duration: 5000,
+      });
+    }
+  };
 
   const fetchRegistrationDetails = async () => {
     try {
@@ -236,19 +292,6 @@ export const RegistrationManagement: React.FC = () => {
         return "bg-red-100 text-red-800 border-red-200";
       default:
         return "bg-gray-100 text-gray-800 border-gray-200";
-    }
-  };
-
-  const getExperienceBadgeColor = (level: string) => {
-    switch (level) {
-      case "beginner":
-        return "bg-green-100 text-green-700";
-      case "intermediate":
-        return "bg-yellow-100 text-yellow-700";
-      case "advanced":
-        return "bg-red-100 text-red-700";
-      default:
-        return "bg-gray-100 text-gray-700";
     }
   };
 
@@ -504,7 +547,7 @@ export const RegistrationManagement: React.FC = () => {
                   Sport
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Experience
+                  Waivers
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Registration Date
@@ -547,13 +590,20 @@ export const RegistrationManagement: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getExperienceBadgeColor(
-                        registration.experience_level
-                      )}`}
-                    >
-                      {registration.experience_level}
-                    </span>
+                    <div className="flex flex-col space-y-1">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xs text-gray-500">Liability:</span>
+                        <span className="text-lg">
+                          {waiverStatuses[registration.email]?.liability ? "✅" : "❌"}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xs text-gray-500">Photo:</span>
+                        <span className="text-lg">
+                          {waiverStatuses[registration.email]?.photo_release ? "✅" : "❌"}
+                        </span>
+                      </div>
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {new Date(
