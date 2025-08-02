@@ -147,8 +147,14 @@ class WaiverService {
       return false;
     }
 
-    // Check acknowledgments
-    if (!data.acknowledgeTerms || !data.voluntarySignature || !data.legalAgeCertification) {
+    // Check acknowledgments - for photo release, acknowledgeTerms can be false (withhold permission)
+    // For liability waiver, acknowledgeTerms must be true
+    if (data.waiverType === 'liability' && !data.acknowledgeTerms) {
+      return false;
+    }
+    
+    // These must always be true regardless of waiver type
+    if (!data.voluntarySignature || !data.legalAgeCertification) {
       return false;
     }
 
