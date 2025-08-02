@@ -22,6 +22,7 @@ interface Registration {
   last_name: string;
   email: string;
   phone: string;
+  date_of_birth: string;
   shirt_size: string;
   experience_level: "beginner" | "intermediate" | "advanced";
   emergency_contact_name: string;
@@ -292,6 +293,21 @@ export const RegistrationManagement: React.FC = () => {
         return "bg-red-100 text-red-800 border-red-200";
       default:
         return "bg-gray-100 text-gray-800 border-gray-200";
+    }
+  };
+
+  const formatDateOfBirth = (dateStr: string | null | undefined): string => {
+    if (!dateStr) return "";
+    try {
+      const date = new Date(dateStr);
+      // Format as MM/DD/YYYY
+      return date.toLocaleDateString('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric'
+      });
+    } catch (error) {
+      return "";
     }
   };
 
@@ -567,6 +583,11 @@ export const RegistrationManagement: React.FC = () => {
                     <div>
                       <div className="text-sm font-medium text-gray-900">
                         {registration.first_name} {registration.last_name}
+                        {registration.date_of_birth && (
+                          <span className="text-gray-500 font-normal">
+                            {" "}({formatDateOfBirth(registration.date_of_birth)})
+                          </span>
+                        )}
                       </div>
                       <div className="text-sm text-gray-500">
                         {registration.email}
