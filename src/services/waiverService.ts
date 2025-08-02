@@ -102,12 +102,22 @@ class WaiverService {
             console.log('New acknowledge_terms:', data.acknowledgeTerms);
             
             // First, delete the existing record
-            const { error: deleteError } = await supabase
+            console.log('Attempting to delete existing waiver with criteria:', {
+              participant_name: data.participantName.trim(),
+              participant_dob: data.participantDOB,
+              waiver_type: data.waiverType
+            });
+
+            const { data: deleteResult, error: deleteError } = await supabase
               .from('waiver_signatures')
               .delete()
               .eq('participant_name', data.participantName.trim())
               .eq('participant_dob', data.participantDOB)
-              .eq('waiver_type', data.waiverType);
+              .eq('waiver_type', data.waiverType)
+              .select();
+
+            console.log('Delete result:', deleteResult);
+            console.log('Delete error:', deleteError);
 
             if (deleteError) {
               console.error('Error deleting existing photo release waiver:', deleteError);
@@ -117,7 +127,15 @@ class WaiverService {
               };
             }
 
-            console.log('Successfully deleted existing waiver, now inserting updated version');
+            if (!deleteResult || deleteResult.length === 0) {
+              console.error('No records were deleted - the existing waiver was not found for deletion');
+              return {
+                success: false,
+                message: 'Failed to update photo permission. Could not find existing record to update.'
+              };
+            }
+
+            console.log('Successfully deleted', deleteResult.length, 'existing waiver(s), now inserting updated version');
 
             // Then insert the new record with updated values
             const { data: insertResult, error: insertError } = await supabase
