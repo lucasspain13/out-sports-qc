@@ -97,9 +97,14 @@ class WaiverService {
           } else {
             // Different choice - update the existing record
             console.log('Updating photo release waiver with new permission');
-            console.log('Updating waiver ID:', existingWaiver.id);
+            console.log('Updating waiver ID:', existingWaiver.id, 'Type:', typeof existingWaiver.id);
             console.log('Current acknowledge_terms:', existingWaiver.acknowledge_terms);
             console.log('New acknowledge_terms:', data.acknowledgeTerms);
+            console.log('Using match criteria:', {
+              participant_name: data.participantName.trim(),
+              participant_dob: data.participantDOB,
+              waiver_type: data.waiverType
+            });
             
             const updateData = {
               digital_signature: data.digitalSignature.trim(),
@@ -114,10 +119,13 @@ class WaiverService {
             console.log('Update data being sent:', updateData);
             
             // Try the update with more explicit error handling
+            // Use the same criteria we used to find the record instead of just ID
             const { data: updateResult, error: updateError, count } = await supabase
               .from('waiver_signatures')
               .update(updateData)
-              .eq('id', existingWaiver.id)
+              .eq('participant_name', data.participantName.trim())
+              .eq('participant_dob', data.participantDOB)
+              .eq('waiver_type', data.waiverType)
               .select();
 
             console.log('Update result:', updateResult);
