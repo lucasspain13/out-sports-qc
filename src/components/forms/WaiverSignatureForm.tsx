@@ -196,8 +196,8 @@ const WaiverSignatureForm: React.FC<WaiverSignatureFormProps> = ({ waiverType, w
                     <label htmlFor="grantPermission" className="ml-3 text-sm text-green-800">
                       <strong>I GRANT permission</strong> for Out Sports of the Quad Cities (OSQC) to use my photography, image, video, 
                       and likeness publicly to promote the league. I understand these images may be used in print, 
-                      website, and/or social media. I also understand that no royalty, fee or any other compensation 
-                      shall be made to me for such use.
+                      website, and/or social media. I also understand that no royalty, fee, or any other compensation 
+                      shall be made to me for use, and that granting permission is voluntary and not required to participate in Out Sports activities.
                     </label>
                   </div>
                   

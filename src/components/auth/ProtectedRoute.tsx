@@ -2,25 +2,8 @@ import React from "react";
 import { useAuth } from "../../hooks/useAuth";
 
 // Development logging utility - sanitized for production
-const devLog = (message: string, data?: any) => {
-  if (process.env.NODE_ENV === "development") {
-    if (data) {
-      // Sanitize sensitive data for logging
-      const sanitizedData = { ...data };
-      if (sanitizedData.userId) {
-        sanitizedData.userId = sanitizedData.userId.substring(0, 8) + "...";
-      }
-      if (sanitizedData.userEmail) {
-        sanitizedData.userEmail = sanitizedData.userEmail.replace(
-          /(.{2}).*(@.*)/,
-          "$1***$2"
-        );
-      }
-      console.log(message, sanitizedData);
-    } else {
-      console.log(message);
-    }
-  }
+const devLog = (_message?: string, _data?: any) => {
+  // Logging removed for production
 };
 
 interface ProtectedRouteProps {

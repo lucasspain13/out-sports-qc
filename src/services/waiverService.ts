@@ -58,48 +58,33 @@ class WaiverService {
         .eq('waiver_type', data.waiverType);
 
       if (checkError) {
-        console.error('Error checking existing waiver:', checkError);
         return {
           success: false,
           message: 'Failed to check existing waiver. Please try again.'
         };
       }
 
-      console.log('Existing waivers found:', existingWaivers);
-
       if (existingWaivers && existingWaivers.length > 0) {
         const existingWaiver = existingWaivers[0]; // Use the first match
-        console.log('Found existing waiver:', existingWaiver);
         
         // Handle existing waiver based on type
         if (data.waiverType === 'liability') {
           // For liability waivers, don't allow resubmission
-          console.log('Blocking liability waiver resubmission');
           return {
             success: false,
             message: 'You have already successfully submitted your liability waiver. No further action is needed.'
           };
         } else if (data.waiverType === 'photo_release') {
           // For photo release waivers, check if acknowledge_terms is changing
-          console.log('Checking photo release waiver:', {
-            existing_acknowledge_terms: existingWaiver.acknowledge_terms,
-            new_acknowledge_terms: data.acknowledgeTerms
-          });
-          
           if (existingWaiver.acknowledge_terms === data.acknowledgeTerms) {
             // Same choice - don't allow duplicate
             const permissionType = data.acknowledgeTerms ? 'GRANT' : 'WITHHOLD';
-            console.log('Blocking duplicate photo release submission with same permission:', permissionType);
             return {
               success: false,
               message: `You have already submitted your photo release waiver with permission ${permissionType}. No further action is needed.`
             };
           } else {
             // Different choice - update the existing record
-            console.log('Updating photo release waiver with new permission');
-            console.log('Current acknowledge_terms:', existingWaiver.acknowledge_terms);
-            console.log('New acknowledge_terms:', data.acknowledgeTerms);
-            
             const updateData = {
               digital_signature: data.digitalSignature.trim(),
               acknowledge_terms: data.acknowledgeTerms,
@@ -110,8 +95,6 @@ class WaiverService {
               signature_timestamp: new Date().toISOString()
             };
             
-            console.log('Update data:', updateData);
-            
             const { data: updateResult, error: updateError } = await supabase
               .from('waiver_signatures')
               .update(updateData)
@@ -119,11 +102,7 @@ class WaiverService {
               .select()
               .single();
 
-            console.log('Update result:', updateResult);
-            console.log('Update error:', updateError);
-
             if (updateError) {
-              console.error('Error updating photo release waiver:', updateError);
               return {
                 success: false,
                 message: `Failed to update photo permission. Error: ${updateError.message}`
@@ -136,7 +115,6 @@ class WaiverService {
             // Generate confirmation number
             const confirmationNumber = this.generateConfirmationNumber(updateResult.id);
 
-            console.log('Successfully updated photo release waiver');
             return {
               success: true,
               id: updateResult.id,
@@ -148,7 +126,6 @@ class WaiverService {
       }
 
       // No existing waiver found - proceed with fresh insert
-      console.log('No existing waiver found, proceeding with new insert');
       const { data: result, error } = await supabase
         .from('waiver_signatures')
         .insert(dbData)
@@ -156,8 +133,6 @@ class WaiverService {
         .single();
 
       if (error) {
-        console.error('Database insert error:', error);
-        console.error('Data being inserted:', dbData);
         return {
           success: false,
           message: `Failed to submit waiver. Error: ${error.message}`
@@ -175,7 +150,6 @@ class WaiverService {
       };
 
     } catch (error) {
-      console.error('Waiver submission error:', error);
       return {
         success: false,
         message: 'An unexpected error occurred. Please try again.'
@@ -197,13 +171,11 @@ class WaiverService {
         .limit(1);
 
       if (error) {
-        console.error('Error checking waiver status:', error);
         return false;
       }
 
       return data && data.length > 0;
     } catch (error) {
-      console.error('Error checking waiver status:', error);
       return false;
     }
   }
@@ -221,13 +193,11 @@ class WaiverService {
         .order('signature_timestamp', { ascending: false });
 
       if (error) {
-        console.error('Error fetching waivers:', error);
         return null;
       }
 
       return data;
     } catch (error) {
-      console.error('Error fetching waivers:', error);
       return null;
     }
   }
