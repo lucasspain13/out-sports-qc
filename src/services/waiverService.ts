@@ -49,19 +49,61 @@ class WaiverService {
         signature_timestamp: new Date().toISOString()
       };
 
-      // Insert into database
-      const { data: result, error } = await supabase
+      // Check if waiver already exists for this participant and waiver type
+      const { data: existingWaiver, error: checkError } = await supabase
         .from('waiver_signatures')
-        .insert(dbData)
         .select('id')
+        .eq('participant_name', data.participantName.trim())
+        .eq('participant_dob', data.participantDOB)
+        .eq('waiver_type', data.waiverType)
         .single();
 
-      if (error) {
-        console.error('Database error:', error);
+      if (checkError && checkError.code !== 'PGRST116') {
+        // PGRST116 means no rows returned, which is fine
+        console.error('Error checking existing waiver:', checkError);
         return {
           success: false,
-          message: 'Failed to submit waiver. Please try again or contact support.'
+          message: 'Failed to check existing waiver. Please try again.'
         };
+      }
+
+      let result;
+      let operationType = 'insert';
+
+      if (existingWaiver) {
+        // Update existing waiver
+        operationType = 'update';
+        const { data: updateResult, error: updateError } = await supabase
+          .from('waiver_signatures')
+          .update(dbData)
+          .eq('id', existingWaiver.id)
+          .select('id')
+          .single();
+
+        if (updateError) {
+          console.error('Database update error:', updateError);
+          return {
+            success: false,
+            message: 'Failed to update waiver. Please try again or contact support.'
+          };
+        }
+        result = updateResult;
+      } else {
+        // Insert new waiver
+        const { data: insertResult, error: insertError } = await supabase
+          .from('waiver_signatures')
+          .insert(dbData)
+          .select('id')
+          .single();
+
+        if (insertError) {
+          console.error('Database insert error:', insertError);
+          return {
+            success: false,
+            message: 'Failed to submit waiver. Please try again or contact support.'
+          };
+        }
+        result = insertResult;
       }
 
       // Generate confirmation number
@@ -70,7 +112,7 @@ class WaiverService {
       return {
         success: true,
         id: result.id,
-        message: 'Waiver submitted successfully!',
+        message: `Waiver ${operationType === 'update' ? 'updated' : 'submitted'} successfully!`,
         confirmationNumber
       };
 
