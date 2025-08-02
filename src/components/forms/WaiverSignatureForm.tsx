@@ -174,7 +174,7 @@ const WaiverSignatureForm: React.FC<WaiverSignatureFormProps> = ({ waiverType, w
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                   <p className="text-sm text-blue-800 leading-relaxed">
                     Out Sports of the Quad Cities (OSQC) considers its members' preferences as a top priority. 
-                    This form ensures all members have control of their visibility to the community at large. <strong>Granting permission is NOT required to participate in Out Sports.</strong> Please read thoroughly 
+                    This form ensures all members have control of their visibility to the community at large. <strong>Granting permission is NOT required to participate in Out Sports, and you may return to this page at any time to change your preferences.</strong> Please read thoroughly 
                     and make a selection to grant or withhold Out Sports of the Quad Cities permission to share 
                     images in which you may appear.
                   </p>
