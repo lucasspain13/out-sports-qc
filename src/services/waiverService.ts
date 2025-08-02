@@ -71,20 +71,38 @@ class WaiverService {
       let operationType = 'insert';
 
       if (existingWaiver) {
-        // Update existing waiver
+        // Update existing waiver - only update fields that should change
         operationType = 'update';
+        console.log('Found existing waiver, updating...', existingWaiver);
+        
+        const updateData = {
+          waiver_version: dbData.waiver_version,
+          digital_signature: dbData.digital_signature,
+          acknowledge_terms: dbData.acknowledge_terms,
+          voluntary_signature: dbData.voluntary_signature,
+          legal_age_certification: dbData.legal_age_certification,
+          ip_address: dbData.ip_address,
+          user_agent: dbData.user_agent,
+          signature_timestamp: dbData.signature_timestamp
+          // Don't update participant_name, participant_dob, or waiver_type as these are used for matching
+        };
+
+        console.log('Update data:', updateData);
+
         const { data: updateResult, error: updateError } = await supabase
           .from('waiver_signatures')
-          .update(dbData)
+          .update(updateData)
           .eq('id', existingWaiver.id)
           .select('id')
           .single();
 
         if (updateError) {
           console.error('Database update error:', updateError);
+          console.error('Update data:', updateData);
+          console.error('Existing waiver ID:', existingWaiver.id);
           return {
             success: false,
-            message: 'Failed to update waiver. Please try again or contact support.'
+            message: `Failed to update waiver. Error: ${updateError.message}`
           };
         }
         result = updateResult;
