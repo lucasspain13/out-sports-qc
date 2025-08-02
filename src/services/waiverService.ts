@@ -98,6 +98,8 @@ class WaiverService {
             // Different choice - update the existing record
             console.log('Updating photo release waiver with new permission');
             console.log('Updating waiver ID:', existingWaiver.id);
+            console.log('Current acknowledge_terms:', existingWaiver.acknowledge_terms);
+            console.log('New acknowledge_terms:', data.acknowledgeTerms);
             
             const updateData = {
               digital_signature: data.digitalSignature.trim(),
@@ -109,21 +111,44 @@ class WaiverService {
               signature_timestamp: new Date().toISOString()
             };
             
-            console.log('Update data:', updateData);
+            console.log('Update data being sent:', updateData);
             
-            const { data: updateResult, error: updateError } = await supabase
+            // Try the update with more explicit error handling
+            const { data: updateResult, error: updateError, count } = await supabase
               .from('waiver_signatures')
               .update(updateData)
-              .eq('id', existingWaiver.id);
+              .eq('id', existingWaiver.id)
+              .select();
 
             console.log('Update result:', updateResult);
             console.log('Update error:', updateError);
+            console.log('Update count:', count);
 
             if (updateError) {
               console.error('Error updating photo release waiver:', updateError);
               return {
                 success: false,
                 message: `Failed to update photo permission. Error: ${updateError.message}`
+              };
+            }
+
+            // Check if any rows were actually updated
+            if (!updateResult || updateResult.length === 0) {
+              console.error('No rows were updated - this suggests the update failed silently');
+              return {
+                success: false,
+                message: 'Failed to update photo permission. No records were modified.'
+              };
+            }
+
+            // Verify the actual updated data
+            console.log('Updated record:', updateResult[0]);
+            if (updateResult[0].acknowledge_terms !== data.acknowledgeTerms) {
+              console.error('Update verification failed - acknowledge_terms in result does not match expected value');
+              console.error('Expected:', data.acknowledgeTerms, 'Got:', updateResult[0].acknowledge_terms);
+              return {
+                success: false,
+                message: 'Photo permission update failed - value did not change as expected.'
               };
             }
 
