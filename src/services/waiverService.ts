@@ -88,7 +88,7 @@ class WaiverService {
           
           if (existingWaiver.acknowledge_terms === data.acknowledgeTerms) {
             // Same choice - don't allow duplicate
-            const permissionType = data.acknowledgeTerms ? 'granted' : 'withheld';
+            const permissionType = data.acknowledgeTerms ? 'GRANT' : 'WITHHOLD';
             console.log('Blocking duplicate photo release submission with same permission:', permissionType);
             return {
               success: false,
@@ -127,8 +127,8 @@ class WaiverService {
               };
             }
 
-            const newPermissionType = data.acknowledgeTerms ? 'granted' : 'withheld';
-            const oldPermissionType = existingWaiver.acknowledge_terms ? 'granted' : 'withheld';
+            const newPermissionType = data.acknowledgeTerms ? 'GRANT' : 'WITHHOLD';
+            const oldPermissionType = existingWaiver.acknowledge_terms ? 'GRANT' : 'WITHHOLD';
 
             // Generate confirmation number for update using existing waiver ID
             const confirmationNumber = this.generateConfirmationNumber(existingWaiver.id);
