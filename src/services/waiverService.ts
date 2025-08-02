@@ -95,75 +95,51 @@ class WaiverService {
               message: `You have already submitted your photo release waiver with permission ${permissionType}. No further action is needed.`
             };
           } else {
-            // Different choice - delete the existing record and insert a new one
-            console.log('Updating photo release waiver with new permission using delete+insert approach');
-            console.log('Existing waiver ID:', existingWaiver.id, 'Type:', typeof existingWaiver.id);
+            // Different choice - update the existing record
+            console.log('Updating photo release waiver with new permission');
             console.log('Current acknowledge_terms:', existingWaiver.acknowledge_terms);
             console.log('New acknowledge_terms:', data.acknowledgeTerms);
             
-            // First, delete the existing record
-            console.log('Attempting to delete existing waiver with criteria:', {
-              participant_name: data.participantName.trim(),
-              participant_dob: data.participantDOB,
-              waiver_type: data.waiverType
-            });
-
-            const { data: deleteResult, error: deleteError } = await supabase
+            const updateData = {
+              digital_signature: data.digitalSignature.trim(),
+              acknowledge_terms: data.acknowledgeTerms,
+              voluntary_signature: data.voluntarySignature,
+              legal_age_certification: data.legalAgeCertification,
+              ip_address: clientInfo.ipAddress,
+              user_agent: clientInfo.userAgent,
+              signature_timestamp: new Date().toISOString()
+            };
+            
+            console.log('Update data:', updateData);
+            
+            const { data: updateResult, error: updateError } = await supabase
               .from('waiver_signatures')
-              .delete()
-              .eq('participant_name', data.participantName.trim())
-              .eq('participant_dob', data.participantDOB)
-              .eq('waiver_type', data.waiverType)
-              .select();
-
-            console.log('Delete result:', deleteResult);
-            console.log('Delete error:', deleteError);
-
-            if (deleteError) {
-              console.error('Error deleting existing photo release waiver:', deleteError);
-              return {
-                success: false,
-                message: `Failed to update photo permission. Error: ${deleteError.message}`
-              };
-            }
-
-            if (!deleteResult || deleteResult.length === 0) {
-              console.error('No records were deleted - the existing waiver was not found for deletion');
-              return {
-                success: false,
-                message: 'Failed to update photo permission. Could not find existing record to update.'
-              };
-            }
-
-            console.log('Successfully deleted', deleteResult.length, 'existing waiver(s), now inserting updated version');
-
-            // Then insert the new record with updated values
-            const { data: insertResult, error: insertError } = await supabase
-              .from('waiver_signatures')
-              .insert(dbData)
-              .select('id')
+              .update(updateData)
+              .eq('id', existingWaiver.id)
+              .select()
               .single();
 
-            if (insertError) {
-              console.error('Error inserting updated photo release waiver:', insertError);
+            console.log('Update result:', updateResult);
+            console.log('Update error:', updateError);
+
+            if (updateError) {
+              console.error('Error updating photo release waiver:', updateError);
               return {
                 success: false,
-                message: `Failed to update photo permission. Error: ${insertError.message}`
+                message: `Failed to update photo permission. Error: ${updateError.message}`
               };
             }
-
-            console.log('Successfully inserted updated waiver:', insertResult);
 
             const newPermissionType = data.acknowledgeTerms ? 'GRANT' : 'WITHHOLD';
             const oldPermissionType = existingWaiver.acknowledge_terms ? 'GRANT' : 'WITHHOLD';
 
-            // Generate confirmation number for the new record
-            const confirmationNumber = this.generateConfirmationNumber(insertResult.id);
+            // Generate confirmation number
+            const confirmationNumber = this.generateConfirmationNumber(updateResult.id);
 
-            console.log('Successfully updated photo release waiver via delete+insert');
+            console.log('Successfully updated photo release waiver');
             return {
               success: true,
-              id: insertResult.id,
+              id: updateResult.id,
               message: `Photo permission updated successfully! Changed from ${oldPermissionType} to ${newPermissionType}.`,
               confirmationNumber
             };
