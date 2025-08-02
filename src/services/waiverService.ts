@@ -97,19 +97,27 @@ class WaiverService {
           } else {
             // Different choice - update the existing record
             console.log('Updating photo release waiver with new permission');
+            console.log('Updating waiver ID:', existingWaiver.id);
+            
+            const updateData = {
+              digital_signature: data.digitalSignature.trim(),
+              acknowledge_terms: data.acknowledgeTerms,
+              voluntary_signature: data.voluntarySignature,
+              legal_age_certification: data.legalAgeCertification,
+              ip_address: clientInfo.ipAddress,
+              user_agent: clientInfo.userAgent,
+              signature_timestamp: new Date().toISOString()
+            };
+            
+            console.log('Update data:', updateData);
+            
             const { data: updateResult, error: updateError } = await supabase
               .from('waiver_signatures')
-              .update({
-                digital_signature: data.digitalSignature.trim(),
-                acknowledge_terms: data.acknowledgeTerms,
-                voluntary_signature: data.voluntarySignature,
-                legal_age_certification: data.legalAgeCertification,
-                ip_address: clientInfo.ipAddress,
-                user_agent: clientInfo.userAgent,
-                signature_timestamp: new Date().toISOString()
-              })
-              .eq('id', existingWaiver.id)
-              .select('id');
+              .update(updateData)
+              .eq('id', existingWaiver.id);
+
+            console.log('Update result:', updateResult);
+            console.log('Update error:', updateError);
 
             if (updateError) {
               console.error('Error updating photo release waiver:', updateError);
@@ -119,24 +127,16 @@ class WaiverService {
               };
             }
 
-            if (!updateResult || updateResult.length === 0) {
-              console.error('Update returned no results');
-              return {
-                success: false,
-                message: 'Failed to update photo permission. No records were updated.'
-              };
-            }
-
             const newPermissionType = data.acknowledgeTerms ? 'granted' : 'withheld';
             const oldPermissionType = existingWaiver.acknowledge_terms ? 'granted' : 'withheld';
 
-            // Generate confirmation number for update
-            const confirmationNumber = this.generateConfirmationNumber(updateResult[0].id);
+            // Generate confirmation number for update using existing waiver ID
+            const confirmationNumber = this.generateConfirmationNumber(existingWaiver.id);
 
             console.log('Successfully updated photo release waiver');
             return {
               success: true,
-              id: updateResult[0].id,
+              id: existingWaiver.id,
               message: `Photo permission updated successfully! Changed from ${oldPermissionType} to ${newPermissionType}.`,
               confirmationNumber
             };
