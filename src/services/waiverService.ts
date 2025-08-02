@@ -50,16 +50,14 @@ class WaiverService {
       };
 
       // Check if waiver already exists for this participant and waiver type
-      const { data: existingWaiver, error: checkError } = await supabase
+      const { data: existingWaivers, error: checkError } = await supabase
         .from('waiver_signatures')
         .select('id, acknowledge_terms')
         .eq('participant_name', data.participantName.trim())
         .eq('participant_dob', data.participantDOB)
-        .eq('waiver_type', data.waiverType)
-        .single();
+        .eq('waiver_type', data.waiverType);
 
-      if (checkError && checkError.code !== 'PGRST116') {
-        // PGRST116 means no rows returned, which is fine
+      if (checkError) {
         console.error('Error checking existing waiver:', checkError);
         return {
           success: false,
@@ -67,25 +65,38 @@ class WaiverService {
         };
       }
 
-      if (existingWaiver) {
+      console.log('Existing waivers found:', existingWaivers);
+
+      if (existingWaivers && existingWaivers.length > 0) {
+        const existingWaiver = existingWaivers[0]; // Use the first match
+        console.log('Found existing waiver:', existingWaiver);
+        
         // Handle existing waiver based on type
         if (data.waiverType === 'liability') {
           // For liability waivers, don't allow resubmission
+          console.log('Blocking liability waiver resubmission');
           return {
             success: false,
             message: 'You have already successfully submitted your liability waiver. No further action is needed.'
           };
         } else if (data.waiverType === 'photo_release') {
           // For photo release waivers, check if acknowledge_terms is changing
+          console.log('Checking photo release waiver:', {
+            existing_acknowledge_terms: existingWaiver.acknowledge_terms,
+            new_acknowledge_terms: data.acknowledgeTerms
+          });
+          
           if (existingWaiver.acknowledge_terms === data.acknowledgeTerms) {
             // Same choice - don't allow duplicate
             const permissionType = data.acknowledgeTerms ? 'granted' : 'withheld';
+            console.log('Blocking duplicate photo release submission with same permission:', permissionType);
             return {
               success: false,
               message: `You have already submitted your photo release waiver with permission ${permissionType}. No further action is needed.`
             };
           } else {
             // Different choice - update the existing record
+            console.log('Updating photo release waiver with new permission');
             const { data: updateResult, error: updateError } = await supabase
               .from('waiver_signatures')
               .update({
@@ -98,8 +109,7 @@ class WaiverService {
                 signature_timestamp: new Date().toISOString()
               })
               .eq('id', existingWaiver.id)
-              .select('id')
-              .single();
+              .select('id');
 
             if (updateError) {
               console.error('Error updating photo release waiver:', updateError);
@@ -109,15 +119,24 @@ class WaiverService {
               };
             }
 
+            if (!updateResult || updateResult.length === 0) {
+              console.error('Update returned no results');
+              return {
+                success: false,
+                message: 'Failed to update photo permission. No records were updated.'
+              };
+            }
+
             const newPermissionType = data.acknowledgeTerms ? 'granted' : 'withheld';
             const oldPermissionType = existingWaiver.acknowledge_terms ? 'granted' : 'withheld';
 
             // Generate confirmation number for update
-            const confirmationNumber = this.generateConfirmationNumber(updateResult.id);
+            const confirmationNumber = this.generateConfirmationNumber(updateResult[0].id);
 
+            console.log('Successfully updated photo release waiver');
             return {
               success: true,
-              id: updateResult.id,
+              id: updateResult[0].id,
               message: `Photo permission updated successfully! Changed from ${oldPermissionType} to ${newPermissionType}.`,
               confirmationNumber
             };
@@ -126,6 +145,7 @@ class WaiverService {
       }
 
       // No existing waiver found - proceed with fresh insert
+      console.log('No existing waiver found, proceeding with new insert');
       const { data: result, error } = await supabase
         .from('waiver_signatures')
         .insert(dbData)
