@@ -49,79 +49,47 @@ class WaiverService {
         signature_timestamp: new Date().toISOString()
       };
 
-      // Check if waiver already exists for this participant and waiver type
-      const { data: existingWaiver, error: checkError } = await supabase
+      // Try to delete any existing waiver first, then insert the new one
+      // This ensures we don't have duplicates and always have the latest data
+      console.log('Deleting existing waivers for:', {
+        participant_name: data.participantName.trim(),
+        participant_dob: data.participantDOB,
+        waiver_type: data.waiverType
+      });
+
+      const { data: deletedRows, error: deleteError } = await supabase
         .from('waiver_signatures')
-        .select('id')
+        .delete()
         .eq('participant_name', data.participantName.trim())
         .eq('participant_dob', data.participantDOB)
         .eq('waiver_type', data.waiverType)
-        .single();
+        .select('id');
 
-      if (checkError && checkError.code !== 'PGRST116') {
-        // PGRST116 means no rows returned, which is fine
-        console.error('Error checking existing waiver:', checkError);
+      if (deleteError) {
+        console.error('Error deleting existing waiver:', deleteError);
         return {
           success: false,
-          message: 'Failed to check existing waiver. Please try again.'
+          message: `Failed to remove existing waiver. Error: ${deleteError.message}`
         };
       }
 
-      let result;
-      let operationType = 'insert';
+      console.log('Deleted existing waivers:', deletedRows);
 
-      if (existingWaiver) {
-        // Update existing waiver - only update fields that should change
-        operationType = 'update';
-        console.log('Found existing waiver, updating...', existingWaiver);
-        
-        const updateData = {
-          waiver_version: dbData.waiver_version,
-          digital_signature: dbData.digital_signature,
-          acknowledge_terms: dbData.acknowledge_terms,
-          voluntary_signature: dbData.voluntary_signature,
-          legal_age_certification: dbData.legal_age_certification,
-          ip_address: dbData.ip_address,
-          user_agent: dbData.user_agent,
-          signature_timestamp: dbData.signature_timestamp
-          // Don't update participant_name, participant_dob, or waiver_type as these are used for matching
+      // Insert the new waiver (this will always be a fresh insert)
+      console.log('Inserting new waiver:', dbData);
+      const { data: result, error } = await supabase
+        .from('waiver_signatures')
+        .insert(dbData)
+        .select('id')
+        .single();
+
+      if (error) {
+        console.error('Database insert error:', error);
+        console.error('Data being inserted:', dbData);
+        return {
+          success: false,
+          message: `Failed to submit waiver. Error: ${error.message}`
         };
-
-        console.log('Update data:', updateData);
-
-        const { data: updateResult, error: updateError } = await supabase
-          .from('waiver_signatures')
-          .update(updateData)
-          .eq('id', existingWaiver.id)
-          .select('id')
-          .single();
-
-        if (updateError) {
-          console.error('Database update error:', updateError);
-          console.error('Update data:', updateData);
-          console.error('Existing waiver ID:', existingWaiver.id);
-          return {
-            success: false,
-            message: `Failed to update waiver. Error: ${updateError.message}`
-          };
-        }
-        result = updateResult;
-      } else {
-        // Insert new waiver
-        const { data: insertResult, error: insertError } = await supabase
-          .from('waiver_signatures')
-          .insert(dbData)
-          .select('id')
-          .single();
-
-        if (insertError) {
-          console.error('Database insert error:', insertError);
-          return {
-            success: false,
-            message: 'Failed to submit waiver. Please try again or contact support.'
-          };
-        }
-        result = insertResult;
       }
 
       // Generate confirmation number
@@ -130,7 +98,7 @@ class WaiverService {
       return {
         success: true,
         id: result.id,
-        message: `Waiver ${operationType === 'update' ? 'updated' : 'submitted'} successfully!`,
+        message: 'Waiver submitted successfully!',
         confirmationNumber
       };
 
