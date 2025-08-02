@@ -53,11 +53,6 @@ const WaiverSignatureForm: React.FC<WaiverSignatureFormProps> = ({ waiverType, w
             </svg>
             <div>
               <p className="text-green-800 font-semibold">{submissionResult.message}</p>
-              {submissionResult.confirmationNumber && (
-                <p className="text-green-700 text-sm mt-1">
-                  Confirmation Number: <span className="font-mono font-bold">{submissionResult.confirmationNumber}</span>
-                </p>
-              )}
               <p className="text-green-700 text-sm mt-2">
                 You can now safely navigate away from this page. Your waiver signature has been recorded.
               </p>
