@@ -18,7 +18,7 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
     const staticItems: MenuItem[] = [
       { label: "Home", href: "#home", isActive: currentRoute === "#home" },
       {
-        label: "General",
+        label: "Waivers",
         hasDropdown: true,
         isActive: currentRoute === "#info" || currentRoute === "#league-rules" || currentRoute === "#liability" || currentRoute === "#photo",
         dropdownItems: [

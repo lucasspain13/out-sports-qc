@@ -1,4 +1,4 @@
-import { ChevronDown, Menu, X, AlertTriangle } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { NavigationProps } from "../../types";
 import { LiveScoreWidget, ReportIssueModal } from "../ui";
@@ -153,8 +153,8 @@ const Navigation: React.FC<NavigationProps> = ({
               </div>
             )}
 
-            {/* Feedback Button */}
-            <button
+            {/* Feedback Button - Hidden from menu */}
+            {/* <button
               onClick={() => {
                 // Scroll to top to ensure modal is visible
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -170,7 +170,7 @@ const Navigation: React.FC<NavigationProps> = ({
             >
               <AlertTriangle className="w-4 h-4 inline mr-1" />
               Give Website Feedback
-            </button>
+            </button> */}
           </div>
 
           {/* Mobile Menu Button */}
@@ -249,8 +249,8 @@ const Navigation: React.FC<NavigationProps> = ({
                 </div>
               ))}
 
-              {/* Feedback Button - Mobile */}
-              <button
+              {/* Feedback Button - Mobile - Hidden from menu */}
+              {/* <button
                 onClick={() => {
                   // Scroll to top to ensure modal is visible
                   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -262,7 +262,7 @@ const Navigation: React.FC<NavigationProps> = ({
               >
                 <AlertTriangle className="w-4 h-4 mr-2" />
                 Give Website Feedback
-              </button>
+              </button> */}
             </div>
           </div>
         )}
