@@ -23,7 +23,7 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
         isActive: currentRoute === "#info" || currentRoute === "#league-rules" || currentRoute === "#liability" || currentRoute === "#photo",
         dropdownItems: [
           // { label: "About Us", href: "#info" }, // Temporarily disabled
-          { label: "League Rules", href: "#league-rules" },
+          // { label: "League Rules", href: "#league-rules" }, // Hidden from menu
           { label: "Liability Release Waiver", href: "#liability" },
           { label: "Photo Release Waiver", href: "#photo" },
         ],
@@ -39,7 +39,7 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
           hasDropdown: true,
           isActive: currentRoute.includes("kickball") || currentRoute.includes("schedule") || currentRoute.includes("teams") || currentRoute.includes("registration"),
           dropdownItems: [
-            { label: "Kickball Rules", href: "#kickball-rules" },
+            // { label: "Kickball Rules", href: "#kickball-rules" }, // Hidden from menu
             { label: "Summer 2025 Schedule", href: "#schedule" },
             // { label: "Summer 2025 Teams", href: "#teams" }, // Temporarily hidden
             { label: "Fall 2025 Registration", href: "#registration" },
@@ -76,10 +76,10 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
     const dynamicSportItems: MenuItem[] = Object.entries(sportGroups).map(([sportName]) => {
       const dropdownItems: MenuItem[] = [];
       
-      // Add sport-specific rules only (League Rules moved to General Info)
-      dropdownItems.push(
-        { label: `${sportName} Rules`, href: `#${sportName.toLowerCase()}-rules` }
-      );
+      // Sport-specific rules hidden from menu
+      // dropdownItems.push(
+      //   { label: `${sportName} Rules`, href: `#${sportName.toLowerCase()}-rules` }
+      // );
       
       // Find active sport (is_active=true, coming_soon=false, name ends with " [SportName]")
       const activeSport = sportsInfo.data.find(sport => 
