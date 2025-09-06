@@ -12,6 +12,7 @@ export { default as RosterDemo } from "./RosterDemo";
 export { default as RosterOverview } from "./RosterOverview";
 export { default as ScheduleDemo } from "./ScheduleDemo";
 export { default as ScheduleOverview } from "./ScheduleOverview";
+export { default as SubstituteRegistrationPage } from "./SubstituteRegistrationPage";
 export { default as TeamDetailPage } from "./TeamDetailPage";
 
 // Admin Components

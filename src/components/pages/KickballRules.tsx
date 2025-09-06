@@ -55,7 +55,7 @@ const KickballRules: React.FC = () => {
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Team Size:</strong> 16 players per roster (minimum 8
+                <strong>Team Size:</strong> 15 players per roster (minimum 8
                 to field a team)
               </span>
             </li>
@@ -94,15 +94,13 @@ const KickballRules: React.FC = () => {
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Mercy Rule:</strong> Game ends if one team is ahead by
-                10+ runs after 5 innings
+                <strong>Time Limits:</strong> No new inning may start after 45 minutes. If time expires during an inning, complete the inning unless the home team is ahead
               </span>
             </li>
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Equipment:</strong> We provide the kickball - just bring
-                your energy!
+                <strong>Tie Games:</strong> Games ending in a tie will be recorded as ties. No extra innings during regular season play
               </span>
             </li>
             <li className="flex items-start">
@@ -127,8 +125,7 @@ const KickballRules: React.FC = () => {
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-red-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Foul Balls:</strong> Count as strikes, but you can't
-                strike out on a foul ball
+                <strong>Foul Balls:</strong> Fouls count as strikes, 4th foul = out
               </span>
             </li>
             <li className="flex items-start">
@@ -185,8 +182,19 @@ const KickballRules: React.FC = () => {
             <li className="flex items-start">
               <span className="inline-block w-2 h-2 bg-indigo-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
               <span>
-                <strong>Home Plate:</strong> Runner must touch home plate to
-                score (no sliding into home)
+                <strong>Home Plate:</strong> Runner must touch home plate to score
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 bg-indigo-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span>
+                <strong>Safety Base:</strong> Runners may run through first base when touching the safety (orange) base. Running through second or third bases is not allowed
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 bg-indigo-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+              <span>
+                <strong>Base Path:</strong> Runners must stay within 3 feet of the direct line between bases. Running outside the base path to avoid a tag results in an out
               </span>
             </li>
           </ul>
@@ -246,9 +254,8 @@ const KickballRules: React.FC = () => {
               game better for everyone.
             </p>
             <p>
-              <strong className="text-blue-600">Self-Officiating:</strong>{" "}
-              Players make their own calls with respect and honesty. When in
-              doubt, give the benefit to your opponent.
+              <strong className="text-blue-600">Honest Play:</strong>{" "}
+              While we have umpires for games, we still encourage players to be honest and respectful about calls that are uncertain. Good sportsmanship makes the game better for everyone.
             </p>
             <p>
               <strong className="text-purple-600">Inclusive Play:</strong> Make

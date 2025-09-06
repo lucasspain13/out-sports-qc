@@ -16,6 +16,7 @@ export {
 export { default as AndroidRegistrationForm } from "./android/AndroidRegistrationForm";
 export { default as IOSRegistrationForm } from "./ios/IOSRegistrationForm";
 export { default as PlatformRegistrationForm } from "./PlatformRegistrationForm";
+export { default as SubstituteRegistrationForm } from "./SubstituteRegistrationForm";
 
 // Date Picker Components
 export { default as AndroidDatePicker } from "./android/AndroidDatePicker";

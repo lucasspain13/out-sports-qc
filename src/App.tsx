@@ -16,6 +16,7 @@ import {
   RegistrationPage,
   RosterOverview,
   ScheduleOverview,
+  SubstituteRegistrationPage,
   TeamDetailPage,
 } from "./components/pages";
 import { SportAwarePage } from "./components/pages/SportAwarePage";
@@ -402,6 +403,19 @@ function AppContent() {
         navigateTo("#registration");
       }, 0);
       return <RegistrationPage sportType="kickball" season="Fall 2025" />;
+    }
+
+    // Substitute Registration pages
+    if (currentRoute === "#substitute-registration") {
+      return <SubstituteRegistrationPage sportType="kickball" season="Fall 2025" />;
+    }
+
+    if (currentRoute === "#kickball-substitute-registration") {
+      return <SubstituteRegistrationPage sportType="kickball" season="Fall 2025" />;
+    }
+
+    if (currentRoute === "#dodgeball-substitute-registration") {
+      return <SubstituteRegistrationPage sportType="dodgeball" season="Winter 2026" />;
     }
 
     // Dodgeball registration is temporarily disabled - handled by redirect above

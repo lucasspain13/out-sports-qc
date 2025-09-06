@@ -18,9 +18,18 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
     const staticItems: MenuItem[] = [
       { label: "Home", href: "#home", isActive: currentRoute === "#home" },
       {
+        label: "Handbook",
+        hasDropdown: true,
+        isActive: currentRoute === "#league-rules" || currentRoute === "#kickball-rules",
+        dropdownItems: [
+          { label: "League Rules (Under Construction)" },
+          { label: "Kickball Rules", href: "#kickball-rules" },
+        ],
+      },
+      {
         label: "Waivers",
         hasDropdown: true,
-        isActive: currentRoute === "#info" || currentRoute === "#league-rules" || currentRoute === "#liability" || currentRoute === "#photo",
+        isActive: currentRoute === "#info" || currentRoute === "#liability" || currentRoute === "#photo",
         dropdownItems: [
           // { label: "About Us", href: "#info" }, // Temporarily disabled
           // { label: "League Rules", href: "#league-rules" }, // Hidden from menu
@@ -43,6 +52,7 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
             { label: "Summer 2025 Schedule", href: "#schedule" },
             // { label: "Summer 2025 Teams", href: "#teams" }, // Temporarily hidden
             { label: "Fall 2025 Registration", href: "#registration" },
+            { label: "Substitute Registration", href: "#substitute-registration" },
           ],
         },
       ];
@@ -111,6 +121,13 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
         const [season, year] = nameWithoutSport.split(' ');
         dropdownItems.push(
           { label: `${nameWithoutSport} Registration`, href: `#registration?sport=${encodeURIComponent(sportName)}&season=${season}&year=${year}` }
+        );
+      }
+
+      // Add substitute registration for kickball
+      if (sportName.toLowerCase() === 'kickball') {
+        dropdownItems.push(
+          { label: `Substitute Registration`, href: `#substitute-registration` }
         );
       }
 
