@@ -66,7 +66,7 @@ const ScheduleOverview: React.FC<ScheduleOverviewProps> = ({
   const completedCount = completedGames.length;
   const upcomingCount = upcomingGames.length;
   const totalWeeks = scheduleWeeks.length;
-  const currentSeason = games.length > 0 ? games[0].season : "Summer 2025";
+  const currentSeason = games.length > 0 ? games[0].season : "Fall 2025";
 
   // Early returns AFTER all hooks have been called
   if (loading) {

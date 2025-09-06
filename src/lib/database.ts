@@ -107,7 +107,7 @@ const transformGame = (
       : undefined,
   sportType: dbGame.sport_type as "kickball" | "dodgeball",
   week: dbGame.week_number || 1,
-  season: dbGame.season || "Summer 2025",
+  season: dbGame.season || "Fall 2025",
   year: (dbGame as any).year || new Date(dbGame.scheduled_at).getFullYear(),
 });
 
@@ -674,7 +674,7 @@ export const scheduleApi = {
     weeks.sort((a, b) => a.weekNumber - b.weekNumber);
 
     return {
-      season: games[0]?.season || "Summer 2025",
+      season: games[0]?.season || "Fall 2025",
       sportType,
       weeks,
       totalWeeks: weeks.length,

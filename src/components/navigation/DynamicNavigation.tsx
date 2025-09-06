@@ -49,8 +49,8 @@ export const DynamicNavigation: React.FC<DynamicNavigationProps> = ({
           isActive: currentRoute.includes("kickball") || currentRoute.includes("schedule") || currentRoute.includes("teams") || currentRoute.includes("registration"),
           dropdownItems: [
             // { label: "Kickball Rules", href: "#kickball-rules" }, // Hidden from menu
-            { label: "Summer 2025 Schedule", href: "#schedule" },
-            // { label: "Summer 2025 Teams", href: "#teams" }, // Temporarily hidden
+            { label: "Fall 2025 Schedule", href: "#schedule" },
+            // { label: "Fall 2025 Teams", href: "#teams" }, // Temporarily hidden
             { label: "Fall 2025 Registration", href: "#registration" },
             { label: "Substitute Registration", href: "#substitute-registration" },
           ],

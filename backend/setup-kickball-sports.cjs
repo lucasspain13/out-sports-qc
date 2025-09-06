@@ -4,8 +4,8 @@
  * Setup Kickball Sports Script
  * 
  * This script ensures that:
- * 1. Summer 2025 Kickball exists and is set to Active (NOT Coming Soon)
- * 2. Fall 2025 Kickball exists and is set to Coming Soon (NOT Active)
+ * 1. Fall 2025 Kickball exists and is set to Active (NOT Coming Soon)
+ * 2. Winter 2026 Kickball exists and is set to Coming Soon (NOT Active)
  * 3. Creates appropriate routes for each sport based on their status
  */
 
@@ -61,21 +61,21 @@ async function setupKickballSports() {
     console.log("📊 Current sports in database:", currentSports);
     
     // Define the sports we need - only fields that exist in the database
-    const summerKickball = {
-      name: 'Summer 2025 Kickball',
+    const fallKickball = {
+      name: 'Fall 2025 Kickball',
       description: 'Join our inclusive kickball league where everyone plays, everyone matters, and everyone has fun! Experience the thrill of kickball in a welcoming, LGBTQ+ friendly community atmosphere.',
       gradient: 'red',
       participants: 62,
-      next_game: '2025-08-03',
+      next_game: '2025-09-22',
       features: ['All skill levels welcome', 'Equipment provided', 'Weekend games', 'LGBTQ+ friendly environment'],
       total_teams: 4,
       coming_soon: false,
       is_active: true
     };
     
-    const fallKickball = {
-      name: 'Fall 2025 Kickball',
-      description: 'Get ready for fall kickball fun! Join our inclusive community for another amazing season of kickball in a welcoming, LGBTQ+ friendly environment.',
+    const winterKickball = {
+      name: 'Winter 2026 Kickball',
+      description: 'Get ready for winter kickball fun! Join our inclusive community for another amazing season of kickball in a welcoming, LGBTQ+ friendly environment.',
       gradient: 'brown',
       participants: 0, // No participants yet since it's coming soon
       next_game: null,
@@ -86,43 +86,13 @@ async function setupKickballSports() {
     };
     
     // Find existing records based on name
-    const existingSummer = currentSports?.find(sport => 
-      sport.name.includes('Summer 2025 Kickball')
-    );
-    
     const existingFall = currentSports?.find(sport => 
       sport.name.includes('Fall 2025 Kickball')
     );
     
-    // Update or create Summer 2025 Kickball
-    if (existingSummer) {
-      console.log("📝 Updating existing Summer 2025 Kickball...");
-      const { error: updateError } = await supabase
-        .from('sports_info')
-        .update({
-          ...summerKickball
-        })
-        .eq('id', existingSummer.id);
-      
-      if (updateError) {
-        console.error("❌ Error updating Summer 2025 Kickball:", updateError);
-      } else {
-        console.log("✅ Successfully updated Summer 2025 Kickball as Active");
-      }
-    } else {
-      console.log("📝 Creating new Summer 2025 Kickball...");
-      const { error: createError } = await supabase
-        .from('sports_info')
-        .insert({
-          ...summerKickball
-        });
-      
-      if (createError) {
-        console.error("❌ Error creating Summer 2025 Kickball:", createError);
-      } else {
-        console.log("✅ Successfully created Summer 2025 Kickball as Active");
-      }
-    }
+    const existingWinter = currentSports?.find(sport => 
+      sport.name.includes('Winter 2026 Kickball')
+    );
     
     // Update or create Fall 2025 Kickball
     if (existingFall) {
@@ -137,7 +107,7 @@ async function setupKickballSports() {
       if (updateError) {
         console.error("❌ Error updating Fall 2025 Kickball:", updateError);
       } else {
-        console.log("✅ Successfully updated Fall 2025 Kickball as Coming Soon");
+        console.log("✅ Successfully updated Fall 2025 Kickball as Active");
       }
     } else {
       console.log("📝 Creating new Fall 2025 Kickball...");
@@ -150,7 +120,37 @@ async function setupKickballSports() {
       if (createError) {
         console.error("❌ Error creating Fall 2025 Kickball:", createError);
       } else {
-        console.log("✅ Successfully created Fall 2025 Kickball as Coming Soon");
+        console.log("✅ Successfully created Fall 2025 Kickball as Active");
+      }
+    }
+    
+    // Update or create Winter 2026 Kickball
+    if (existingWinter) {
+      console.log("📝 Updating existing Winter 2026 Kickball...");
+      const { error: updateError } = await supabase
+        .from('sports_info')
+        .update({
+          ...winterKickball
+        })
+        .eq('id', existingWinter.id);
+      
+      if (updateError) {
+        console.error("❌ Error updating Winter 2026 Kickball:", updateError);
+      } else {
+        console.log("✅ Successfully updated Winter 2026 Kickball as Coming Soon");
+      }
+    } else {
+      console.log("📝 Creating new Winter 2026 Kickball...");
+      const { error: createError } = await supabase
+        .from('sports_info')
+        .insert({
+          ...winterKickball
+        });
+      
+      if (createError) {
+        console.error("❌ Error creating Winter 2026 Kickball:", createError);
+      } else {
+        console.log("✅ Successfully created Winter 2026 Kickball as Coming Soon");
       }
     }
     
@@ -159,7 +159,7 @@ async function setupKickballSports() {
     const { data: finalSports, error: finalError } = await supabase
       .from('sports_info')
       .select('*')
-      .or('name.eq.Summer 2025 Kickball,name.eq.Fall 2025 Kickball')
+      .or('name.eq.Fall 2025 Kickball,name.eq.Winter 2026 Kickball')
       .order('name');
     
     if (finalError) {

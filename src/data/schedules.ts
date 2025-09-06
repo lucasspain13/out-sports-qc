@@ -46,10 +46,10 @@ const generateScore = () => ({
 const createKickballSchedule = (): Schedule => {
   const matchups = createRoundRobinMatchups(kickballTeams);
   const weeks: ScheduleWeek[] = [];
-  const season = "Summer 2025";
+  const season = "Fall 2025";
 
-  // Start date for the season - updated to current timeframe
-  const startDate = new Date("2025-07-01");
+  // Start date for the season - updated to Fall timeframe
+  const startDate = new Date("2025-09-15");
 
   let gameId = 1;
   let weekNumber = 1;
@@ -124,10 +124,10 @@ const createKickballSchedule = (): Schedule => {
 const createDodgeballSchedule = (): Schedule => {
   const matchups = createRoundRobinMatchups(dodgeballTeams);
   const weeks: ScheduleWeek[] = [];
-  const season = "Summer 2025";
+  const season = "Fall 2025";
 
   // Start date for the season (offset by a few days from kickball)
-  const startDate = new Date("2025-07-03");
+  const startDate = new Date("2025-09-17");
 
   let gameId = 1;
   let weekNumber = 1;
