@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface AdminErrorBannerProps {
   error: string | null;
@@ -13,7 +13,15 @@ export const AdminErrorBanner: React.FC<AdminErrorBannerProps> = ({
   onDismiss,
   className = "",
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   if (!error) return null;
+
+  // Check if error message is long (more than 100 characters)
+  const isLongError = error.length > 100;
+  const displayError = isLongError && !isExpanded 
+    ? `${error.substring(0, 100)}...` 
+    : error;
 
   return (
     <div
@@ -36,7 +44,17 @@ export const AdminErrorBanner: React.FC<AdminErrorBannerProps> = ({
           </svg>
         </div>
         <div className="ml-3 flex-1">
-          <p className="text-sm font-medium text-red-800">{error}</p>
+          <div className="text-sm font-medium text-red-800 break-words">
+            {displayError}
+            {isLongError && (
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="ml-2 text-red-600 hover:text-red-800 underline text-xs"
+              >
+                {isExpanded ? "Show less" : "Show more"}
+              </button>
+            )}
+          </div>
           {actionSuggestion && (
             <div className="mt-2 p-3 bg-red-100 rounded-md">
               <p className="text-sm text-red-700">

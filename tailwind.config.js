@@ -3,6 +3,40 @@ const { fontFamily } = require("tailwindcss/defaultTheme");
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  safelist: [
+    // Team color gradients - ensure all gradient combinations are included
+    'from-orange-400', 'to-red-500',
+    'from-green-400', 'to-emerald-500', 
+    'from-blue-400', 'to-indigo-500',
+    'from-pink-400', 'to-rose-500',
+    'from-gray-100', 'to-gray-200',
+    'from-gray-700', 'to-gray-900',
+    'from-gray-400', 'to-gray-600',
+    'from-amber-600', 'to-amber-800',
+    'from-purple-400', 'to-purple-600',
+    'from-yellow-400', 'to-yellow-600',
+    'from-red-400', 'to-red-600',
+    'from-cyan-300', 'to-cyan-500',
+    // Brand color gradients
+    'from-brand-orange', 'to-brand-orange-dark',
+    'from-brand-green', 'to-brand-green-dark',
+    'from-brand-blue', 'to-brand-blue-dark',
+    'from-brand-pink', 'to-brand-pink-dark',
+    'from-brand-white', 'to-brand-white-dark',
+    'from-brand-black', 'to-brand-black-dark',
+    'from-brand-gray', 'to-brand-gray-dark',
+    'from-brand-brown', 'to-brand-brown-dark',
+    'from-brand-purple', 'to-brand-purple-dark',
+    'from-brand-yellow', 'to-brand-yellow-dark',
+    'from-brand-red', 'to-brand-red-dark',
+    'from-brand-cyan', 'to-brand-cyan-dark',
+    // Background color classes for mobile team indicators
+    'bg-orange-500', 'bg-green-500', 'bg-blue-500', 'bg-pink-500',
+    'bg-gray-200', 'bg-gray-800', 'bg-gray-500', 'bg-amber-700',
+    'bg-purple-500', 'bg-yellow-500', 'bg-red-500', 'bg-cyan-400',
+    // Gradient direction classes that might be used dynamically
+    'bg-gradient-to-r', 'bg-gradient-to-br'
+  ],
   theme: {
     extend: {
       fontFamily: {

@@ -243,8 +243,8 @@ export const TeamManagement: React.FC = () => {
             className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="all">All Sports</option>
-            <option value="kickball">Kickball</option>
-            <option value="dodgeball">Dodgeball</option>
+            <option value="kickball">Summer Kickball</option>
+            <option value="dodgeball">Fall Kickball</option>
           </select>
         </div>
       </div>
@@ -342,8 +342,8 @@ export const TeamManagement: React.FC = () => {
                   }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <option value="kickball">Kickball</option>
-                  <option value="dodgeball">Dodgeball</option>
+                  <option value="kickball">Summer Kickball</option>
+                  <option value="dodgeball">Fall Kickball</option>
                 </select>
               </div>
 

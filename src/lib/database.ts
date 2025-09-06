@@ -18,8 +18,7 @@ type DbGame = Database["public"]["Tables"]["games"]["Row"];
 const convertLegacyGradient = (gradient: string): "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan" => {
   // Map old color values to new ones
   const colorMap: Record<string, "orange" | "green" | "blue" | "pink" | "white" | "black" | "gray" | "brown" | "purple" | "yellow" | "red" | "cyan"> = {
-    "teal": "green",
-    "purple": "pink",
+    "teal": "green",  // Only legacy conversion needed
     // Keep all valid new colors as-is
     "orange": "orange",
     "green": "green", 
@@ -29,6 +28,7 @@ const convertLegacyGradient = (gradient: string): "orange" | "green" | "blue" | 
     "black": "black",
     "gray": "gray",
     "brown": "brown",
+    "purple": "purple",  // Purple is now a valid color, don't convert it
     "yellow": "yellow",
     "red": "red",
     "cyan": "cyan"
@@ -210,7 +210,7 @@ export const teamsApi = {
   // Migration function to update legacy color values in the database
   async migrateLegacyColors() {
     try {
-      // Update teams with "teal" to "green"
+      // Update teams with "teal" to "green" (only legacy conversion needed)
       const { error: tealError } = await supabase
         .from("teams")
         .update({ gradient: "green" })
@@ -218,13 +218,7 @@ export const teamsApi = {
 
       if (tealError) throw tealError;
 
-      // Update teams with "purple" to "pink"  
-      const { error: purpleError } = await supabase
-        .from("teams")
-        .update({ gradient: "pink" })
-        .eq("gradient", "purple");
-
-      if (purpleError) throw purpleError;
+      // Note: Purple is now a valid color, so we don't convert it to pink anymore
 
       return { success: true };
     } catch (error) {
@@ -272,23 +266,43 @@ export const teamsApi = {
       captain_id: string;
     }>
   ) {
-    // Prepare the update data, ensuring gradient is handled properly
-    const updateData = { ...teamData };
-    
-    // Ensure gradient value is valid (convert legacy values if needed)
-    if (updateData.gradient) {
-      updateData.gradient = convertLegacyGradient(updateData.gradient);
+    try {
+      // Prepare the update data, ensuring gradient is handled properly
+      const updateData = { ...teamData };
+      
+      // Ensure gradient value is valid (convert legacy values if needed)
+      if (updateData.gradient) {
+        const originalGradient = updateData.gradient;
+        updateData.gradient = convertLegacyGradient(updateData.gradient);
+        console.log(`🎨 Converting gradient: ${originalGradient} -> ${updateData.gradient}`);
+      }
+
+      console.log(`🏀 Updating team ${teamId} with data:`, updateData);
+
+      const { data, error } = await supabase
+        .from("teams")
+        .update(updateData)
+        .eq("id", teamId)
+        .select()
+        .single();
+
+      if (error) {
+        console.error(`❌ Database error updating team ${teamId}:`, error);
+        console.error(`❌ Error details:`, {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint
+        });
+        throw error;
+      }
+
+      console.log(`✅ Successfully updated team ${teamId}`);
+      return data;
+    } catch (error) {
+      console.error(`❌ Unexpected error updating team ${teamId}:`, error);
+      throw error;
     }
-
-    const { data, error } = await supabase
-      .from("teams")
-      .update(updateData)
-      .eq("id", teamId)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
   },
 
   async deleteTeam(teamId: string) {

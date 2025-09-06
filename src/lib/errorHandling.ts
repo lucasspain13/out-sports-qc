@@ -230,6 +230,14 @@ function handleCheckConstraintError(error: DatabaseError): string {
     return "Please enter a valid URL.";
   }
 
+  if (message.includes("gradient")) {
+    return "The selected color theme is not valid. Please choose from the available color options.";
+  }
+
+  if (message.includes("sport_type") && message.includes("kickball")) {
+    return "Sport type must be either 'kickball' or 'dodgeball'.";
+  }
+
   return "The provided data does not meet the required format or constraints.";
 }
 
